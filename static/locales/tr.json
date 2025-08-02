@@ -1,0 +1,185 @@
+{
+  "landing": {
+    "title": "LocationIQ - İşletmeniz için en doğru konumu zekayla bulun",
+    "description": "Türkiye'deki KOBİ'lerin ve girişimcilerin yeni işletme açarken en doğru lokasyonu bulmasını sağlayan akıllı analiz platformu.",
+    "features": "Özellikler",
+    "howItWorks": "Nasıl Çalışır",
+    "contact": "İletişim",
+    "heroTitle": "İşletmeniz için en doğru konumu",
+    "heroHighlight": "zekayla",
+    "heroSubtitle": "Türkiye'deki KOBİ'lerin ve girişimcilerin yeni bir işletme açarken veri analizi ile en kârlı lokasyonu keşfetmesini sağlayan akıllı platform",
+    "startAnalysis": "Analize Başla",
+    "freeBadge": "Ücretsiz • Kayıt gerektirmez • Anında sonuç",
+    "stats": {
+      "locations": "Analiz Edilen Lokasyon",
+      "businesses": "Başarılı İşletme",
+      "accuracy": "% Doğruluk Oranı"
+    },
+    "whyTitle": "Neden LocationIQ?",
+    "whySubtitle": "Gelişmiş veri analizi ve yapay zeka ile lokasyon kararlarınızı güçlendirin",
+    "featuresList": {
+      "precise": {
+        "title": "Hassas Lokasyon Analizi",
+        "description": "Nüfus yoğunluğu, rakip analizi, ulaşım ağları ve demografik verilerle en uygun konumları belirleyin."
+      },
+      "businessSpecific": {
+        "title": "İşletme Türüne Özel",
+        "description": "Eczane, fırın, market, cafe ve restoran için özelleştirilmiş analiz kriterleri ve skorlama sistemi."
+      },
+      "interactiveMap": {
+        "title": "İnteraktif Harita",
+        "description": "Sonuçları görsel harita üzerinde inceleyin, ısı haritası ile potansiyel alanları keşfedin."
+      },
+      "instantResults": {
+        "title": "Anında Sonuç",
+        "description": "Saniyeler içinde detaylı analiz sonuçları alın, zaman kaybetmeden karar verin."
+      },
+      "reliableData": {
+        "title": "Güvenilir Veri",
+        "description": "Güncel ve doğrulanmış verilerle desteklenen analiz sonuçları, güvenilir öneriler."
+      },
+      "smeFocused": {
+        "title": "KOBİ Odaklı",
+        "description": "Küçük ve orta ölçekli işletmelerin ihtiyaçlarına özel tasarlanmış analiz algoritmaları."
+      }
+    },
+    "howItWorksTitle": "Nasıl Çalışır?",
+    "howItWorksSubtitle": "3 basit adımda işletmeniz için en uygun lokasyonu bulun",
+    "steps": {
+      "step1": {
+        "title": "İşletme Türünü Seçin",
+        "description": "Eczane, fırın, market, cafe veya restoran gibi işletme türünüzü belirleyin."
+      },
+      "step2": {
+        "title": "Analiz Modunu Seçin",
+        "description": "Belirli adresleri karşılaştırın veya yeni fırsatları keşfedin."
+      },
+      "step3": {
+        "title": "Sonuçları İnceleyin",
+        "description": "Detaylı analiz sonuçlarını harita üzerinde görün ve en iyi kararı verin."
+      }
+    },
+    "ctaTitle": "Başarılı İşletmenizin İlk Adımını Atın",
+    "ctaSubtitle": "Doğru lokasyon seçimi ile işletmenizin başarısını garanti altına alın",
+    "ctaButton": "Hemen Başla",
+    "footer": {
+      "description": "Türkiye'deki KOBİ'lerin ve girişimcilerin en doğru lokasyon kararlarını vermesini sağlayan akıllı analiz platformu.",
+      "platform": "Platform",
+      "contact": "İletişim",
+      "features": "Özellikler",
+      "howItWorks": "Nasıl Çalışır",
+      "pricing": "Fiyatlandırma",
+      "support": "Destek",
+      "privacy": "Gizlilik",
+      "copyright": "2024 LocationIQ. Tüm hakları saklıdır."
+    }
+  },
+  "businessSelection": {
+    "title": "İşletme Türü Seçimi - LocationIQ",
+    "description": "İşletmeniz için en uygun lokasyon analizini başlatmak için işletme türünüzü seçin.",
+    "back": "Geri",
+    "stepIndicator": "İşletme Türünüzü Seçin",
+    "stepSubtitle": "Size en uygun lokasyon analizini yapabilmemiz için işletmenizin türünü belirleyin",
+    "businessTypes": {
+      "pharmacy": {
+        "title": "Eczane",
+        "description": "Sağlık hizmetleri odaklı analiz. Hastane yakınlığı, yaşlı nüfus yoğunluğu ve ulaşım kolaylığı öncelikli."
+      },
+      "bakery": {
+        "title": "Fırın",
+        "description": "Günlük ihtiyaç odaklı analiz. Konut yoğunluğu, yaya trafiği ve rekabet analizi ön planda."
+      },
+      "market": {
+        "title": "Market",
+        "description": "Perakende odaklı analiz. Nüfus yoğunluğu, gelir seviyesi ve park imkanları değerlendirilir."
+      },
+      "cafe": {
+        "title": "Cafe",
+        "description": "Sosyal mekan odaklı analiz. Genç nüfus, öğrenci yoğunluğu ve sosyal aktivite alanları öncelikli."
+      },
+      "restaurant": {
+        "title": "Restoran",
+        "description": "Yemek hizmeti odaklı analiz. İş merkezi yakınlığı, gelir seviyesi ve akşam trafiği değerlendirilir."
+      },
+      "other": {
+        "title": "Diğer",
+        "description": "Yakında daha fazla işletme türü eklenecek..."
+      }
+    },
+    "continue": "İşletme Türü Seçin",
+    "helpText": "İşletme türünüz listede yoksa, en yakın türü seçebilirsiniz"
+  },
+  "modeSelection": {
+    "title": "Analiz Modu Seçimi - LocationIQ",
+    "description": "Lokasyon analiziniz için uygun modu seçin: Belirli dükkanları karşılaştırın veya yeni fırsatları keşfedin.",
+    "back": "Geri",
+    "stepIndicator": "Analiz Modunu Seçin",
+    "stepSubtitle": "İhtiyacınıza en uygun analiz yöntemini seçerek lokasyon araştırmanızı başlatın",
+    "businessTypePrefix": "İşletme Türü:",
+    "modes": {
+      "comparison": {
+        "title": "Belirli Dükkanları Karşılaştır",
+        "subtitle": "Aklınızdaki birden fazla lokasyonun potansiyelini analiz edin ve en iyisini belirleyin",
+        "features": [
+          "Birden fazla adres ekleyip karşılaştırın",
+          "Detaylı skor analizi ve karşılaştırma tablosu",
+          "Rakip yoğunluğu ve hedef kitle uyumu",
+          "Yaya erişimi ve ulaşım kolaylığı analizi",
+          "100 üzerinden genel skor değerlendirmesi"
+        ]
+      },
+      "discovery": {
+        "title": "Yeni Fırsatları Keşfet",
+        "subtitle": "Seçtiğiniz bölgedeki en uygun konumları sizin için bulalım ve önerelim",
+        "features": [
+          "İl, ilçe ve mahalle bazında analiz",
+          "Isı haritası ile potansiyel görselleştirme",
+          "En yüksek skorlu 5 lokasyon önerisi",
+          "Bölgesel fırsat analizi ve keşif",
+          "Hızlı bölge tarama ve değerlendirme"
+        ]
+      }
+    },
+    "continue": "Analiz Modu Seçin",
+    "helpTitle": "Hangi modu seçmeliyim?",
+    "helpText": "Elinizde belirli adresler varsa Mod 1'i, yeni fırsatlar arıyorsanız Mod 2'yi tercih edin"
+  },
+  "map": {
+    "container": "Harita Konteyneri",
+    "title": "Harita",
+    "controls": {
+      "zoomIn": "Yakınlaştır",
+      "zoomOut": "Uzaklaştır",
+      "reset": "Sıfırla"
+    },
+    "overlay": "Harita yükleniyor...",
+    "info": "Harita bilgileri burada gösterilecek"
+  },
+  "sidebar": {
+    "container": "Kenar Çubuğu",
+    "title": "LocationIQ",
+    "subtitle": "Lokasyon Analizi Platformu",
+    "menu": {
+      "dashboard": "Kontrol Paneli",
+      "analysis": "Analiz",
+      "reports": "Raporlar",
+      "settings": "Ayarlar"
+    },
+    "sections": {
+      "businessTypes": "İşletme Türleri",
+      "analysisModes": "Analiz Modları"
+    },
+    "businessTypes": {
+      "pharmacy": "Eczane",
+      "bakery": "Fırın",
+      "market": "Market",
+      "cafe": "Cafe",
+      "restaurant": "Restoran"
+    },
+    "analysisModes": {
+      "comparison": "Karşılaştırma",
+      "discovery": "Keşif"
+    },
+    "copyright": "© 2024 LocationIQ. Tüm hakları saklıdır."
+  }
+}

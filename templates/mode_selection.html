@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analiz Modu Seçimi - LocationIQ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/design_system.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <style>
+        /* Modern UI Styles */
+        * {
+            visibility: visible !important;
+        }
+
+        /* Header Styles */
+        .header-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #dbeafe;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: #3b82f6;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .back-button {
+            padding: 0.375rem 0.75rem;
+            color: #2563eb;
+            background: transparent;
+            border: none;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button:hover {
+            background: #dbeafe;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 72rem;
+            margin: 0 auto;
+            padding: 6rem 1.5rem 4rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        @media (min-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+        }
+
+        .hero-gradient-text {
+            background: linear-gradient(to right, #2563eb, #0891b2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: #4b5563;
+            max-width: 48rem;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        @media (min-width: 768px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Mode Cards */
+        .mode-card {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mode-card:hover {
+            transform: scale(1.05) translateY(-8px);
+        }
+
+        .mode-card.selected {
+            transform: scale(1.05) translateY(-8px);
+        }
+
+        /* Glow Effect */
+        .card-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 1rem;
+            filter: blur(24px);
+            transition: all 0.5s;
+            opacity: 0;
+        }
+
+        .mode-card:hover .card-glow {
+            opacity: 0.2;
+            transform: scale(1.05);
+        }
+
+        .mode-card.selected .card-glow {
+            opacity: 0.3;
+            transform: scale(1.1);
+        }
+
+        .card-glow.blue {
+            background: linear-gradient(to right, #3b82f6, #06b6d4);
+        }
+
+        .card-glow.cyan {
+            background: linear-gradient(to right, #06b6d4, #3b82f6);
+        }
+
+        /* Card Content */
+        .card-content {
+            position: relative;
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #dbeafe;
+            transition: all 0.5s;
+        }
+
+        .mode-card:hover .card-content {
+            border-color: #93c5fd;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .mode-card.selected .card-content {
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.6);
+        }
+
+        .mode-card.selected.cyan .card-content {
+            border-color: #22d3ee;
+            box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.6);
+        }
+
+        /* Card Header */
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .card-icon.blue {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+
+        .card-icon.cyan {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+        }
+
+        .mode-card.selected .card-icon {
+            transform: scale(1.1);
+        }
+
+        .mode-card.selected .card-icon.blue {
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+        }
+
+        .mode-card.selected .card-icon.cyan {
+            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.5);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .card-description {
+            color: #4b5563;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* Features List */
+        .features-section {
+            margin-bottom: 1rem;
+        }
+
+        .features-title {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 1.125rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #374151;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-bullet {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .feature-bullet.blue {
+            background: #3b82f6;
+        }
+
+        .feature-bullet.cyan {
+            background: #06b6d4;
+        }
+
+        /* Selection Indicator */
+        .selection-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .mode-card.selected .selection-indicator {
+            opacity: 1;
+            animation: pulse 2s infinite;
+        }
+
+        .selection-indicator.blue {
+            background: #3b82f6;
+        }
+
+        .selection-indicator.cyan {
+            background: #06b6d4;
+        }
+
+        .selection-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            background: white;
+            border-radius: 50%;
+        }
+
+        /* Sticky Button */
+        .sticky-button {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            opacity: 0;
+            transform: translateX(-50%) translateY(100px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sticky-button.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .analyze-button {
+            position: relative;
+            padding: 1rem 3rem;
+            background: linear-gradient(to right, #2563eb, #0891b2);
+            color: white;
+            font-weight: 700;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .analyze-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .analyze-button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, #1d4ed8, #0e7490);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .analyze-button:hover::before {
+            opacity: 1;
+        }
+
+        .analyze-button::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .analyze-button:hover::after {
+            opacity: 1;
+            animation: pulse 2s infinite;
+        }
+
+        .button-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px) translateX(-50%);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) translateX(-50%);
+            }
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    {% include 'components/floating_background.html' %}
+    {% include 'components/simple_button_effects.html' %}
+    {% include 'components/safe_page_transition.html' %}
+    {% include 'components/sticky_navigation.html' %}
+    
+    <!-- Back Button -->
+    <div style="position: fixed; top: 1rem; right: 1rem; z-index: 1001;">
+        <button class="back-button" onclick="navigateWithSafeTransition('/business-selection', 'slide-left')" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.9); border: 1px solid #e5e7eb; border-radius: 0.5rem; color: #2563eb; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Geri
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content" style="padding-top: 6rem;">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h2 class="hero-title">
+                Hangi analiz türünü 
+                <span class="hero-gradient-text">tercih ediyorsunuz?</span>
+            </h2>
+            <p class="hero-subtitle">
+                İhtiyacınıza en uygun analiz modülünü seçin ve lokasyon potansiyelini keşfedin
+            </p>
+        </div>
+
+        <!-- Feature Cards -->
+        <div class="cards-grid">
+            <!-- Compare Stores Card -->
+            <div class="mode-card" data-mode="comparison" onclick="selectMode('comparison')">
+                <div class="card-glow blue"></div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="card-icon blue">
+                            <svg width="32" height="32" fill="white" stroke="white" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="card-title">Belirli Dükkanları Karşılaştır</h3>
+                    </div>
+                    
+                    <p class="card-description">
+                        Bildiğiniz spesifik adresleri karşılaştırın ve hangisinin daha avantajlı olduğunu öğrenin
+                    </p>
+
+                    <div class="features-section">
+                        <h4 class="features-title">Bu modda neler var:</h4>
+                        <ul class="features-list">
+                            <li class="feature-item">
+                                <div class="feature-bullet blue"></div>
+                                <span>Birden fazla adres karşılaştırması</span>
+                            </li>
+                            <li class="feature-item">
+                                <div class="feature-bullet blue"></div>
+                                <span>Detaylı skor analizi</span>
+                            </li>
+                            <li class="feature-item">
+                                <div class="feature-bullet blue"></div>
+                                <span>Rakip yoğunluğu karşılaştırması</span>
+                            </li>
+                            <li class="feature-item">
+                                <div class="feature-bullet blue"></div>
+                                <span>Yaya erişimi değerlendirmesi</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="selection-indicator blue">
+                        <div class="selection-dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Discover Opportunities Card -->
+            <div class="mode-card" data-mode="region" onclick="selectMode('region')">
+                <div class="card-glow cyan"></div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="card-icon cyan">
+                            <svg width="32" height="32" fill="white" stroke="white" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="card-title">Yeni Fırsatları Keşfet</h3>
+                    </div>
+                    
+                    <p class="card-description">
+                        Belirli bir bölgedeki en potansiyelli lokasyonları keşfedin ve yeni fırsatları yakalayın
+                    </p>
+
+                    <div class="features-section">
+                        <h4 class="features-title">Bu modda neler var:</h4>
+                        <ul class="features-list">
+                            <li class="feature-item">
+                                <div class="feature-bullet cyan"></div>
+                                <span>Bölgesel potansiyel haritası</span>
+                            </li>
+                            <li class="feature-item">
+                                <div class="feature-bullet cyan"></div>
+                                <span>En iyi 5 lokasyon önerisi</span>
+                            </li>
+                            <li class="feature-item">
+                                <div class="feature-bullet cyan"></div>
+                                <span>Mahalle bazında analiz</span>
+                            </li>
+                            <li class="feature-item">
+                                <div class="feature-bullet cyan"></div>
+                                <span>Yoğunluk haritası görselleştirme</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="selection-indicator cyan">
+                        <div class="selection-dot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Sticky Analyze Button -->
+    <div id="stickyButton" class="sticky-button">
+        <button class="analyze-button" onclick="continueToAnalysis()">
+            <div class="button-content">
+                <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+                <span id="buttonText">Analize Başla</span>
+            </div>
+        </button>
+    </div>
+
+    <!-- Business Type Display -->
+    <div class="fixed bottom-6 left-6 bg-white/90 backdrop-blur-sm rounded-lg px-4 py-2 shadow-lg border border-blue-100">
+        <div class="flex items-center space-x-2">
+            <span class="text-sm text-gray-600">Seçilen işletme türü:</span>
+            <span id="selectedBusinessType" class="text-sm font-medium text-blue-600">-</span>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/new_ui/animation_performance.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/animation_manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/micro_interactions.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/sticky_navigation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/enhanced_scroll_animations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/performance_monitor.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/ui_integration_manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/ui_test_suite.js') }}"></script>
+    
+    <script>
+        let selectedMode = null;
+        let businessType = null;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get business type from URL params or localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            businessType = urlParams.get('business_type') || localStorage.getItem('selectedBusinessType');
+            
+            if (businessType) {
+                document.getElementById('selectedBusinessType').textContent = getBusinessTypeDisplayName(businessType);
+            }
+
+            // Initialize animation systems
+            try {
+                if (typeof AnimationPerformance !== 'undefined') {
+                    window.animationPerformance = new AnimationPerformance();
+                }
+                if (typeof AnimationManager !== 'undefined') {
+                    window.animationManager = new AnimationManager();
+                }
+                if (typeof MicroInteractions !== 'undefined') {
+                    window.microInteractions = new MicroInteractions();
+                }
+            } catch (error) {
+                console.error('JavaScript initialization error:', error);
+            }
+        });
+
+        // Mode selection
+        function selectMode(mode) {
+            console.log('selectMode called with:', mode);
+            
+            // Remove previous selection
+            document.querySelectorAll('.mode-card').forEach(card => {
+                card.classList.remove('selected');
+                if (mode === 'region') {
+                    card.classList.remove('cyan');
+                } else {
+                    card.classList.remove('blue');
+                }
+            });
+
+            // Add selection to clicked card
+            const selectedCard = document.querySelector(`[data-mode="${mode}"]`);
+            if (selectedCard) {
+                selectedCard.classList.add('selected');
+                if (mode === 'region') {
+                    selectedCard.classList.add('cyan');
+                } else {
+                    selectedCard.classList.add('blue');
+                }
+                console.log('Card selected:', selectedCard);
+            } else {
+                console.error('Card not found for mode:', mode);
+            }
+
+            // Update selected mode
+            selectedMode = mode;
+
+            // Show sticky button with animation
+            showStickyButton(mode);
+
+            // Store selection
+            localStorage.setItem('selectedMode', mode);
+
+            // Add visual feedback
+            if (window.microInteractions) {
+                window.microInteractions.bounceElement(selectedCard);
+            }
+        }
+
+        function showStickyButton(mode) {
+            const stickyButton = document.getElementById('stickyButton');
+            const buttonText = document.getElementById('buttonText');
+            
+            // Update button text based on mode
+            if (mode === 'comparison') {
+                buttonText.textContent = 'Karşılaştırma Analizini Başlat';
+            } else if (mode === 'region') {
+                buttonText.textContent = 'Keşif Analizini Başlat';
+            }
+            
+            // Show with animation
+            stickyButton.classList.add('show');
+        }
+
+        // Continue to analysis
+        function continueToAnalysis() {
+            if (!selectedMode) return;
+
+            // Store selections
+            localStorage.setItem('selectedMode', selectedMode);
+            localStorage.setItem('selectedBusinessType', businessType);
+
+            // Navigate based on selected mode
+            const params = new URLSearchParams({
+                mode: selectedMode,
+                business_type: businessType
+            });
+
+            if (selectedMode === 'comparison') {
+                // Navigate to Mod1 comparison page
+                navigateWithSafeTransition(`/mod1-comparison?business_type=${businessType}`, 'slide-right');
+            } else {
+                // Navigate to regular analysis dashboard
+                navigateWithSafeTransition(`/analysis_dashboard?${params.toString()}`, 'slide-right');
+            }
+        }
+
+        // Go back to business selection
+        function goBack() {
+            window.location.href = '/business-selection';
+        }
+
+        // Get business type display name
+        function getBusinessTypeDisplayName(type) {
+            const displayNames = {
+                'eczane': 'Eczane',
+                'firin': 'Fırın',
+                'market': 'Market',
+                'cafe': 'Cafe',
+                'restoran': 'Restoran'
+            };
+            return displayNames[type] || type;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '1') {
+                selectMode('comparison');
+            } else if (e.key === '2') {
+                selectMode('region');
+            } else if (e.key === 'Enter' && selectedMode) {
+                continueToAnalysis();
+            } else if (e.key === 'Escape') {
+                goBack();
+            }
+        });
+    </script>
+</body>
+</html>

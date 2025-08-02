@@ -1,0 +1,61 @@
+{
+  "navigation": {
+    "features": "Özellikler",
+    "demo": "Demo",
+    "contact": "İletişim",
+    "adminPanel": "Admin Panel",
+    "oldVersion": "Eski Sürüm"
+  },
+  "hero": {
+    "tagline": "Yapay zeka destekli lokasyon analizi",
+    "title": "Lokasyon Analizinde",
+    "subtitle": "Yeni Dönem",
+    "description": "Yapay zeka destekli lokasyon analizi ile işletmeniz için en uygun yeri bulun. Modern araçlar, detaylı analizler ve gerçek zamanlı sonuçlar.",
+    "startAnalysis": "Analize Başla",
+    "watchDemo": "Demo İzle"
+  },
+  "features": {
+    "title": "Gelişmiş Analiz Araçları",
+    "description": "İşletmenizin başarısı için gerekli tüm lokasyon verilerini tek platformda",
+    "detailedAnalysis": {
+      "title": "Detaylı Analiz",
+      "description": "Demografik veriler, trafik yoğunluğu ve rekabet analizi ile kapsamlı raporlar"
+    },
+    "realTimeData": {
+      "title": "Gerçek Zamanlı Veri",
+      "description": "Anlık güncellemeler ve canlı verilerle her zaman güncel kalın"
+    },
+    "securePlatform": {
+      "title": "Güvenli Platform",
+      "description": "Verileriniz şifreli olarak saklanır ve güvenliğiniz önceliğimizdir"
+    }
+  },
+  "stats": {
+    "locations": "Analiz Edilen Lokasyon",
+    "customers": "Mutlu Müşteri",
+    "uptime": "Uptime Garantisi",
+    "support": "Destek Hizmeti"
+  },
+  "cta": {
+    "title": "Hemen Başlayın",
+    "description": "Lokasyon analizinizi bugün başlatın ve işletmeniz için en doğru kararları verin",
+    "tryFree": "Ücretsiz Deneyin",
+    "moreInfo": "Daha Fazla Bilgi"
+  },
+  "footer": {
+    "description": "Yapay zeka destekli lokasyon analizi platformu",
+    "product": "Ürün",
+    "company": "Şirket",
+    "support": "Destek",
+    "features": "Özellikler",
+    "pricing": "Fiyatlandırma",
+    "api": "API",
+    "about": "Hakkımızda",
+    "blog": "Blog",
+    "careers": "Kariyer",
+    "helpCenter": "Yardım Merkezi",
+    "contact": "İletişim",
+    "status": "Durum",
+    "copyright": "2024 LocationIQ. Tüm hakları saklıdır."
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "app": {
+    "title": "LocationIQ",
+    "back": "Back",
+    "analyzeButton": "Start {{mode}} Analysis"
+  },
+  "hero": {
+    "title": "Which analysis type do you prefer?",
+    "subtitle": "Select the analysis module that best suits your needs and discover location potential"
+  },
+  "modes": {
+    "compare": {
+      "title": "Compare Specific Stores",
+      "description": "Compare specific addresses you know and find out which one is more advantageous",
+      "featuresTitle": "What's in this mode:",
+      "features": [
+        "Multiple address comparison",
+        "Detailed score analysis",
+        "Competitor density comparison",
+        "Pedestrian access evaluation"
+      ]
+    },
+    "discover": {
+      "title": "Discover New Opportunities",
+      "description": "Discover the most potential locations in a specific area and seize new opportunities",
+      "featuresTitle": "What's in this mode:",
+      "features": [
+        "Regional potential map",
+        "Top 5 location recommendations",
+        "Neighborhood-based analysis",
+        "Density map visualization"
+      ]
+    }
+  },
+  "footer": {
+    "title": "Activate Windows",
+    "description": "Go to Settings to activate Windows"
+  }
+}

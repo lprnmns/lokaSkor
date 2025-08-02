@@ -1,0 +1,39 @@
+{
+  "dashboard": {
+    "title": "Lokasyon Analizi",
+    "lastUpdated": "Son güncelleme:",
+    "dataPoints": "veri noktası",
+    "loading": "Analiz yapılıyor...",
+    "retry": "Tekrar Dene",
+    "retrying": "Tekrar Deneniyor...",
+    "error": {
+      "title": "Hata oluştu",
+      "message": "İsteğiniz işlenirken bir hata oluştu. Lütfen tekrar deneyin.",
+      "action": "Tekrar Dene"
+    }
+  },
+  "analysis": {
+    "modes": {
+      "point": "Nokta Analizi",
+      "area": "Alan Analizi",
+      "heatmap": "Isı Haritası Görünümü"
+    },
+    "categories": {
+      "cafe": "Kafe",
+      "restaurant": "Restoran",
+      "retail": "Perakende",
+      "pharmacy": "Eczane"
+    },
+    "toggles": {
+      "trafficData": "Trafik Verileri",
+      "competitorAnalysis": "Rakip Analizi",
+      "demographics": "Demografi"
+    },
+    "controls": {
+      "refresh": "Yenile"
+    }
+  },
+  "map": {
+    "placeholder": "Analiz için haritada bir konum seçmek için tıklayın"
+  }
+}

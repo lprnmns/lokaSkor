@@ -1,0 +1,378 @@
+<!-- Safe Page Transition Component - Non-intrusive -->
+<style>
+    /* Page Transition Overlay */
+    .safe-page-transition-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #f8fafc 0%, #dbeafe 50%, #e0e7ff 100%);
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        backdrop-filter: blur(0px);
+        pointer-events: none;
+    }
+
+    .safe-page-transition-overlay.active {
+        opacity: 1;
+        visibility: visible;
+        backdrop-filter: blur(10px);
+        pointer-events: all;
+    }
+
+    /* Sliding Content */
+    .safe-transition-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) translateX(100px);
+        text-align: center;
+        color: #1f2937;
+        transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .safe-page-transition-overlay.active .safe-transition-content {
+        transform: translate(-50%, -50%) translateX(0px);
+    }
+
+    /* Loading Animation */
+    .safe-transition-loader {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 20px;
+        position: relative;
+    }
+
+    .safe-transition-spinner {
+        width: 100%;
+        height: 100%;
+        border: 3px solid rgba(59, 130, 246, 0.2);
+        border-top: 3px solid #3b82f6;
+        border-radius: 50%;
+        animation: safe-spin 1s linear infinite;
+    }
+
+    @keyframes safe-spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Progress Bar */
+    .safe-transition-progress {
+        width: 200px;
+        height: 4px;
+        background: rgba(59, 130, 246, 0.2);
+        border-radius: 2px;
+        margin: 20px auto;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .safe-transition-progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        border-radius: 2px;
+        width: 0%;
+        transition: width 0.5s ease;
+        position: relative;
+    }
+
+    .safe-transition-progress-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        animation: safe-progress-shimmer 1.5s infinite;
+    }
+
+    @keyframes safe-progress-shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    /* Text Animation */
+    .safe-transition-text {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease 0.2s;
+    }
+
+    .safe-page-transition-overlay.active .safe-transition-text {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+
+    .safe-transition-subtext {
+        font-size: 0.875rem;
+        color: #6b7280;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease 0.3s;
+    }
+
+    .safe-page-transition-overlay.active .safe-transition-subtext {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+
+    /* Page Content Blur Effect */
+    .safe-page-blur-transition {
+        transition: filter 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .safe-page-blur-transition.blurred {
+        filter: blur(8px);
+        transform: scale(0.95);
+    }
+
+    /* Slide Direction Classes */
+    .slide-left .safe-transition-content {
+        transform: translate(-50%, -50%) translateX(-100px);
+    }
+
+    .slide-right .safe-transition-content {
+        transform: translate(-50%, -50%) translateX(100px);
+    }
+
+    /* Floating particles during transition */
+    .safe-transition-particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: #3b82f6;
+        border-radius: 50%;
+        opacity: 0.6;
+        animation: safe-particle-float 2s ease-out forwards;
+    }
+
+    @keyframes safe-particle-float {
+        0% {
+            opacity: 0.6;
+            transform: translateY(0px) scale(1);
+        }
+        50% {
+            opacity: 0.8;
+            transform: translateY(-30px) scale(1.2);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-60px) scale(0.5);
+        }
+    }
+
+    /* Transition Button Styles */
+    .transition-btn {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .transition-btn::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+        pointer-events: none;
+    }
+
+    .transition-btn.clicked::after {
+        width: 300px;
+        height: 300px;
+    }
+</style>
+
+<!-- Safe Page Transition Overlay -->
+<div id="safePageTransitionOverlay" class="safe-page-transition-overlay">
+    <div class="safe-transition-content">
+        <div class="safe-transition-loader">
+            <div class="safe-transition-spinner"></div>
+        </div>
+        <div class="safe-transition-text">Sayfa Yükleniyor...</div>
+        <div class="safe-transition-subtext">Lütfen bekleyin</div>
+        <div class="safe-transition-progress">
+            <div class="safe-transition-progress-bar" id="safeTransitionProgressBar"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Safe Page Transition System - Non-intrusive
+class SafePageTransitionManager {
+    constructor() {
+        this.overlay = document.getElementById('safePageTransitionOverlay');
+        this.progressBar = document.getElementById('safeTransitionProgressBar');
+        this.isTransitioning = false;
+        this.init();
+    }
+
+    init() {
+        // Only handle specifically marked transition buttons
+        this.handleTransitionButtons();
+        
+        // Handle browser back/forward
+        window.addEventListener('popstate', (e) => {
+            if (e.state && e.state.url) {
+                this.navigateToPage(e.state.url, 'slide-left');
+            }
+        });
+
+        // Page load complete handler
+        window.addEventListener('load', () => {
+            this.hideTransition();
+        });
+
+        console.log('SafePageTransitionManager initialized');
+    }
+
+    handleTransitionButtons() {
+        // Handle buttons with data-safe-transition attribute
+        document.addEventListener('click', (e) => {
+            const button = e.target.closest('[data-safe-transition]');
+            if (!button) return;
+
+            const href = button.getAttribute('href') || button.dataset.href;
+            if (!href || href === '#') return;
+
+            e.preventDefault();
+            
+            // Add click effect
+            button.classList.add('transition-btn', 'clicked');
+            setTimeout(() => button.classList.remove('clicked'), 600);
+
+            const direction = button.dataset.safeTransition || 'slide-right';
+            this.navigateToPage(href, direction);
+        });
+
+        // Add transition button styling
+        const transitionButtons = document.querySelectorAll('[data-safe-transition]');
+        transitionButtons.forEach(button => {
+            button.classList.add('transition-btn');
+        });
+    }
+
+    async navigateToPage(url, direction = 'slide-right') {
+        if (this.isTransitioning) return;
+        
+        this.isTransitioning = true;
+        
+        // Show transition with direction
+        await this.showTransition(direction);
+        
+        // Add to browser history
+        if (url !== window.location.pathname) {
+            history.pushState({ url: url }, '', url);
+        }
+        
+        // Simulate loading progress
+        await this.animateProgress();
+        
+        // Navigate to new page
+        window.location.href = url;
+    }
+
+    async showTransition(direction = 'slide-right') {
+        return new Promise((resolve) => {
+            // Blur current page content
+            const mainContent = document.querySelector('.main-content, body > *:not(#safePageTransitionOverlay)');
+            if (mainContent) {
+                mainContent.classList.add('safe-page-blur-transition', 'blurred');
+            }
+
+            // Set slide direction
+            this.overlay.className = `safe-page-transition-overlay ${direction}`;
+            
+            // Show overlay
+            requestAnimationFrame(() => {
+                this.overlay.classList.add('active');
+                
+                // Create floating particles
+                this.createTransitionParticles();
+                
+                setTimeout(resolve, 100);
+            });
+        });
+    }
+
+    async hideTransition() {
+        return new Promise((resolve) => {
+            this.overlay.classList.remove('active');
+            
+            // Remove blur from content
+            const blurredElements = document.querySelectorAll('.blurred');
+            blurredElements.forEach(el => {
+                el.classList.remove('blurred');
+            });
+            
+            setTimeout(() => {
+                this.isTransitioning = false;
+                this.progressBar.style.width = '0%';
+                resolve();
+            }, 500);
+        });
+    }
+
+    async animateProgress() {
+        return new Promise((resolve) => {
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15 + 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(resolve, 200);
+                }
+                this.progressBar.style.width = progress + '%';
+            }, 50);
+        });
+    }
+
+    createTransitionParticles() {
+        const particleCount = 8;
+        const overlay = this.overlay;
+        
+        for (let i = 0; i < particleCount; i++) {
+            setTimeout(() => {
+                const particle = document.createElement('div');
+                particle.className = 'safe-transition-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                
+                overlay.appendChild(particle);
+                
+                // Remove particle after animation
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, 2000);
+            }, i * 100);
+        }
+    }
+}
+
+// Initialize safe page transition system
+document.addEventListener('DOMContentLoaded', () => {
+    window.safePageTransitionManager = new SafePageTransitionManager();
+});
+
+// Expose global navigation function
+window.navigateWithSafeTransition = (url, direction) => {
+    if (window.safePageTransitionManager) {
+        window.safePageTransitionManager.navigateToPage(url, direction);
+    }
+};
+</script>

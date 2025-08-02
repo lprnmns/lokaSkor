@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İşletme Türü Seçimi - LocationIQ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/design_system.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+</head>
+<body>
+    {% include 'components/floating_background.html' %}
+    {% include 'components/simple_button_effects.html' %}
+    {% include 'components/safe_page_transition.html' %}
+    {% include 'components/sticky_navigation.html' %}
+    
+    <!-- Back Button -->
+    <div style="position: fixed; top: 1rem; right: 1rem; z-index: 1001;">
+        <a href="/new-ui" class="btn btn-outline btn-sm" data-safe-transition="slide-left" style="display: inline-flex; align-items: center; padding: 0.5rem 0.75rem; border: 1px solid #3b82f6; color: #3b82f6; text-decoration: none; border-radius: 0.5rem; font-size: 0.875rem; background: rgba(255, 255, 255, 0.9);">← Geri</a>
+    </div>
+    
+    <div class="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5" style="min-height: 100vh; background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(156, 163, 175, 0.05) 100%);"
+
+        <!-- Main Content -->
+        <main class="main-content container mx-auto px-6 py-12" style="width: 100%; margin: 0 auto; padding: 6rem 1.5rem 3rem; position: relative; z-index: 10;">
+            <!-- Title Section -->
+            <div class="text-center mb-16" style="text-align: center; margin-bottom: 4rem;">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6" style="font-size: 2.25rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.1;">
+                    Hangi türde bir
+                    <span class="text-primary" style="color: #3b82f6;">işletme</span> açacaksınız?
+                </h1>
+                <p class="text-xl text-muted-foreground max-w-2xl mx-auto" style="font-size: 1.25rem; color: #6b7280; max-width: 42rem; margin: 0 auto; line-height: 1.6;">
+                    İşletme türünüzü seçin, size özel analiz kriterleri ile en uygun lokasyonu bulalım
+                </p>
+            </div>
+
+            <!-- Business Type Cards -->
+            <div class="max-w-4xl mx-auto" style="max-width: 56rem; margin: 0 auto;">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+                    <!-- Eczane -->
+                    <div class="business-card" data-business="eczane" onclick="selectBusiness('eczane'); console.log('Eczane clicked');" style="background: white; border: 2px solid #e5e7eb; border-radius: 1rem; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); min-height: 280px;">
+                        <div class="business-icon" style="color: #3b82f6; margin-bottom: 1rem;">
+                            <svg class="w-12 h-12" style="width: 3rem; height: 3rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 7.172V5L8 4z"/>
+                            </svg>
+                        </div>
+                        <h3 class="business-title" style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Eczane</h3>
+                        <p class="business-description" style="color: #6b7280; margin-bottom: 1rem;">Sağlık hizmetleri ve ilaç satışı</p>
+                        <div class="business-features" style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
+                            <span class="feature-tag" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500;">Hastane yakınlığı</span>
+                            <span class="feature-tag" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500;">Yaşlı nüfus</span>
+                            <span class="feature-tag" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500;">Ulaşım kolaylığı</span>
+                        </div>
+                    </div>
+
+                    <!-- Fırın -->
+                    <div class="business-card" data-business="firin" onclick="selectBusiness('firin')" style="background: white; border: 2px solid #e5e7eb; border-radius: 1rem; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); min-height: 280px;">
+                        <div class="business-icon" style="color: #3b82f6; margin-bottom: 1rem;">
+                            <svg class="w-12 h-12" style="width: 3rem; height: 3rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
+                        </div>
+                        <h3 class="business-title" style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Fırın</h3>
+                        <p class="business-description" style="color: #6b7280; margin-bottom: 1rem;">Ekmek ve unlu mamul satışı</p>
+                        <div class="business-features" style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
+                            <span class="feature-tag" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500;">Konut yoğunluğu</span>
+                            <span class="feature-tag" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500;">Sabah trafiği</span>
+                            <span class="feature-tag" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500;">Mahalle merkezi</span>
+                        </div>
+                    </div>
+
+                    <!-- Market -->
+                    <div class="business-card" data-business="market" onclick="selectBusiness('market')" style="background: white; border: 2px solid #e5e7eb; border-radius: 1rem; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); min-height: 280px;">
+                        <div class="business-icon" style="color: #3b82f6; margin-bottom: 1rem;">
+                            <svg class="w-12 h-12" style="width: 3rem; height: 3rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z"/>
+                            </svg>
+                        </div>
+                        <h3 class="business-title" style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Market</h3>
+                        <p class="business-description" style="color: #6b7280; margin-bottom: 1rem;">Gıda ve temel ihtiyaç ürünleri</p>
+                        <div class="business-features" style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
+                            <span class="feature-tag" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500;">Nüfus yoğunluğu</span>
+                            <span class="feature-tag" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500;">Park imkanı</span>
+                            <span class="feature-tag" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500;">Rekabet analizi</span>
+                        </div>
+                    </div>
+
+                    <!-- Cafe -->
+                    <div class="business-card" data-business="cafe" onclick="selectBusiness('cafe')" style="background: white; border: 2px solid #e5e7eb; border-radius: 1rem; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); min-height: 280px;">
+                        <div class="business-icon" style="color: #3b82f6; margin-bottom: 1rem;">
+                            <svg class="w-12 h-12" style="width: 3rem; height: 3rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+                            </svg>
+                        </div>
+                        <h3 class="business-title" style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Cafe</h3>
+                        <p class="business-description" style="color: #6b7280; margin-bottom: 1rem;">Kahve ve hafif yiyecek servisi</p>
+                        <div class="business-features" style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
+                            <span class="feature-tag" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500;">Genç nüfus</span>
+                            <span class="feature-tag" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500;">İş merkezi</span>
+                            <span class="feature-tag" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500;">Sosyal alan</span>
+                        </div>
+                    </div>
+
+                    <!-- Restoran -->
+                    <div class="business-card" data-business="restoran" onclick="selectBusiness('restoran')" style="background: white; border: 2px solid #e5e7eb; border-radius: 1rem; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); min-height: 280px;">
+                        <div class="business-icon" style="color: #3b82f6; margin-bottom: 1rem;">
+                            <svg class="w-12 h-12" style="width: 3rem; height: 3rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
+                            </svg>
+                        </div>
+                        <h3 class="business-title" style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Restoran</h3>
+                        <p class="business-description" style="color: #6b7280; margin-bottom: 1rem;">Yemek servisi ve gastronomi</p>
+                        <div class="business-features" style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
+                            <span class="feature-tag" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500;">Gece hayatı</span>
+                            <span class="feature-tag" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500;">Turist bölgesi</span>
+                            <span class="feature-tag" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500;">Gelir seviyesi</span>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Sticky Continue Button -->
+    <div id="stickyButtonContainer" class="sticky-button-container" style="position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e5e7eb; padding: 1rem 1.5rem; box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000;">
+        <div class="container mx-auto" style="max-width: 56rem; margin: 0 auto;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div id="selectedBusinessIcon" style="width: 3rem; height: 3rem; background: rgba(59, 130, 246, 0.1); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #3b82f6;">
+                        <!-- Icon will be inserted here -->
+                    </div>
+                    <div>
+                        <div id="selectedBusinessName" style="font-weight: 600; color: #1f2937; font-size: 1.125rem;">İşletme Türü</div>
+                        <div style="font-size: 0.875rem; color: #6b7280;">Seçiminizi onaylayın</div>
+                    </div>
+                </div>
+                <button id="stickyContineBtn" onclick="continueToModeSelection()" style="display: inline-flex; align-items: center; justify-content: center; padding: 1rem 2rem; background-color: #3b82f6; color: white; border: none; border-radius: 0.75rem; font-weight: 600; font-size: 1.125rem; cursor: pointer; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); transition: all 0.2s ease;">
+                    <span style="margin-right: 0.75rem;">Devam Et</span>
+                    <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/new_ui/animation_performance.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/animation_manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/micro_interactions.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/sticky_navigation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/enhanced_scroll_animations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/performance_monitor.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/ui_integration_manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/ui_test_suite.js') }}"></script>
+    
+    <script>
+        let selectedBusinessType = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize animation systems
+            if (typeof AnimationPerformance !== 'undefined') {
+                window.animationPerformance = new AnimationPerformance();
+            }
+            if (typeof AnimationManager !== 'undefined') {
+                window.animationManager = new AnimationManager();
+            }
+            if (typeof MicroInteractions !== 'undefined') {
+                window.microInteractions = new MicroInteractions();
+            }
+        });
+
+        function selectBusiness(businessType) {
+            console.log('selectBusiness called with:', businessType);
+            
+            // Remove previous selection
+            document.querySelectorAll('.business-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+
+            // Add selection to clicked card
+            const selectedCard = document.querySelector(`[data-business="${businessType}"]`);
+            if (selectedCard) {
+                selectedCard.classList.add('selected');
+                console.log('Card selected:', selectedCard);
+            } else {
+                console.error('Card not found for business type:', businessType);
+            }
+
+            // Update selected business type
+            selectedBusinessType = businessType;
+
+            // Show sticky button with animation
+            showStickyButton(businessType);
+
+            // Store selection
+            localStorage.setItem('selectedBusinessType', businessType);
+
+            // Add visual feedback
+            if (window.microInteractions) {
+                window.microInteractions.bounceElement(selectedCard);
+            }
+        }
+
+        function showStickyButton(businessType) {
+            const stickyContainer = document.getElementById('stickyButtonContainer');
+            const businessIcon = document.getElementById('selectedBusinessIcon');
+            const businessName = document.getElementById('selectedBusinessName');
+            
+            // Business type data
+            const businessData = {
+                'eczane': {
+                    name: 'Eczane',
+                    icon: '<svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 7.172V5L8 4z"/></svg>'
+                },
+                'firin': {
+                    name: 'Fırın',
+                    icon: '<svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>'
+                },
+                'market': {
+                    name: 'Market',
+                    icon: '<svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z"/></svg>'
+                },
+                'cafe': {
+                    name: 'Cafe',
+                    icon: '<svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>'
+                },
+                'restoran': {
+                    name: 'Restoran',
+                    icon: '<svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/></svg>'
+                }
+            };
+            
+            // Update content
+            const data = businessData[businessType];
+            if (data) {
+                businessIcon.innerHTML = data.icon;
+                businessName.textContent = data.name;
+            }
+            
+            // Show with animation
+            stickyContainer.style.transform = 'translateY(0)';
+            
+            // Add bounce animation
+            setTimeout(() => {
+                stickyContainer.style.transform = 'translateY(-5px)';
+                setTimeout(() => {
+                    stickyContainer.style.transform = 'translateY(0)';
+                }, 150);
+            }, 100);
+        }
+
+        function continueToModeSelection() {
+            if (!selectedBusinessType) return;
+
+            // Store selection
+            localStorage.setItem('selectedBusinessType', selectedBusinessType);
+
+            // Navigate to mode selection with transition
+            navigateWithSafeTransition(`/mode-selection?business_type=${selectedBusinessType}`, 'slide-right');
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const businessTypes = ['eczane', 'firin', 'market', 'cafe', 'restoran'];
+            
+            if (e.key >= '1' && e.key <= '5') {
+                const index = parseInt(e.key) - 1;
+                if (businessTypes[index]) {
+                    selectBusiness(businessTypes[index]);
+                }
+            } else if (e.key === 'Enter' && selectedBusinessType) {
+                continueToModeSelection();
+            }
+        });
+    </script>
+
+    <style>
+        /* Force visibility and reset */
+        * {
+            visibility: visible !important;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, sans-serif !important;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(156, 163, 175, 0.05) 100%) !important;
+            min-height: 100vh !important;
+        }
+        
+        .business-card {
+            background: white !important;
+            border: 2px solid #e5e7eb !important;
+            border-radius: 1rem !important;
+            padding: 2rem !important;
+            text-align: center !important;
+            cursor: pointer !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            position: relative !important;
+            overflow: hidden !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .business-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .business-card.selected {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+            transform: translateY(-2px) !important;
+            background: rgba(59, 130, 246, 0.05) !important;
+        }
+
+        .business-icon {
+            color: #3b82f6;
+            margin-bottom: 1rem;
+        }
+
+        .business-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .business-description {
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+
+        .business-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .feature-tag {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Sticky Button Styles */
+        .sticky-button-container {
+            backdrop-filter: blur(10px);
+        }
+
+        #stickyContineBtn:hover {
+            background-color: #2563eb !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4) !important;
+        }
+
+        #stickyContineBtn:active {
+            transform: translateY(0) !important;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3) !important;
+        }
+
+        @media (max-width: 768px) {
+            .business-card {
+                padding: 1.5rem;
+            }
+            
+            .business-features {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</body>
+</html>

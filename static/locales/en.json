@@ -1,0 +1,185 @@
+{
+  "landing": {
+    "title": "LocationIQ - Find the right location for your business with intelligence",
+    "description": "Smart analysis platform that helps SMEs and entrepreneurs in Turkey find the most suitable location when opening a new business.",
+    "features": "Features",
+    "howItWorks": "How It Works",
+    "contact": "Contact",
+    "heroTitle": "Find the most suitable location for your business",
+    "heroHighlight": "with intelligence",
+    "heroSubtitle": "Smart platform that helps SMEs and entrepreneurs in Turkey discover the most profitable location through data analysis when opening a new business",
+    "startAnalysis": "Start Analysis",
+    "freeBadge": "Free • No registration required • Instant results",
+    "stats": {
+      "locations": "Analyzed Locations",
+      "businesses": "Successful Businesses",
+      "accuracy": "Accuracy Rate"
+    },
+    "whyTitle": "Why LocationIQ?",
+    "whySubtitle": "Strengthen your location decisions with advanced data analysis and artificial intelligence",
+    "featuresList": {
+      "precise": {
+        "title": "Precise Location Analysis",
+        "description": "Determine the most suitable locations with population density, competitor analysis, transportation networks and demographic data."
+      },
+      "businessSpecific": {
+        "title": "Business Type Specific",
+        "description": "Customized analysis criteria and scoring system for pharmacy, bakery, market, cafe and restaurant."
+      },
+      "interactiveMap": {
+        "title": "Interactive Map",
+        "description": "Review results on a visual map, discover potential areas with heat map."
+      },
+      "instantResults": {
+        "title": "Instant Results",
+        "description": "Get detailed analysis results in seconds, make decisions without wasting time."
+      },
+      "reliableData": {
+        "title": "Reliable Data",
+        "description": "Analysis results supported by up-to-date and verified data, reliable recommendations."
+      },
+      "smeFocused": {
+        "title": "SME Focused",
+        "description": "Analysis algorithms designed specifically for the needs of small and medium-sized enterprises."
+      }
+    },
+    "howItWorksTitle": "How It Works?",
+    "howItWorksSubtitle": "Find the most suitable location for your business in 3 simple steps",
+    "steps": {
+      "step1": {
+        "title": "Select Business Type",
+        "description": "Determine your business type such as pharmacy, bakery, market, cafe or restaurant."
+      },
+      "step2": {
+        "title": "Select Analysis Mode",
+        "description": "Compare specific addresses or discover new opportunities."
+      },
+      "step3": {
+        "title": "Review Results",
+        "description": "View detailed analysis results on the map and make the best decision."
+      }
+    },
+    "ctaTitle": "Take the First Step of Your Successful Business",
+    "ctaSubtitle": "Guarantee your business success with the right location selection",
+    "ctaButton": "Get Started Now",
+    "footer": {
+      "description": "Smart analysis platform that helps SMEs and entrepreneurs in Turkey make the most accurate location decisions.",
+      "platform": "Platform",
+      "contact": "Contact",
+      "features": "Features",
+      "howItWorks": "How It Works",
+      "pricing": "Pricing",
+      "support": "Support",
+      "privacy": "Privacy",
+      "copyright": "2024 LocationIQ. All rights reserved."
+    }
+  },
+  "businessSelection": {
+    "title": "Business Type Selection - LocationIQ",
+    "description": "Select your business type to start the most suitable location analysis for your business.",
+    "back": "Back",
+    "stepIndicator": "Select Your Business Type",
+    "stepSubtitle": "Determine your business type so we can make the most suitable location analysis for you",
+    "businessTypes": {
+      "pharmacy": {
+        "title": "Pharmacy",
+        "description": "Healthcare-focused analysis. Priority given to hospital proximity, elderly population density and transportation ease."
+      },
+      "bakery": {
+        "title": "Bakery",
+        "description": "Daily needs-focused analysis. Residential density, pedestrian traffic and competitor analysis are prioritized."
+      },
+      "market": {
+        "title": "Market",
+        "description": "Retail-focused analysis. Population density, income level and parking facilities are evaluated."
+      },
+      "cafe": {
+        "title": "Cafe",
+        "description": "Social venue-focused analysis. Priority given to young population, student density and social activity areas."
+      },
+      "restaurant": {
+        "title": "Restaurant",
+        "description": "Food service-focused analysis. Business center proximity, income level and evening traffic are evaluated."
+      },
+      "other": {
+        "title": "Other",
+        "description": "More business types will be added soon..."
+      }
+    },
+    "continue": "Select Business Type",
+    "helpText": "If your business type is not on the list, you can select the closest one"
+  },
+  "modeSelection": {
+    "title": "Analysis Mode Selection - LocationIQ",
+    "description": "Select the appropriate mode for your location analysis: Compare specific shops or discover new opportunities.",
+    "back": "Back",
+    "stepIndicator": "Select Analysis Mode",
+    "stepSubtitle": "Start your location research by selecting the analysis method that best suits your needs",
+    "businessTypePrefix": "Business Type:",
+    "modes": {
+      "comparison": {
+        "title": "Compare Specific Shops",
+        "subtitle": "Analyze the potential of multiple locations you have in mind and determine the best one",
+        "features": [
+          "Add and compare multiple addresses",
+          "Detailed score analysis and comparison table",
+          "Competitor density and target audience compatibility",
+          "Pedestrian access and transportation ease analysis",
+          "Overall score evaluation out of 100"
+        ]
+      },
+      "discovery": {
+        "title": "Discover New Opportunities",
+        "subtitle": "Let us find and recommend the most suitable locations in your selected area",
+        "features": [
+          "Analysis based on province, district and neighborhood",
+          "Potential visualization with heat map",
+          "Top 5 location recommendations with highest scores",
+          "Regional opportunity analysis and discovery",
+          "Fast region scanning and evaluation"
+        ]
+      }
+    },
+    "continue": "Select Analysis Mode",
+    "helpTitle": "Which mode should I select?",
+    "helpText": "If you have specific addresses, prefer Mode 1, if you are looking for new opportunities, prefer Mode 2"
+  },
+  "map": {
+    "container": "Map Container",
+    "title": "Map",
+    "controls": {
+      "zoomIn": "Zoom In",
+      "zoomOut": "Zoom Out",
+      "reset": "Reset"
+    },
+    "overlay": "Loading map...",
+    "info": "Map information will be shown here"
+  },
+  "sidebar": {
+    "container": "Sidebar",
+    "title": "LocationIQ",
+    "subtitle": "Location Analysis Platform",
+    "menu": {
+      "dashboard": "Dashboard",
+      "analysis": "Analysis",
+      "reports": "Reports",
+      "settings": "Settings"
+    },
+    "sections": {
+      "businessTypes": "Business Types",
+      "analysisModes": "Analysis Modes"
+    },
+    "businessTypes": {
+      "pharmacy": "Pharmacy",
+      "bakery": "Bakery",
+      "market": "Market",
+      "cafe": "Cafe",
+      "restaurant": "Restaurant"
+    },
+    "analysisModes": {
+      "comparison": "Comparison",
+      "discovery": "Discovery"
+    },
+    "copyright": "© 2024 LocationIQ. All rights reserved."
+  }
+}

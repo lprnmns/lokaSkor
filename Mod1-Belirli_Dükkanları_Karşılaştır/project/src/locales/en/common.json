@@ -1,0 +1,37 @@
+{
+  "app": {
+    "title": "Shop Comparison Tool",
+    "description": "Compare specific shops",
+    "back": "Back",
+    "watchDemo": "Watch Demo",
+    "getReport": "Get Report"
+  },
+  "comparison": {
+    "title": "Shop Comparison",
+    "noShops": "No shops selected",
+    "addShops": "Add shops to start comparison",
+    "compare": "Compare",
+    "clearAll": "Clear All",
+    "nearbyPlaces": "Nearby Places",
+    "demographics": "Demographics",
+    "competitorAnalysis": "Competitor Analysis",
+    "importantPlaces": "Important Places",
+    "streetView": "Street View",
+    "detailedAnalysis": "Detailed Analysis",
+    "summary": "Summary",
+    "highestScore": "Highest Score",
+    "averageScore": "Average Score",
+    "analyzedLocations": "Analyzed Locations",
+    "bestOption": "Best Option",
+    "streetViewNotAvailable": "Street View Not Available"
+  },
+  "shop": {
+    "name": "Shop Name",
+    "category": "Category",
+    "location": "Location",
+    "rating": "Rating",
+    "reviews": "Reviews",
+    "distance": "Distance",
+    "remove": "Remove"
+  }
+}

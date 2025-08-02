@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocationIQ Pro - Akıllı Lokasyon Analizi</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Cache busting -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --primary: 223 87% 63%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96.1%;
+            --secondary-foreground: 222.2 47.4% 11.2%;
+            --muted: 210 40% 96.1%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 223 87% 63%;
+            --accent-foreground: 210 40% 98%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 223 87% 63%;
+            --success: 142 76% 36%;
+            --warning: 38 92% 50%;
+            --info: 230 80% 70%;
+            --radius: 0.5rem;
+        }
+        
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, hsl(235, 85%, 75%), hsl(250, 60%, 70%), hsl(265, 55%, 65%));
+        }
+        
+        .bg-gradient-secondary {
+            background: linear-gradient(135deg, hsl(230, 80%, 70%), hsl(240, 75%, 75%));
+        }
+        
+        .text-success { color: hsl(var(--success)); }
+        .text-warning { color: hsl(var(--warning)); }
+        .text-info { color: hsl(var(--info)); }
+        .bg-success { background-color: hsl(var(--success)); }
+        .bg-warning { background-color: hsl(var(--warning)); }
+        .bg-info { background-color: hsl(var(--info)); }
+        
+        .card-overlay {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        .transition-all-smooth {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Map container */
+        #map {
+            height: 100%;
+            width: 100%;
+            border-radius: 0;
+        }
+        
+        /* Custom scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: hsl(var(--muted));
+            border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: hsl(var(--primary));
+            border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: hsl(var(--primary) / 0.8);
+        }
+        
+        /* Spin animation for loading */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Custom popup styles */
+        .leaflet-popup-content-wrapper {
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .leaflet-popup-content {
+            margin: 10px;
+            line-height: 1.4;
+        }
+    </style>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: 'hsl(var(--primary))',
+                        secondary: 'hsl(var(--secondary))',
+                        success: 'hsl(var(--success))',
+                        warning: 'hsl(var(--warning))',
+                        info: 'hsl(var(--info))',
+                        muted: 'hsl(var(--muted))',
+                        border: 'hsl(var(--border))'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen bg-gray-50">
+    {% include 'components/floating_background.html' %}
+    {% include 'components/simple_button_effects.html' %}
+    {% include 'components/safe_page_transition.html' %}
+    
+    <div class="main-content min-h-screen flex">
+        <!-- Left Sidebar - 30% -->
+        <div class="w-[30%] bg-gradient-primary p-6 flex flex-col gap-6 custom-scrollbar overflow-y-auto">
+            <!-- Header Section -->
+            <div class="flex flex-col gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
+                        <i data-lucide="target" class="w-6 h-6 text-primary"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-white font-bold text-xl">LocationIQ Pro</h1>
+                    </div>
+                </div>
+                <p class="text-white/80 text-sm">Gelişmiş Lokasyon Seçimi & Pazar Analizi</p>
+            </div>
+
+            <!-- Analysis Mode Card -->
+            <div class="card-overlay rounded-lg p-5 shadow-lg">
+                <h3 class="font-semibold text-gray-900 mb-4">Analiz Modu</h3>
+                <div class="space-y-3">
+                    <div class="analysis-mode-btn flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all-smooth hover:bg-gray-50" 
+                         data-mode="point" onclick="setAnalysisMode('point')">
+                        <i data-lucide="map-pin" class="w-5 h-5"></i>
+                        <div>
+                            <div class="font-medium">Nokta Analizi</div>
+                            <div class="text-sm text-gray-500">Belirli lokasyonları analiz et</div>
+                        </div>
+                    </div>
+                    <div class="analysis-mode-btn flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all-smooth hover:bg-gray-50" 
+                         data-mode="area" onclick="setAnalysisMode('area')">
+                        <i data-lucide="users" class="w-5 h-5"></i>
+                        <div>
+                            <div class="font-medium">Bölge Analizi</div>
+                            <div class="text-sm text-gray-500">Mahalleleri karşılaştır</div>
+                        </div>
+                    </div>
+                    <div class="analysis-mode-btn flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all-smooth hover:bg-gray-50 bg-primary/10 border border-primary text-primary" 
+                         data-mode="heatmap" onclick="setAnalysisMode('heatmap')">
+                        <i data-lucide="layers" class="w-5 h-5"></i>
+                        <div>
+                            <div class="font-medium">Isı Haritası</div>
+                            <div class="text-sm text-gray-500">Veri yoğunluğunu görselleştir</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Category Card -->
+            <div class="card-overlay rounded-lg p-5 shadow-lg">
+                <h3 class="font-semibold text-gray-900 mb-4">İşletme Kategorisi</h3>
+                <div class="relative">
+                    <select id="business-category" class="w-full p-3 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-primary focus:border-transparent appearance-none">
+                        <option value="cafe" data-emoji="☕">☕ Cafe</option>
+                        <option value="restoran" data-emoji="🍽️">🍽️ Restoran</option>
+                        <option value="market" data-emoji="🛒">🛒 Market</option>
+                        <option value="eczane" data-emoji="💊">💊 Eczane</option>
+                        <option value="firin" data-emoji="🍞">🍞 Fırın</option>
+                        <option value="avm" data-emoji="🛍️">🛍️ AVM</option>
+                    </select>
+                    <i data-lucide="chevron-down" class="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                </div>
+            </div>
+
+            <!-- Location Controls Card -->
+            <div class="card-overlay rounded-lg p-5 shadow-lg">
+                <h3 class="font-semibold text-gray-900 mb-4">Lokasyon Kontrolleri</h3>
+                
+                <div class="space-y-4">
+                    <!-- Point Analysis Controls -->
+                    <div id="point-controls" class="hidden space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Koordinatlar</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="number" id="point-lat" placeholder="Enlem" step="any" 
+                                       class="p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <input type="number" id="point-lon" placeholder="Boylam" step="any"
+                                       class="p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Area Analysis Controls -->
+                    <div id="area-controls" class="hidden space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Hedef Bölge</label>
+                            <select id="target-area" class="w-full p-3 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value="">Mahalle seçin...</option>
+                                <option value="Demetevler Mahallesi">Demetevler Mahallesi</option>
+                                <option value="Yeşilevler Mahallesi">Yeşilevler Mahallesi</option>
+                                <option value="Pamuklar Mahallesi">Pamuklar Mahallesi</option>
+                                <option value="Kentkoop Mahallesi">Kentkoop Mahallesi</option>
+                                <option value="Gayret Mahallesi">Gayret Mahallesi</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Data Layer Toggles -->
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium">Trafik Verisi</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="traffic-data" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium">Rekabet Analizi</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="competitor-analysis" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium">Demografi</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="demographics" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-2 pt-2">
+                        <button id="run-analysis" class="w-full bg-gradient-secondary hover:bg-gradient-primary text-white py-3 px-4 rounded-lg font-medium transition-all-smooth transform hover:scale-105 shadow-lg">
+                            Analizi Çalıştır
+                        </button>
+                        <button class="w-full border border-gray-200 text-gray-700 py-2 px-4 rounded-lg text-sm hover:bg-gray-50 transition-all-smooth">
+                            Gelişmiş Ayarlar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Site Score Card -->
+            <div class="card-overlay rounded-lg p-5 shadow-lg">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold text-gray-900">Site Skoru</h3>
+                    <span id="category-badge" class="px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full text-sm font-medium">
+                        ☕ Cafe
+                    </span>
+                </div>
+                
+                <div class="text-center mb-6">
+                    <div id="site-score" class="text-5xl font-bold text-gray-900 mb-1">--</div>
+                    <div class="text-sm text-gray-500">100 üzerinden</div>
+                </div>
+
+                <div id="score-breakdown" class="space-y-3 mb-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm">Yaya Trafiği:</span>
+                        <span class="text-sm font-medium text-gray-400">--</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm">Rekabet:</span>
+                        <span class="text-sm font-medium text-gray-400">--</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm">Demografi:</span>
+                        <span class="text-sm font-medium text-gray-400">--</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm">Erişilebilirlik:</span>
+                        <span class="text-sm font-medium text-gray-400">--</span>
+                    </div>
+                </div>
+
+                <button class="w-full border border-gray-200 text-gray-700 py-2 px-4 rounded-lg text-sm hover:bg-gray-50 transition-all-smooth flex items-center justify-center gap-2">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    Raporu Dışa Aktar
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Map Area - 70% -->
+        <div class="w-[70%] flex flex-col">
+            <!-- Header -->
+            <div class="bg-white border-b border-gray-200 p-4 flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-lg font-semibold">İnteraktif Harita Görünümü</h2>
+                    <span id="view-mode-badge" class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                        Isı Haritası Görünümü
+                    </span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="flex items-center gap-2 px-3 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50 transition-all-smooth">
+                        <i data-lucide="layers" class="w-4 h-4"></i>
+                        Katmanlar
+                    </button>
+                    <button class="px-3 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50 transition-all-smooth">
+                        Sığdır
+                    </button>
+                </div>
+            </div>
+
+            <!-- Map Content -->
+            <div class="flex-1 relative">
+                <!-- Map Container -->
+                <div id="map" class="w-full h-full"></div>
+
+                <!-- Map Controls -->
+                <div class="absolute top-4 right-4 flex flex-col gap-2 z-[1000]">
+                    <button id="zoom-in" class="w-8 h-8 bg-white border border-gray-200 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-all-smooth shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                    </button>
+                    <button id="zoom-out" class="w-8 h-8 bg-white border border-gray-200 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-all-smooth shadow-sm">
+                        <i data-lucide="minus" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Legend -->
+                <div class="absolute bottom-4 left-4 bg-white rounded-lg p-3 shadow-lg z-[1000]">
+                    <h4 class="font-medium text-sm mb-2">Açıklama</h4>
+                    <div class="space-y-1 text-xs">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                            <span>Yüksek Skor (80-100)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                            <span>Orta Skor (60-79)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                            <span>Düşük Skor (0-59)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading Overlay -->
+                <div id="loading-overlay" class="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-[2000] hidden">
+                    <div class="text-center">
+                        <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                        <p class="text-gray-600">Analiz yapılıyor...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="fixed top-4 right-4 space-y-2 z-[9999]"></div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script src="/static/modern_dashboard.js?v={{ timestamp }}"></script>
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

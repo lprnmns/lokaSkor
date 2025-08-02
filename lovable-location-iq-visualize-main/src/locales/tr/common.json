@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "LocationIQ Pro",
+    "description": "Gelişmiş Site Seçimi & Pazar Analizi"
+  },
+  "analysisMode": {
+    "title": "Analiz Modu",
+    "point": {
+      "title": "Nokta Analizi",
+      "description": "Belirli lokasyonları analiz et"
+    },
+    "area": {
+      "title": "Bölge Analizi",
+      "description": "Mahalleleri karşılaştır"
+    },
+    "heatmap": {
+      "title": "Harita Görünümü",
+      "description": "Veri yoğunluğunu görselleştir"
+    }
+  },
+  "businessCategory": {
+    "title": "İş Kategorisi",
+    "cafe": "Kafe",
+    "restaurant": "Restoran",
+    "retail": "Perakende",
+    "pharmacy": "Eczane"
+  },
+  "locationControls": {
+    "title": "Lokasyon Kontrolleri",
+    "targetArea": "Hedef Bölge",
+    "downtown": "Şehir Merkezi",
+    "suburbs": "Banliyöler",
+    "waterfront": "Sahil Şeridi",
+    "trafficData": "Trafik Verileri",
+    "competitorAnalysis": "Rakip Analizi",
+    "demographics": "Demografik Veriler",
+    "runAnalysis": "Analiz Çalıştır",
+    "advancedSettings": "Gelişmiş Ayarlar"
+  },
+  "siteScore": {
+    "title": "Site Skoru",
+    "outOf": "/ 100 üzerinden",
+    "footTraffic": "Yaya Trafiği",
+    "competition": "Rekabet",
+    "demographics": "Demografi",
+    "accessibility": "Erişilebilirlik",
+    "high": "Yüksek",
+    "medium": "Orta",
+    "excellent": "Mükemmel",
+    "veryGood": "Çok İyi",
+    "exportReport": "Raporu Dışa Aktar"
+  },
+  "mapView": {
+    "title": "Etkileşimli Harita Görünümü",
+    "heatmapView": "Harita Görünümü",
+    "layers": "Katmanlar",
+    "zoomToFit": "Uyacak Şekilde Yakınlaştır",
+    "mapPlaceholder": {
+      "title": "Etkileşimli Harita",
+      "description": "Lokasyon analiziniz işaretçiler, haritalar ve demografik katmanlarla burada gösterilecek.",
+      "analyzing": "Şehir Merkezi Analiz Ediliyor"
+    },
+    "legend": {
+      "title": "Legenda",
+      "highScore": "Yüksek Skor (80-100)",
+      "mediumScore": "Orta Skor (60-79)",
+      "lowScore": "Düşük Skor (0-59)"
+    }
+  }
+}

@@ -1,0 +1,81 @@
+<!-- Enhanced Sticky Navigation Component -->
+<nav class="nav-sticky" id="stickyNavigation">
+    <div class="nav-container">
+        <div class="nav-content">
+            <!-- Logo Section -->
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <svg width="24" height="24" fill="white" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <span class="logo-text">LocationIQ</span>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Özellikler</a>
+                <a href="#demo" class="nav-link">Demo</a>
+                <a href="#contact" class="nav-link">İletişim</a>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="nav-buttons">
+                <a href="/admin" class="nav-button nav-button-primary">Admin Panel</a>
+                <a href="/" class="nav-button nav-button-secondary">Eski Sürüm</a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-content">
+                <a href="#features" class="mobile-nav-link">Özellikler</a>
+                <a href="#demo" class="mobile-nav-link">Demo</a>
+                <a href="#contact" class="mobile-nav-link">İletişim</a>
+                <div class="mobile-nav-buttons">
+                    <a href="/admin" class="mobile-nav-button mobile-nav-button-primary">Admin Panel</a>
+                    <a href="/" class="mobile-nav-button mobile-nav-button-secondary">Eski Sürüm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script>
+// Basic mobile menu functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (mobileMenuToggle && mobileMenu) {
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            mobileMenuToggle.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenuToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
+            }
+        });
+
+        // Close mobile menu when clicking on links
+        const mobileLinks = mobileMenu.querySelectorAll('.mobile-nav-link, .mobile-nav-button');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
+            });
+        });
+    }
+});
+</script>

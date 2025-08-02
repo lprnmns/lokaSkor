@@ -1,0 +1,481 @@
+<!-- Page Transition Component - Modern & Smooth: Slide + Blur -->
+<style>
+    /* Page Transition Overlay */
+    .page-transition-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #f8fafc 0%, #dbeafe 50%, #e0e7ff 100%);
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        backdrop-filter: blur(0px);
+    }
+
+    .page-transition-overlay.active {
+        opacity: 1;
+        visibility: visible;
+        backdrop-filter: blur(10px);
+    }
+
+    /* Sliding Content */
+    .page-transition-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) translateX(100px);
+        text-align: center;
+        color: #1f2937;
+        transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .page-transition-overlay.active .page-transition-content {
+        transform: translate(-50%, -50%) translateX(0px);
+    }
+
+    /* Loading Animation */
+    .page-transition-loader {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 20px;
+        position: relative;
+    }
+
+    .page-transition-spinner {
+        width: 100%;
+        height: 100%;
+        border: 3px solid rgba(59, 130, 246, 0.2);
+        border-top: 3px solid #3b82f6;
+        border-radius: 50%;
+        animation: page-spin 1s linear infinite;
+    }
+
+    @keyframes page-spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Progress Bar */
+    .page-transition-progress {
+        width: 200px;
+        height: 4px;
+        background: rgba(59, 130, 246, 0.2);
+        border-radius: 2px;
+        margin: 20px auto;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .page-transition-progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        border-radius: 2px;
+        width: 0%;
+        transition: width 0.5s ease;
+        position: relative;
+    }
+
+    .page-transition-progress-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        animation: progress-shimmer 1.5s infinite;
+    }
+
+    @keyframes progress-shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    /* Text Animation */
+    .page-transition-text {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease 0.2s;
+    }
+
+    .page-transition-overlay.active .page-transition-text {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+
+    .page-transition-subtext {
+        font-size: 0.875rem;
+        color: #6b7280;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease 0.3s;
+    }
+
+    .page-transition-overlay.active .page-transition-subtext {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+
+    /* Page Content Blur Effect */
+    .page-blur-transition {
+        transition: filter 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .page-blur-transition.blurred {
+        filter: blur(8px);
+        transform: scale(0.95);
+    }
+
+    /* Slide Direction Classes */
+    .slide-left .page-transition-content {
+        transform: translate(-50%, -50%) translateX(-100px);
+    }
+
+    .slide-right .page-transition-content {
+        transform: translate(-50%, -50%) translateX(100px);
+    }
+
+    .slide-up .page-transition-content {
+        transform: translate(-50%, -50%) translateY(-50px);
+    }
+
+    .slide-down .page-transition-content {
+        transform: translate(-50%, -50%) translateY(50px);
+    }
+
+    /* Floating particles during transition */
+    .transition-particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: #3b82f6;
+        border-radius: 50%;
+        opacity: 0.6;
+        animation: particle-float 2s ease-out forwards;
+    }
+
+    @keyframes particle-float {
+        0% {
+            opacity: 0.6;
+            transform: translateY(0px) scale(1);
+        }
+        50% {
+            opacity: 0.8;
+            transform: translateY(-30px) scale(1.2);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-60px) scale(0.5);
+        }
+    }
+
+    /* Enhanced Button Hover Effects - Force Override */
+    .btn-primary, .btn-secondary, .btn-white, .btn-outline, 
+    a[class*="btn"], button[class*="btn"],
+    .hero-buttons a, .cta-buttons a, .nav-button {
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+        cursor: pointer !important;
+        position: relative !important;
+        overflow: hidden !important;
+        pointer-events: auto !important;
+    }
+
+    .btn-primary:hover, .btn-secondary:hover, .btn-white:hover, .btn-outline:hover,
+    a[class*="btn"]:hover, button[class*="btn"]:hover,
+    .hero-buttons a:hover, .cta-buttons a:hover, .nav-button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .btn-primary:active, .btn-secondary:active, .btn-white:active, .btn-outline:active,
+    a[class*="btn"]:active, button[class*="btn"]:active,
+    .hero-buttons a:active, .cta-buttons a:active, .nav-button:active {
+        transform: translateY(0px) !important;
+        transition: all 0.1s ease !important;
+    }
+
+    /* Ensure buttons are clickable */
+    .btn-primary, .btn-secondary, .btn-white, .btn-outline,
+    a[class*="btn"], button[class*="btn"],
+    .hero-buttons a, .cta-buttons a {
+        z-index: 100 !important;
+        position: relative !important;
+    }
+
+    /* Ripple effect for buttons */
+    .btn-ripple {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-ripple::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-ripple:active::before {
+        width: 300px;
+        height: 300px;
+    }
+</style>
+
+<!-- Page Transition Overlay -->
+<div id="pageTransitionOverlay" class="page-transition-overlay">
+    <div class="page-transition-content">
+        <div class="page-transition-loader">
+            <div class="page-transition-spinner"></div>
+        </div>
+        <div class="page-transition-text">Sayfa Yükleniyor...</div>
+        <div class="page-transition-subtext">Lütfen bekleyin</div>
+        <div class="page-transition-progress">
+            <div class="page-transition-progress-bar" id="transitionProgressBar"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Modern Page Transition System
+class PageTransitionManager {
+    constructor() {
+        this.overlay = document.getElementById('pageTransitionOverlay');
+        this.progressBar = document.getElementById('transitionProgressBar');
+        this.isTransitioning = false;
+        this.init();
+    }
+
+    init() {
+        // First, ensure all buttons work normally
+        this.interceptLinks();
+        this.enhanceButtons();
+        
+        // Handle browser back/forward
+        window.addEventListener('popstate', (e) => {
+            if (e.state && e.state.url) {
+                this.navigateToPage(e.state.url, 'slide-left');
+            }
+        });
+
+        // Page load complete handler
+        window.addEventListener('load', () => {
+            this.hideTransition();
+        });
+
+        // Handle page visibility change
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && this.isTransitioning) {
+                this.hideTransition();
+            }
+        });
+
+        console.log('PageTransitionManager initialized');
+    }
+
+    enhanceButtons() {
+        // This method is now handled in interceptLinks
+        console.log('Button enhancement initialized');
+    }
+
+    interceptLinks() {
+        // Only intercept links that explicitly want transitions
+        const transitionLinks = document.querySelectorAll('a[data-transition="true"], .page-transition-link');
+        
+        transitionLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (!href || href === '#' || href.startsWith('javascript:')) {
+                return;
+            }
+
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const direction = this.getSlideDirection(link);
+                this.navigateToPage(href, direction);
+            });
+        });
+
+        // Add hover effects to ALL buttons (without intercepting clicks)
+        const allButtons = document.querySelectorAll('a, button, .btn-primary, .btn-secondary, .btn-white, .btn-outline');
+        
+        allButtons.forEach(button => {
+            if (button.dataset.hoverAdded) return;
+            button.dataset.hoverAdded = 'true';
+            
+            button.addEventListener('mouseenter', function() {
+                if (!this.classList.contains('disabled') && !this.hasAttribute('disabled')) {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.transition = 'all 0.3s ease';
+                    this.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
+                }
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('disabled') && !this.hasAttribute('disabled')) {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                }
+            });
+        });
+    }
+
+    getSlideDirection(link) {
+        // Determine slide direction based on navigation context
+        const href = link.getAttribute('href');
+        const currentPath = window.location.pathname;
+        
+        // Define navigation hierarchy
+        const hierarchy = [
+            '/new-ui',
+            '/landing', 
+            '/business-selection',
+            '/mode-selection',
+            '/modern-dashboard',
+            '/analysis-dashboard',
+            '/animation-demo'
+        ];
+
+        const currentIndex = hierarchy.indexOf(currentPath);
+        const targetIndex = hierarchy.indexOf(href);
+
+        if (currentIndex !== -1 && targetIndex !== -1) {
+            return targetIndex > currentIndex ? 'slide-right' : 'slide-left';
+        }
+
+        // Default directions for specific cases
+        if (href.includes('back') || href.includes('geri')) return 'slide-left';
+        if (href.includes('next') || href.includes('ileri')) return 'slide-right';
+        
+        return 'slide-right'; // Default
+    }
+
+    async navigateToPage(url, direction = 'slide-right') {
+        if (this.isTransitioning) return;
+        
+        this.isTransitioning = true;
+        
+        // Show transition with direction
+        await this.showTransition(direction);
+        
+        // Add to browser history
+        if (url !== window.location.pathname) {
+            history.pushState({ url: url }, '', url);
+        }
+        
+        // Simulate loading progress
+        await this.animateProgress();
+        
+        // Navigate to new page
+        window.location.href = url;
+    }
+
+    async showTransition(direction = 'slide-right') {
+        return new Promise((resolve) => {
+            // Blur current page content
+            const mainContent = document.querySelector('.main-content, body > *:not(#pageTransitionOverlay)');
+            if (mainContent) {
+                mainContent.classList.add('page-blur-transition', 'blurred');
+            }
+
+            // Set slide direction
+            this.overlay.className = `page-transition-overlay ${direction}`;
+            
+            // Show overlay
+            requestAnimationFrame(() => {
+                this.overlay.classList.add('active');
+                
+                // Create floating particles
+                this.createTransitionParticles();
+                
+                setTimeout(resolve, 100);
+            });
+        });
+    }
+
+    async hideTransition() {
+        return new Promise((resolve) => {
+            this.overlay.classList.remove('active');
+            
+            // Remove blur from content
+            const blurredElements = document.querySelectorAll('.blurred');
+            blurredElements.forEach(el => {
+                el.classList.remove('blurred');
+            });
+            
+            setTimeout(() => {
+                this.isTransitioning = false;
+                this.progressBar.style.width = '0%';
+                resolve();
+            }, 500);
+        });
+    }
+
+    async animateProgress() {
+        return new Promise((resolve) => {
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15 + 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(resolve, 200);
+                }
+                this.progressBar.style.width = progress + '%';
+            }, 50);
+        });
+    }
+
+    createTransitionParticles() {
+        const particleCount = 8;
+        const overlay = this.overlay;
+        
+        for (let i = 0; i < particleCount; i++) {
+            setTimeout(() => {
+                const particle = document.createElement('div');
+                particle.className = 'transition-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                
+                overlay.appendChild(particle);
+                
+                // Remove particle after animation
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, 2000);
+            }, i * 100);
+        }
+    }
+
+    // Public method to trigger transition programmatically
+    static navigate(url, direction = 'slide-right') {
+        if (window.pageTransitionManager) {
+            window.pageTransitionManager.navigateToPage(url, direction);
+        }
+    }
+}
+
+// Initialize page transition system
+document.addEventListener('DOMContentLoaded', () => {
+    window.pageTransitionManager = new PageTransitionManager();
+});
+
+// Expose global navigation function
+window.navigateWithTransition = (url, direction) => {
+    if (window.pageTransitionManager) {
+        window.pageTransitionManager.navigateToPage(url, direction);
+    }
+};
+</script>

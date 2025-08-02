@@ -1,0 +1,232 @@
+{
+  "landing": {
+    "title": "LocationIQ - Find the perfect location for your business with AI",
+    "features": "Features",
+    "howItWorks": "How It Works",
+    "contact": "Contact",
+    "heroTitle": "Find the perfect location for your business",
+    "heroHighlight": " with AI",
+    "heroSubtitle": "An intelligent platform that helps SMEs and entrepreneurs in Turkey discover the most profitable locations through data analysis when starting a new business",
+    "startAnalysis": "Start Analysis",
+    "freeBadge": "Free • No registration • Instant results",
+    "stats": {
+      "locations": "Locations Analyzed",
+      "businesses": "Successful Businesses",
+      "accuracy": "% Accuracy Rate"
+    },
+    "whyTitle": "Why LocationIQ?",
+    "whySubtitle": "Enhance your location decisions with advanced data analysis and AI",
+    "featuresList": {
+      "precise": {
+        "title": "Precise Location Analysis",
+        "description": "Determine optimal locations using population density, competitor analysis, transportation networks, and demographic data."
+      },
+      "businessSpecific": {
+        "title": "Business Type Specific",
+        "description": "Customized analysis criteria and scoring systems for pharmacies, bakeries, markets, cafes, and restaurants."
+      },
+      "interactiveMap": {
+        "title": "Interactive Map",
+        "description": "Review results on visual maps and discover potential areas with heat maps."
+      },
+      "instantResults": {
+        "title": "Instant Results",
+        "description": "Get detailed analysis results in seconds and make decisions without delay."
+      },
+      "reliableData": {
+        "title": "Reliable Data",
+        "description": "Analysis results supported by current and verified data, providing trustworthy recommendations."
+      },
+      "smeFocused": {
+        "title": "SME Focused",
+        "description": "Analysis algorithms specifically designed for the needs of small and medium-sized enterprises."
+      }
+    },
+    "howItWorksTitle": "How It Works?",
+    "howItWorksSubtitle": "Find the perfect location for your business in 3 simple steps",
+    "steps": {
+      "step1": {
+        "title": "Choose Business Type",
+        "description": "Select your business type such as pharmacy, bakery, market, cafe, or restaurant."
+      },
+      "step2": {
+        "title": "Select Analysis Mode",
+        "description": "Compare specific locations or discover new opportunities."
+      },
+      "step3": {
+        "title": "Review Results",
+        "description": "Determine the best location with detailed analysis reports and recommendations."
+      }
+    }
+  },
+  "businessSelection": {
+    "title": "Business Type Selection - LocationIQ",
+    "back": "Back",
+    "stepIndicator": "Choose Your Business Type",
+    "stepSubtitle": "Select your business type so we can provide you with the most suitable location analysis",
+    "businessTypes": {
+      "pharmacy": {
+        "title": "Pharmacy",
+        "description": "Healthcare-focused analysis. Priority given to hospital proximity, elderly population density, and transportation accessibility."
+      },
+      "bakery": {
+        "title": "Bakery",
+        "description": "Daily needs-focused analysis. Emphasis on residential density, pedestrian traffic, and competitive analysis."
+      },
+      "market": {
+        "title": "Market",
+        "description": "Retail-focused analysis. Population density, income level, and parking facilities are evaluated."
+      },
+      "cafe": {
+        "title": "Cafe",
+        "description": "Social space-focused analysis. Young population, student density, and social activity areas are prioritized."
+      },
+      "restaurant": {
+        "title": "Restaurant",
+        "description": "Food service-focused analysis. Business center proximity, income level, and evening traffic are evaluated."
+      },
+      "other": {
+        "title": "Other",
+        "description": "More business types will be added soon..."
+      }
+    },
+    "continue": "Select Business Type",
+    "helpText": "If your business type is not listed, you can choose the closest one",
+    "loading": "Analysis panel is being prepared..."
+  },
+  "modeSelection": {
+    "title": "Analysis Mode Selection - LocationIQ",
+    "back": "Back",
+    "stepIndicator": "Choose Analysis Mode",
+    "stepSubtitle": "Start your location research by selecting the analysis method that best suits your needs",
+    "businessTypePrefix": "Business Type:",
+    "modes": {
+      "comparison": {
+        "title": "Compare Specific Locations",
+        "subtitle": "Analyze the potential of multiple locations in your mind and determine the best one",
+        "features": [
+          "Add and compare multiple addresses",
+          "Detailed score analysis and comparison table",
+          "Competitor density and target audience compatibility",
+          "Pedestrian access and transportation convenience analysis",
+          "Overall score evaluation out of 100"
+        ],
+        "continue": "Start Comparison"
+      },
+      "discovery": {
+        "title": "Discover New Opportunities",
+        "subtitle": "Let us find and recommend the most suitable locations in your selected area",
+        "features": [
+          "Analysis by province, district and neighborhood",
+          "Potential visualization with heat maps",
+          "Top 5 highest-scoring location recommendations",
+          "Regional opportunity analysis and discovery",
+          "Fast area scanning and evaluation"
+        ],
+        "continue": "Start Discovery"
+      }
+    },
+    "helpTitle": "Which mode should I choose?",
+    "helpText": "If you have specific addresses, choose Mode 1, if you're looking for new opportunities, choose Mode 2"
+  },
+  "sidebar": {
+    "container": "Sidebar",
+    "title": "LocationIQ",
+    "subtitle": "Location Analysis Platform",
+    "menu": {
+      "dashboard": "Dashboard",
+      "analysis": "Analysis",
+      "reports": "Reports",
+      "settings": "Settings"
+    },
+    "sections": {
+      "businessTypes": "Business Types",
+      "analysisModes": "Analysis Modes"
+    },
+    "businessTypes": {
+      "pharmacy": "Pharmacy",
+      "bakery": "Bakery",
+      "market": "Market",
+      "cafe": "Cafe",
+      "restaurant": "Restaurant"
+    },
+    "analysisModes": {
+      "comparison": "Comparison",
+      "discovery": "Discovery"
+    },
+    "copyright": "© 2024 LocationIQ. All rights reserved."
+  },
+  "map": {
+    "container": "Map Container",
+    "title": "Map",
+    "controls": {
+      "zoomIn": "Zoom In",
+      "zoomOut": "Zoom Out",
+      "reset": "Reset"
+    },
+    "overlay": "Loading map...",
+    "info": "Map information will be displayed here"
+  },
+  "errors": {
+    "generic": {
+      "title": "An Error Occurred",
+      "message": "An unexpected error occurred. Please try again."
+    },
+    "network": {
+      "title": "Connection Error",
+      "message": "Please check your internet connection and try again."
+    },
+    "api": {
+      "title": "Server Error",
+      "serverError": "There's a problem with the server. Please try again later.",
+      "notFound": "The requested resource was not found.",
+      "forbidden": "You don't have permission for this action.",
+      "requestError": "An error occurred while processing the request."
+    },
+    "validation": {
+      "title": "Invalid Data",
+      "message": "The entered data is invalid.",
+      "missingFields": "Missing fields"
+    },
+    "map": {
+      "title": "Map Error",
+      "message": "A problem occurred while loading the map."
+    },
+    "actions": {
+      "retry": "Retry",
+      "close": "Close",
+      "ok": "OK",
+      "refreshMap": "Refresh Map"
+    },
+    "success": {
+      "title": "Success",
+      "message": "Operation completed successfully."
+    },
+    "info": {
+      "title": "Information",
+      "message": "Information message."
+    }
+  },
+  "api": {
+    "errors": {
+      "timeout": "Request timed out",
+      "network": "Network error - check your connection",
+      "unknown": "An unknown error occurred"
+    },
+    "validation": {
+      "missingParams": "Missing required parameters",
+      "missingLocations": "Locations array is required",
+      "missingBusinessType": "Business type is required",
+      "missingRegionParams": "Missing required region parameters",
+      "missingHeatmapParams": "Missing required heatmap parameters",
+      "queryTooShort": "Search query must be at least 3 characters",
+      "invalidCoordinates": "Invalid coordinates - must be numbers",
+      "latitudeRange": "Latitude must be between -90 and 90",
+      "longitudeRange": "Longitude must be between -180 and 180",
+      "invalidBusinessType": "Invalid business type. Must be one of: {types}"
+    },
+    "errors": {
+      "scoringFailed": "Failed to score multiple points"
+    }
+  }
+}

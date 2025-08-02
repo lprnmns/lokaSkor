@@ -1,0 +1,10 @@
+{
+  "agent_model": "claude-4.0-sonnet",
+  "steering_document_path": "./AGENT_STEERING_PROMPT.md",
+  "agent_hooks": [],
+  "user_persona": "Project Lead & Product Manager",
+  "project_goals": [
+    "Build and refine a world-class location analysis and comparison tool.",
+    "Focus on intuitive UI, clean code, and modular architecture."
+  ]
+}

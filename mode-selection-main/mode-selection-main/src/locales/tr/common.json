@@ -1,0 +1,39 @@
+{
+  "app": {
+    "title": "LocationIQ",
+    "back": "Geri",
+    "analyzeButton": "{{mode}} Analizini Başlat"
+  },
+  "hero": {
+    "title": "Hangi analiz türünü tercih ediyorsunuz?",
+    "subtitle": "İhtiyacınıza en uygun analiz modülünü seçin ve lokasyon potansiyelini keşfedin"
+  },
+  "modes": {
+    "compare": {
+      "title": "Belirli Dükkanları Karşılaştır",
+      "description": "Bildiğiniz spesifik adresleri karşılaştırın ve hangisinin daha avantajlı olduğunu öğrenin",
+      "featuresTitle": "Bu modda neler var:",
+      "features": [
+        "Birden fazla adres karşılaştırması",
+        "Detaylı skor analizi",
+        "Rakip yoğunluğu karşılaştırması",
+        "Yaya erişimi değerlendirmesi"
+      ]
+    },
+    "discover": {
+      "title": "Yeni Fırsatları Keşfet",
+      "description": "Belirli bir bölgedeki en potansiyelli lokasyonları keşfedin ve yeni fırsatları yakalayın",
+      "featuresTitle": "Bu modda neler var:",
+      "features": [
+        "Bölgesel potansiyel haritası",
+        "En iyi 5 lokasyon önerisi",
+        "Mahalle bazında analiz",
+        "Yoğunluk haritası görselleştirme"
+      ]
+    }
+  },
+  "footer": {
+    "title": "Windows'u Etkinleştir",
+    "description": "Windows'u etkinleştirmek için Ayarlar'a gidin"
+  }
+}

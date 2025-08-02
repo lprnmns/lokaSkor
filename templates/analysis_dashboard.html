@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocationIQ - Analiz Dashboard</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/design_system.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern_ui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    {% include 'components/floating_background.html' %}
+    {% include 'components/simple_button_effects.html' %}
+    {% include 'components/safe_page_transition.html' %}
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="welcome-screen">
+        <div class="welcome-content">
+            <div class="welcome-icon">📍</div>
+            <h1 class="welcome-title">LocationIQ</h1>
+            <p class="welcome-description">Lokasyon analizi sonuçlarını görüntüleyin</p>
+            <div class="welcome-features">
+                <div class="feature-item">
+                    <span>📊</span>
+                    <span>Detaylı Analiz</span>
+                </div>
+                <div class="feature-item">
+                    <span>🗺️</span>
+                    <span>Harita Görünümü</span>
+                </div>
+                <div class="feature-item">
+                    <span>📈</span>
+                    <span>İstatistikler</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar-container">
+            <div class="sidebar-header">
+                <h2>LocationIQ</h2>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <div class="menu-item active">
+                    <span class="menu-icon">🏠</span>
+                    <span>Ana Sayfa</span>
+                </div>
+                <div class="menu-item" onclick="goBack()">
+                    <span class="menu-icon">⬅️</span>
+                    <span>Geri Dön</span>
+                </div>
+                <div class="menu-item" onclick="resetAnalysis()">
+                    <span class="menu-icon">🔄</span>
+                    <span>Yeniden Başlat</span>
+                </div>
+                <div class="menu-item" onclick="showHelp()">
+                    <span class="menu-icon">❓</span>
+                    <span>Yardım</span>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div class="dashboard-body">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="header-content">
+                    <div class="header-left">
+                        <div class="header-title">
+                            <h1 class="dashboard-title">Analiz Dashboard</h1>
+                            <p class="dashboard-subtitle" id="dashboardSubtitle">Bölge Analizi</p>
+                        </div>
+                    </div>
+                    
+                    <div class="header-right">
+                        <div class="header-info">
+                            <div class="info-item">
+                                <span class="info-label">Mod:</span>
+                                <span class="info-value" id="analysisModeElement">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">İşletme:</span>
+                                <span class="info-value" id="businessTypeElement">-</span>
+                            </div>
+                        </div>
+                        
+                        <div class="header-actions">
+                            <button class="btn btn-outline btn-sm" onclick="toggleFullscreen()">⛶</button>
+                            <button class="btn btn-outline btn-sm" onclick="toggleHeaderMenu()">⋮</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Header Dropdown Menu -->
+                <div id="headerMenuDropdown" class="header-menu-dropdown hidden">
+                    <div class="menu-item" onclick="shareResults()">
+                        <span>📤</span>
+                        <span>Sonuçları Paylaş</span>
+                    </div>
+                    <div class="menu-item" onclick="exportResults()">
+                        <span>💾</span>
+                        <span>Dışa Aktar</span>
+                    </div>
+                    <div class="menu-item" onclick="printResults()">
+                        <span>🖨️</span>
+                        <span>Yazdır</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="status-left">
+                    <div class="status-item">
+                        <span class="status-label">Durum:</span>
+                        <span class="status-value" id="analysisStatus">Hazır</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Lokasyon Sayısı:</span>
+                        <span class="status-value" id="locationCount">0</span>
+                    </div>
+                </div>
+                
+                <div class="status-right">
+                    <div class="status-item">
+                        <span class="status-label">Son Güncelleme:</span>
+                        <span class="status-value" id="lastUpdate">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="main-content dashboard-main">
+                <!-- Map Section -->
+                <section class="map-section">
+                    <div class="map-container">
+                        <div id="mapContainer" style="height: 100%;"></div>
+                        <div class="map-loading" id="mapLoading">
+                            <div class="loading-spinner"></div>
+                            <span>Harita yükleniyor...</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Map Controls -->
+                    <div class="map-controls">
+                        <div class="map-control-group">
+                            <button class="map-control-btn active" onclick="toggleMapStyle()">🗺️</button>
+                            <button class="map-control-btn" onclick="centerMap()">🎯</button>
+                            <button class="map-control-btn" onclick="zoomIn()">➕</button>
+                            <button class="map-control-btn" onclick="zoomOut()">➖</button>
+                            <button class="map-control-btn" onclick="toggleHeatmap()">🔥</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Map Legend -->
+                    <div id="mapLegend" class="map-legend">
+                        <h4>Harita Açıklaması</h4>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #22c55e;"></span>
+                            <span>Yüksek Puan</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #eab308;"></span>
+                            <span>Orta Puan</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #ef4444;"></span>
+                            <span>Düşük Puan</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Heatmap Toggle -->
+                    <div id="heatmapToggle" class="heatmap-toggle" style="display: none;">
+                        <button class="btn btn-primary btn-sm" onclick="toggleHeatmap()">
+                            Isı Haritası
+                        </button>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Yardım</h3>
+                <button class="modal-close" onclick="closeHelpModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="help-section">
+                    <h4>Harita Kontrolleri</h4>
+                    <p>Harita üzerinde gezinmek için fare ile sürükleyin. Yakınlaştırmak için mouse tekerleğini kullanın.</p>
+                </div>
+                <div class="help-section">
+                    <h4>Klavye Kısayolları</h4>
+                    <ul>
+                        <li><strong>F</strong> - Tam ekran</li>
+                        <li><strong>R</strong> - Analizi sıfırla</li>
+                        <li><strong>H</strong> - Yardım</li>
+                        <li><strong>S</strong> - Sonuçları paylaş</li>
+                        <li><strong>Esc</strong> - Menüleri kapat</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- JavaScript Files -->
+    <script src="{{ url_for('static', filename='js/new_ui/animation_performance.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/animation_manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/loading_manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/error_handler.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/api_client.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/map_manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/mode1_controller.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/mode2_controller.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/heatmap_manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/main.js') }}"></script>
+
+    <!-- Dashboard-specific JavaScript -->
+    <script>
+        // Dashboard Application Class
+        class DashboardApp {
+            constructor() {
+                this.currentMode = null;
+                this.businessType = null;
+                this.mapManager = null;
+                this.sidebarManager = null;
+                this.mode1Controller = null;
+                this.mode2Controller = null;
+                this.heatmapManager = null;
+                this.loadingManager = null;
+                this.isFullscreen = false;
+            }
+
+            async init() {
+                try {
+                    console.log('Dashboard yükleniyor...');
+                    
+                    // Show initial loading
+                    this.loadingManager = new LoadingManager();
+                    this.loadingManager.showPageLoading('Dashboard yükleniyor...');
+                    
+                    // Get URL parameters
+                    const urlParams = new URLSearchParams(window.location.search);
+                    this.currentMode = urlParams.get('mode') || localStorage.getItem('selectedMode');
+                    this.businessType = urlParams.get('business_type') || localStorage.getItem('selectedBusinessType');
+                    
+                    // Initialize components
+                    await this.initializeComponents();
+                    
+                    // Setup event listeners
+                    this.setupEventListeners();
+                    
+                    // Update UI
+                    this.updateDashboardInfo();
+                    
+                    // Hide loading
+                    this.loadingManager.hidePageLoading();
+                    
+                    console.log('Dashboard initialized successfully');
+                } catch (error) {
+                    console.error('Dashboard initialization failed:', error);
+                    this.showError('Dashboard yüklenirken bir hata oluştu');
+                }
+            }
+
+            async initializeComponents() {
+                // Initialize API client
+                this.apiClient = new ApiClient();
+                
+                // Initialize map
+                this.mapManager = new MapManager('mapContainer');
+                await this.mapManager.init();
+                
+                // Initialize sidebar
+                this.sidebarManager = new SidebarManager();
+                this.sidebarManager.updateBusinessType(this.businessType);
+                this.sidebarManager.setMode(this.currentMode);
+                
+                // Initialize mode controllers
+                this.mode1Controller = new Mode1Controller(this.apiClient, this.mapManager, this.sidebarManager);
+                this.mode2Controller = new Mode2Controller(this.apiClient, this.mapManager, this.sidebarManager);
+                
+                // Initialize heatmap manager
+                this.heatmapManager = new HeatmapManager(this.mapManager);
+                
+                // Set active controller based on mode
+                this.setActiveMode(this.currentMode);
+            }
+
+            setActiveMode(mode) {
+                this.currentMode = mode;
+                
+                // Update UI elements based on mode
+                const welcomeScreen = document.getElementById('welcomeScreen');
+                const mapLegend = document.getElementById('mapLegend');
+                const heatmapToggle = document.getElementById('heatmapToggle');
+                
+                if (mode === 'region') {
+                    // No mode selected, show welcome screen
+                    welcomeScreen.style.display = 'flex';
+                    mapLegend.classList.add('hidden');
+                    heatmapToggle.style.display = 'none';
+                } else if (mode === 'comparison') {
+                    heatmapToggle.style.display = 'none';
+                    welcomeScreen.style.display = 'none';
+                    mapLegend.classList.remove('hidden');
+                } else {
+                    welcomeScreen.style.display = 'none';
+                    mapLegend.classList.remove('hidden');
+                    heatmapToggle.style.display = 'block';
+                }
+                
+                // Update UI elements
+                this.updateDashboardInfo();
+            }
+
+            updateDashboardInfo() {
+                // Update header info
+                const businessNames = {
+                    'market': 'Market',
+                    'cafe': 'Cafe',
+                    'restoran': 'Restoran',
+                    'firin': 'Fırın',
+                    'eczane': 'Eczane'
+                };
+                
+                const modeNames = {
+                    'region': 'Bölge Analizi',
+                    'comparison': 'Nokta Karşılaştırması'
+                };
+                
+                const businessTypeElement = document.getElementById('businessTypeElement');
+                if (businessTypeElement) {
+                    businessTypeElement.textContent = businessNames[this.businessType] || '-';
+                }
+                
+                const analysisModeElement = document.getElementById('analysisModeElement');
+                if (analysisModeElement) {
+                    analysisModeElement.textContent = modeNames[this.currentMode] || '-';
+                }
+                
+                const subtitleElement = document.getElementById('dashboardSubtitle');
+                if (subtitleElement) {
+                    subtitleElement.textContent = `${businessNames[this.businessType] || 'İşletme'} - ${modeNames[this.currentMode] || 'Analiz modunu seçin'}`;
+                }
+            }
+
+            updateStatus(status) {
+                const statusElement = document.getElementById('analysisStatus');
+                if (statusElement) {
+                    statusElement.textContent = status;
+                }
+            }
+
+            updateLocationCount(count) {
+                const locationCountElement = document.getElementById('locationCount');
+                if (locationCountElement && locationCountValue) {
+                    locationCountElement.textContent = count;
+                    if (count > 0) {
+                        locationCountElement.style.display = 'block';
+                    } else {
+                        locationCountElement.style.display = 'none';
+                    }
+                }
+            }
+
+            updateLastUpdate() {
+                const lastUpdateElement = document.getElementById('lastUpdate');
+                if (lastUpdateElement) {
+                    const now = new Date();
+                    lastUpdateElement.textContent = now.toLocaleTimeString('tr-TR');
+                }
+            }
+
+            setupEventListeners() {
+                // Window events
+                window.addEventListener('resize', () => {
+                    this.handleWindowResize();
+                });
+                
+                window.addEventListener('beforeunload', (event) => {
+                    this.handleBeforeUnload(event);
+                });
+                
+                // Analysis events
+                window.addEventListener('analysisComplete', (event) => {
+                    this.handleAnalysisComplete(event.detail);
+                });
+                
+                window.addEventListener('regionAnalysisComplete', (event) => {
+                    this.handleRegionAnalysisComplete(event.detail);
+                });
+                
+                // Sidebar toggle events
+                window.addEventListener('sidebarToggle', (event) => {
+                    this.handleSidebarToggle(event.detail);
+                });
+                
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (event) => {
+                    this.handleKeyboardShortcuts(event);
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (event) => {
+                    const headerMenu = document.getElementById('headerMenuDropdown');
+                    const menuButton = event.target.closest('.header-menu');
+                    if (!menuButton && headerMenu) {
+                        headerMenu.classList.add('hidden');
+                    }
+                });
+            }
+
+            handleKeyboardShortcuts(event) {
+                // Ctrl/Cmd + shortcuts
+                if (event.ctrlKey || event.metaKey) {
+                    switch (event.key) {
+                        case 'r':
+                            event.preventDefault();
+                            this.resetAnalysis();
+                            break;
+                        case 'f':
+                            event.preventDefault();
+                            this.toggleFullscreen();
+                            break;
+                        case 'h':
+                            event.preventDefault();
+                            this.showHelp();
+                            break;
+                        case 's':
+                            event.preventDefault();
+                            this.exportResults();
+                            break;
+                    }
+                }
+                
+                // Escape key
+                if (event.key === 'Escape') {
+                    this.closeHelpModal();
+                }
+            }
+
+            handleBeforeUnload(event) {
+                // Warn user if analysis is in progress
+                if (this.loadingManager && this.loadingManager.getActiveLoaders().length > 0) {
+                    event.returnValue = 'Analiz devam ediyor. Sayfayı kapatmak istediğinizden emin misiniz?';
+                }
+            }
+
+            handleWindowResize() {
+                if (this.mapManager) {
+                    this.mapManager.map.resize();
+                }
+            }
+
+            handleSidebarToggle(detail) {
+                const dashboardContainer = document.querySelector('.dashboard-container');
+                if (detail.collapsed) {
+                    dashboardContainer.classList.add('sidebar-collapsed');
+                } else {
+                    dashboardContainer.classList.remove('sidebar-collapsed');
+                }
+                
+                // Resize map after sidebar toggle
+                setTimeout(() => {
+                    if (this.mapManager) {
+                        this.mapManager.map.resize();
+                    }
+                }, 300);
+            }
+
+            handleAnalysisComplete(detail) {
+                const { results } = detail;
+                this.updateStatus('Analiz tamamlandı');
+                this.updateLocationCount(results.length);
+                this.updateLastUpdate();
+            }
+
+            handleRegionAnalysisComplete(detail) {
+                const { locations } = detail;
+                this.updateStatus('Bölge analizi tamamlandı');
+                this.updateLocationCount(locations.length);
+                this.updateLastUpdate();
+            }
+
+            showError(message) {
+                if (window.microInteractions) {
+                    window.microInteractions.showNotification(message, 'error', 5000);
+                }
+            }
+        }
+
+        // Global functions for HTML onclick handlers
+        function goBack() {
+            if (confirm('Analizi bırakıp geri dönmek istediğinizden emin misiniz?')) {
+                navigateWithSafeTransition('/mode_selection', 'slide-left');
+            }
+        }
+
+        function resetAnalysis() {
+            if (confirm('Mevcut analizi sıfırlamak istediğinizden emin misiniz?')) {
+                // Reset controllers
+                if (dashboardApp && dashboardApp.mode1Controller) {
+                    dashboardApp.mode1Controller.reset();
+                }
+                if (dashboardApp && dashboardApp.mode2Controller) {
+                    dashboardApp.mode2Controller.reset();
+                }
+                if (dashboardApp && dashboardApp.heatmapManager) {
+                    dashboardApp.heatmapManager.cleanup();
+                }
+                
+                // Reset UI
+                dashboardApp.updateStatus('Sıfırlandı');
+                dashboardApp.updateLocationCount(0);
+                dashboardApp.updateLastUpdate();
+                
+                // Show welcome screen
+                const welcomeScreen = document.getElementById('welcomeScreen');
+                welcomeScreen.style.display = 'flex';
+                
+                // Hide map legend
+                const mapLegend = document.getElementById('mapLegend');
+                mapLegend.classList.add('hidden');
+            }
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+                dashboardApp.isFullscreen = true;
+            } else {
+                document.exitFullscreen();
+                dashboardApp.isFullscreen = false;
+            }
+        }
+
+        function toggleHeaderMenu() {
+            const menu = document.getElementById('headerMenuDropdown');
+            menu.classList.toggle('hidden');
+        }
+
+        function shareResults() {
+            // Implementation for sharing results
+            if (navigator.share) {
+                navigator.share({
+                    title: 'LocationIQ Analiz Sonuçları',
+                    text: 'Lokasyon analizi sonuçlarını görüntüleyin',
+                    url: window.location.href
+                }).then(() => {
+                    if (window.microInteractions) {
+                        window.microInteractions.showNotification('Link panoya kopyalandı', 'success', 2000);
+                    }
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    if (window.microInteractions) {
+                        window.microInteractions.showNotification('Link panoya kopyalandı', 'success', 2000);
+                    }
+                });
+            }
+        }
+
+        function exportResults() {
+            // Implementation for exporting results
+            if (window.microInteractions) {
+                window.microInteractions.showNotification('Dışa aktarma özelliği yakında eklenecek', 'info', 3000);
+            }
+        }
+
+        function printResults() {
+            window.print();
+        }
+
+        function showHelp() {
+            const helpModal = document.getElementById('helpModal');
+            helpModal.classList.remove('hidden');
+        }
+
+        function closeHelpModal() {
+            const helpModal = document.getElementById('helpModal');
+            helpModal.classList.add('hidden');
+        }
+
+        function toggleSidebar() {
+            const dashboardContainer = document.querySelector('.dashboard-container');
+            dashboardContainer.classList.toggle('sidebar-collapsed');
+            
+            // Resize map after toggle
+            setTimeout(() => {
+                if (dashboardApp && dashboardApp.mapManager) {
+                    dashboardApp.mapManager.map.resize();
+                }
+            }, 300);
+        }
+
+        function toggleMapStyle() {
+            if (dashboardApp && dashboardApp.mapManager) {
+                dashboardApp.mapManager.toggleMapStyle();
+            }
+        }
+
+        function centerMap() {
+            if (dashboardApp && dashboardApp.mapManager) {
+                dashboardApp.mapManager.centerMap();
+            }
+        }
+
+        function zoomIn() {
+            if (dashboardApp && dashboardApp.mapManager) {
+                dashboardApp.mapManager.map.zoomIn();
+            }
+        }
+
+        function zoomOut() {
+            if (dashboardApp && dashboardApp.mapManager) {
+                dashboardApp.mapManager.map.zoomOut();
+            }
+        }
+
+        function toggleHeatmap() {
+            if (dashboardApp && dashboardApp.heatmapManager) {
+                dashboardApp.heatmapManager.toggleHeatmap();
+            }
+        }
+
+        // Initialize dashboard
+        let dashboardApp;
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                dashboardApp = new DashboardApp();
+                await dashboardApp.init();
+            } catch (error) {
+                console.error('Dashboard initialization failed:', error);
+            }
+        });
+    </script>
+</body>
+</html>

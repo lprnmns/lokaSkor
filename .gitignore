@@ -1,0 +1,10 @@
+# Sanal ortam
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Yerel veritabanları
+*.db

@@ -1,0 +1,41 @@
+{
+  "app": {
+    "title": "Location Addition Interface",
+    "description": "Add and manage new locations"
+  },
+  "locationCard": {
+    "title": "Location Information",
+    "name": "Name",
+    "address": "Address",
+    "category": "Category",
+    "coordinates": "Coordinates",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "locationSelector": {
+    "title": "Location Selector",
+    "searchPlaceholder": "Search for location...",
+    "selectLocation": "Select Location",
+    "selectedLocation": "Selected Location",
+    "noLocationSelected": "No location selected",
+    "clearSelection": "Clear Selection"
+  },
+  "map": {
+    "title": "Map View",
+    "selectOnMap": "Select on Map",
+    "clickToSelect": "Click on the map to select a point"
+  },
+  "selectedLocations": {
+    "title": "Selected Locations",
+    "noLocations": "No locations selected",
+    "remove": "Remove",
+    "clearAll": "Clear All"
+  },
+  "search": {
+    "placeholder": "Search for location...",
+    "search": "Search",
+    "clear": "Clear"
+  }
+}

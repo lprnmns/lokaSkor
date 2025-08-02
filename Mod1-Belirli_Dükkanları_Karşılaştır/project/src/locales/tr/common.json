@@ -1,0 +1,37 @@
+{
+  "app": {
+    "title": "Dükkan Karşılaştırma Aracı",
+    "description": "Belirli dükkanları karşılaştırın",
+    "back": "Geri",
+    "watchDemo": "Demoyu İzle",
+    "getReport": "Rapor Al"
+  },
+  "comparison": {
+    "title": "Dükkan Karşılaştırması",
+    "noShops": "Hiç dükkan seçilmedi",
+    "addShops": "Karşılaştırma yapmak için dükkan ekleyin",
+    "compare": "Karşılaştır",
+    "clearAll": "Tümünü Temizle",
+    "nearbyPlaces": "Yakın Yerler",
+    "demographics": "Demografi",
+    "competitorAnalysis": "Rekabet Analizi",
+    "importantPlaces": "Önemli Yerler",
+    "streetView": "Sokak Görünümü",
+    "detailedAnalysis": "Detaylı Analiz",
+    "summary": "Özet",
+    "highestScore": "En Yüksek Puan",
+    "averageScore": "Ortalama Puan",
+    "analyzedLocations": "Analiz Edilen Lokasyon",
+    "bestOption": "En İyi Seçenek",
+    "streetViewNotAvailable": "Sokak Görünümü Mevcut Değil"
+  },
+  "shop": {
+    "name": "Dükkan Adı",
+    "category": "Kategori",
+    "location": "Konum",
+    "rating": "Puan",
+    "reviews": "İnceleme",
+    "distance": "Mesafe",
+    "remove": "Kaldır"
+  }
+}

@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="modeSelection.title">Analiz Modu Seçimi - LocationIQ</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="Lokasyon analiziniz için uygun modu seçin: Belirli dükkanları karşılaştırın veya yeni fırsatları keşfedin.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="/static/css/design_system.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="stylesheet" href="/static/css/animations.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        /* Mode Selection Specific Styles */
+        .mode-card {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--card) / 0.98) 100%);
+            border: 2px solid hsl(var(--border));
+            min-height: 320px;
+        }
+        
+        .mode-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 25px 50px hsl(var(--primary) / 0.15);
+            border-color: hsl(var(--primary) / 0.5);
+        }
+        
+        .mode-card.selected {
+            border-color: hsl(var(--primary));
+            box-shadow: 0 0 0 4px hsl(var(--primary) / 0.2);
+            background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--primary) / 0.03) 100%);
+        }
+        
+        .mode-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.08), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .mode-card:hover::before {
+            left: 100%;
+        }
+        
+        .mode-header {
+            position: relative;
+            z-index: 1;
+            padding: 2rem 2rem 1rem;
+            text-align: center;
+        }
+        
+        .mode-icon {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+        
+        .mode-card:hover .mode-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .mode-card.selected .mode-icon {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            transform: scale(1.15);
+        }
+        
+        .mode-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            transition: color 0.3s ease;
+        }
+        
+        .mode-card.selected .mode-title {
+            color: hsl(var(--primary));
+        }
+        
+        .mode-subtitle {
+            color: hsl(var(--muted-foreground));
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .mode-card.selected .mode-subtitle {
+            color: hsl(var(--foreground) / 0.8);
+        }
+        
+        .mode-features {
+            padding: 0 2rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+            font-size: 0.875rem;
+            color: hsl(var(--muted-foreground));
+            transition: color 0.3s ease;
+        }
+        
+        .mode-card.selected .feature-item {
+            color: hsl(var(--foreground) / 0.9);
+        }
+        
+        .feature-icon {
+            width: 1rem;
+            height: 1rem;
+            margin-right: 0.75rem;
+            color: hsl(var(--primary));
+            flex-shrink: 0;
+        }
+        
+        .mode-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .mode-1-badge {
+            background: hsl(var(--chart-1) / 0.1);
+            color: hsl(var(--chart-1));
+        }
+        
+        .mode-2-badge {
+            background: hsl(var(--chart-2) / 0.1);
+            color: hsl(var(--chart-2));
+        }
+        
+        .selection-indicator {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.4s ease;
+        }
+        
+        .mode-card.selected .selection-indicator {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .business-type-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: hsl(var(--muted));
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+        }
+        
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: hsl(var(--primary));
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .step {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+        
+        .step.active {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+        
+        .step.completed {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+        
+        .step.inactive {
+            background: hsl(var(--muted));
+            color: hsl(var(--muted-foreground));
+        }
+        
+        .step-connector {
+            width: 2rem;
+            height: 2px;
+            background: hsl(var(--border));
+            transition: background-color 0.3s ease;
+        }
+        
+        .step-connector.completed {
+            background: hsl(var(--primary));
+        }
+        
+        /* Language Selector Styles */
+        .language-selector {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 9999;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .language-selector__button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .language-selector__button:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-color: #cbd5e0;
+        }
+
+        .language-selector__flag {
+            font-size: 16px;
+        }
+
+        .language-selector__code {
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .language-selector__arrow {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .language-selector__dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 8px;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            min-width: 160px;
+            overflow: hidden;
+            animation: fadeIn 0.2s ease;
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .language-selector__option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .language-selector__option:hover {
+            background-color: #f1f5f9;
+        }
+
+        .language-selector__option--active {
+            background-color: #dbeafe;
+            font-weight: 600;
+        }
+
+        .language-selector__name {
+            color: #334155;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .language-selector {
+                top: 12px;
+                left: 12px;
+            }
+            
+            .language-selector__button {
+                padding: 6px 10px;
+            }
+            
+            .language-selector__code {
+                font-size: 14px;
+            }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .mode-card {
+                min-height: 280px;
+            }
+            
+            .mode-header {
+                padding: 1.5rem 1.5rem 1rem;
+            }
+            
+            .mode-features {
+                padding: 0 1.5rem 1.5rem;
+            }
+            
+            .mode-icon {
+                width: 4rem;
+                height: 4rem;
+            }
+            
+            .mode-title {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-foreground min-h-screen">
+    <!-- Language Selector -->
+    <div class="language-selector" id="languageSelector">
+        <button class="language-selector__button" id="languageButton" aria-label="Select language">
+            <span class="language-selector__flag" id="currentFlag">🇹🇷</span>
+            <span class="language-selector__code" id="currentCode">TR</span>
+            <span class="language-selector__arrow" id="arrow">▼</span>
+        </button>
+
+        <div class="language-selector__dropdown" id="languageDropdown">
+            <button class="language-selector__option language-selector__option--active" data-lang="tr">
+                <span class="language-selector__flag">🇹🇷</span>
+                <span class="language-selector__name">Türkçe</span>
+            </button>
+            <button class="language-selector__option" data-lang="en">
+                <span class="language-selector__flag">🇬🇧</span>
+                <span class="language-selector__name">English</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Progress Bar -->
+    <div class="progress-bar" style="width: 66.66%"></div>
+    
+    <!-- Navigation -->
+    <nav class="border-b border-border bg-background/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-primary-foreground"></i>
+                    </div>
+                    <span class="text-xl font-bold text-foreground">LocationIQ</span>
+                </div>
+                
+                <!-- Back Button -->
+                <button id="back-btn" class="btn btn-ghost btn-sm">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                    <span data-i18n="modeSelection.back">Geri</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Step Indicator -->
+            <div class="step-indicator animate-fade-in">
+                <div class="step completed">1</div>
+                <div class="step-connector completed"></div>
+                <div class="step completed">2</div>
+                <div class="step-connector completed"></div>
+                <div class="step active">3</div>
+            </div>
+            
+            <!-- Header -->
+            <div class="text-center mb-8 animate-slide-in-from-top">
+                <!-- Selected Business Type Display -->
+                <div class="flex justify-center mb-4">
+                    <div class="business-type-display">
+                        <i id="business-icon" data-lucide="store" class="w-4 h-4"></i>
+                        <span id="business-name" data-i18n="modeSelection.businessTypePrefix">İşletme Türü:</span>
+                        <span id="business-type-name">Eczane</span>
+                    </div>
+                </div>
+                
+                <h1 class="text-3xl md:text-4xl font-bold text-foreground mb-4" data-i18n="modeSelection.stepIndicator">
+                    Analiz Modunu Seçin
+                </h1>
+                <p class="text-xl text-muted-foreground max-w-3xl mx-auto" data-i18n="modeSelection.stepSubtitle">
+                    İhtiyacınıza en uygun analiz yöntemini seçerek lokasyon araştırmanızı başlatın
+                </p>
+            </div>
+            
+            <!-- Mode Selection Cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <!-- Mode 1: Comparison -->
+                <div class="mode-card card animate-scale-in" data-mode="comparison">
+                    <div class="selection-indicator">
+                        <i data-lucide="check" class="w-5 h-5"></i>
+                    </div>
+                    <div class="mode-badge mode-1-badge">Mod 1</div>
+                    
+                    <div class="mode-header">
+                        <div class="mode-icon bg-blue-100 text-blue-600">
+                            <i data-lucide="git-compare" class="w-10 h-10"></i>
+                        </div>
+                        <h3 class="mode-title" data-i18n="modeSelection.modes.comparison.title">Belirli Dükkanları Karşılaştır</h3>
+                        <p class="mode-subtitle" data-i18n="modeSelection.modes.comparison.subtitle">
+                            Aklınızdaki birden fazla lokasyonun potansiyelini analiz edin ve en iyisini belirleyin
+                        </p>
+                    </div>
+                    
+                    <div class="mode-features">
+                        <ul class="feature-list">
+                            <li class="feature-item">
+                                <i data-lucide="map-pin" class="feature-icon"></i>
+                                <span data-i18n="modeSelection.modes.comparison.features.0">Birden fazla adres ekleyip karşılaştırın</span>
+                            </li>
+                            <li class="feature-item">
+                                <i data-lucide="bar-chart-3" class="feature-icon"></i>
+                                <span data-i18n="modeSelection.modes.comparison.features.1">Detaylı skor analizi ve karşılaştırma tablosu</span>
+                            </li>
+                            <li class="feature-item">
+                                <i data-lucide="target" class="feature-icon"></i>
+                                <span data-i18n="modeSelection.modes.comparison.features.2">Rakip yoğunluğu ve hedef kitle uyumu</span>
+                            </li>
+                            <li class="feature-item">
+                                <i data-lucide="navigation" class="feature-icon"></i>
+                                <span data-i18n="modeSelection.modes.comparison.features.3">Yaya erişimi ve ulaşım kolaylığı analizi</span>
+                            </li>
+                            <li class="feature-item">
+                                <i data-lucide="trending-up" class="feature-icon"></i>
+                                <span data-i18n="modeSelection.modes.comparison.features.4">100 üzerinden genel skor değerlendirmesi</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Mode 2: Discovery -->
+                <div class="mode-card card animate-scale-in animate-delay-200" data-mode="region">
+                    <div class="selection-indicator">
+                        <i data-lucide="check" class="w-5 h-5"></i>
+                    </div>
+                    <div class="mode-badge mode-2-badge">Mod 2</div>
+                    
+                    <div class="mode-header">
+                        <div class="mode-icon bg-green-100 text-green-600">
+                            <i data-lucide="search" class="w-10 h-10"></i>
+                        </div>
+                        <h3 class="mode-title" data-i18n="modeSelection.modes.discovery.title">Yeni Fırsatları Keşfet</h3>
+                        <p class="mode-subtitle" data-i18n="modeSelection.modes.discovery.subtitle">
+                            Seçtiğiniz bölgedeki en uygun konumları sizin için bulalım ve önerelim
+                        </p>
+                    </div>
+                    
+                    <div class="mode-features">
+                        <ul class="feature-list">
+                            <li class="feature-item">
+                                <i data-lucide="map" class="feature-icon"></i>
+                                <span data-i18n="modeSelection.modes.discovery.features.0">İl, ilçe ve mahalle bazında analiz</span>
+                            </li>
+                            <li class="feature-item">
+                                <i data-lucide="thermometer" class="feature-icon"></i>
+                                <span data-i18n="modeSelection.modes.discovery.features.1">Isı haritası ile potansiyel görselleştirme</span>
+                            </li>
+                            <li class="feature-item">
+                                <i data-lucide="star" class="feature-icon"></i>
+                                <span data-i18n="modeSelection.modes.discovery.features.2">En yüksek skorlu 5 lokasyon önerisi</span>
+                            </li>
+                            <li class="feature-item">
+                                <i data-lucide="eye" class="feature-icon"></i>
+                                <span data-i18n="modeSelection.modes.discovery.features.3">Bölgesel fırsat analizi ve keşif</span>
+                            </li>
+                            <li class="feature-item">
+                                <i data-lucide="zap" class="feature-icon"></i>
+                                <span data-i18n="modeSelection.modes.discovery.features.4">Hızlı bölge tarama ve değerlendirme</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex justify-center space-x-4 animate-slide-in-from-bottom">
+                <button id="continue-btn" class="btn btn-lg btn-primary px-8 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    <span id="continue-text" data-i18n="modeSelection.continue">Analiz Modu Seçin</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
+                </button>
+            </div>
+            
+            <!-- Help Text -->
+            <div class="text-center mt-8 animate-fade-in animate-delay-500">
+                <div class="max-w-2xl mx-auto">
+                    <p class="text-sm text-muted-foreground mb-2">
+                        <i data-lucide="lightbulb" class="w-4 h-4 inline mr-1"></i>
+                        <strong data-i18n="modeSelection.helpTitle">Hangi modu seçmeliyim?</strong>
+                    </p>
+                    <p class="text-xs text-muted-foreground" data-i18n="modeSelection.helpText">
+                        Elinizde belirli adresler varsa <strong>Mod 1</strong>'i, 
+                        yeni fırsatlar arıyorsanız <strong>Mod 2</strong>'yi tercih edin
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center h-full">
+            <div class="text-center">
+                <div class="loading-spinner w-8 h-8 mx-auto mb-4"></div>
+                <p class="text-muted-foreground" data-i18n="modeSelection.loading">Analiz paneli hazırlanıyor...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/static/js/new_ui/translation-utils.js"></script>
+    <script src="/static/js/new_ui/language-selector.js"></script>
+    <script src="/static/js/new_ui/translation-engine.js"></script>
+    <script src="/static/js/new_ui/api_client.js"></script>
+    <script src="/static/js/new_ui/error_handler.js"></script>
+    <script src="/static/js/new_ui/main.js"></script>
+    <script src="/static/js/new_ui/test-translation.js"></script>
+    
+    <script>
+        // Initialize Lucide icons
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            
+            // Initialize translation if available
+            if (window.translationUtils) {
+                window.translationUtils.translatePage();
+            }
+        });
+    </script>
+    
+    <script>
+        // Mode Selection Page Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Lucide icons
+            lucide.createIcons();
+            
+            let selectedMode = null;
+            let selectedBusinessType = null;
+            
+            const modeCards = document.querySelectorAll('.mode-card[data-mode]');
+            const continueBtn = document.getElementById('continue-btn');
+            const continueText = document.getElementById('continue-text');
+            const backBtn = document.getElementById('back-btn');
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const businessIcon = document.getElementById('business-icon');
+            const businessName = document.getElementById('business-name');
+            const businessTypeName = document.getElementById('business-type-name');
+            
+            // Business type configuration
+            const businessTypes = {
+                eczane: { name: 'Eczane', icon: 'cross' },
+                firin: { name: 'Fırın', icon: 'wheat' },
+                market: { name: 'Market', icon: 'shopping-cart' },
+                cafe: { name: 'Cafe', icon: 'coffee' },
+                restoran: { name: 'Restoran', icon: 'utensils' }
+            };
+            
+            // Get business type from URL or app state
+            function getBusinessType() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const urlBusiness = urlParams.get('business');
+                
+                if (urlBusiness && businessTypes[urlBusiness]) {
+                    return urlBusiness;
+                }
+                
+                if (window.LocationIQApp) {
+                    const state = window.LocationIQApp.getState();
+                    return state.selectedBusinessType;
+                }
+                
+                return null;
+            }
+            
+            // Update business type display
+            function updateBusinessTypeDisplay(businessType) {
+                if (businessType && businessTypes[businessType]) {
+                    const config = businessTypes[businessType];
+                    businessTypeName.textContent = config.name;
+                    businessIcon.setAttribute('data-lucide', config.icon);
+                    lucide.createIcons(); // Refresh icons
+                    selectedBusinessType = businessType;
+                } else {
+                    // Redirect back to business selection if no valid business type
+                    if (window.LocationIQApp) {
+                        window.LocationIQApp.navigate('business-selection');
+                    } else {
+                        window.location.href = '/business-selection';
+                    }
+                }
+            }
+            
+            // Initialize business type display
+            const businessType = getBusinessType();
+            updateBusinessTypeDisplay(businessType);
+            
+            // Mode card selection logic
+            modeCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const mode = this.dataset.mode;
+                    
+                    // Remove selection from all cards
+                    modeCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Add selection to clicked card
+                    this.classList.add('selected');
+                    
+                    // Update selected mode
+                    selectedMode = mode;
+                    
+                    // Enable continue button
+                    continueBtn.disabled = false;
+                    continueText.textContent = mode === 'comparison' ? 
+                        (window.translator ? window.translator.t('modeSelection.modes.comparison.continue') : 'Karşılaştırmaya Başla') : 
+                        (window.translator ? window.translator.t('modeSelection.modes.discovery.continue') : 'Keşfe Başla');
+                    
+                    // Add micro-interaction
+                    this.classList.add('micro-bounce');
+                    setTimeout(() => {
+                        this.classList.remove('micro-bounce');
+                    }, 400);
+                    
+                    // Update app state if available
+                    if (window.LocationIQApp) {
+                        window.LocationIQApp.state.setMode(mode);
+                    }
+                    
+                    console.log('Selected mode:', mode);
+                });
+                
+                // Add hover effects
+                card.addEventListener('mouseenter', function() {
+                    if (!this.classList.contains('selected')) {
+                        this.style.transform = 'translateY(-8px) scale(1.01)';
+                    }
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('selected')) {
+                        this.style.transform = '';
+                    }
+                });
+            });
+            
+            // Continue button logic
+            continueBtn.addEventListener('click', function() {
+                if (!selectedMode || !selectedBusinessType) {
+                    return;
+                }
+                
+                // Show loading
+                loadingOverlay.classList.remove('hidden');
+                
+                // Simulate brief loading for smooth UX
+                setTimeout(() => {
+                    if (window.LocationIQApp) {
+                        window.LocationIQApp.navigate('analysis', {
+                            mode: selectedMode,
+                            businessType: selectedBusinessType
+                        });
+                    } else {
+                        // Fallback navigation
+                        window.location.href = `/analysis?mode=${selectedMode}&business=${selectedBusinessType}`;
+                    }
+                }, 800);
+            });
+            
+            // Back button logic
+            backBtn.addEventListener('click', function() {
+                if (window.LocationIQApp) {
+                    window.LocationIQApp.navigate('business-selection');
+                } else {
+                    window.location.href = '/business-selection';
+                }
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && selectedMode && !continueBtn.disabled) {
+                    continueBtn.click();
+                } else if (e.key === 'Escape') {
+                    backBtn.click();
+                }
+                
+                // Arrow key navigation between modes
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    const cards = Array.from(modeCards);
+                    const currentIndex = cards.findIndex(card => card.classList.contains('selected'));
+                    let nextIndex;
+                    
+                    if (e.key === 'ArrowRight') {
+                        nextIndex = currentIndex < cards.length - 1 ? currentIndex + 1 : 0;
+                    } else {
+                        nextIndex = currentIndex > 0 ? currentIndex - 1 : cards.length - 1;
+                    }
+                    
+                    if (nextIndex >= 0) {
+                        cards[nextIndex].click();
+                        cards[nextIndex].focus();
+                    }
+                }
+            });
+            
+            // Auto-focus first card for accessibility
+            if (modeCards.length > 0) {
+                modeCards[0].setAttribute('tabindex', '0');
+                modeCards.forEach((card, index) => {
+                    if (index > 0) card.setAttribute('tabindex', '-1');
+                });
+            }
+            
+            // Check if mode was preselected via URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const preselectedMode = urlParams.get('mode');
+            if (preselectedMode && (preselectedMode === 'comparison' || preselectedMode === 'region')) {
+                const preselectedCard = document.querySelector(`[data-mode="${preselectedMode}"]`);
+                if (preselectedCard) {
+                    setTimeout(() => {
+                        preselectedCard.click();
+                    }, 600);
+                }
+            }
+            
+            // Translate page content
+            if (window.translator) {
+                window.translator.translatePage();
+            }
+        });
+    </script>
+</body>
+</html>

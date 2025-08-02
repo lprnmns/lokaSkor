@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gelişmiş Skorlama Kontrol Paneli</title>
+    
+    <!-- CSS Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    
+    <!-- JavaScript Libraries -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <style>
+        .loading-spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="admin-app">
+        <!-- Simple Layout -->
+        <div class="p-8">
+            <h1 class="text-2xl font-bold mb-4">Gelişmiş Skorlama Kontrol Paneli</h1>
+            
+            <div class="bg-white p-6 rounded-lg shadow mb-6">
+                <h2 class="text-xl font-semibold mb-4">Kategori Seçimi</h2>
+                <div class="flex space-x-4">
+                    <button 
+                        v-for="cat in categories" 
+                        :key="cat.id"
+                        @click="selectCategory(cat.id)"
+                        :class="['px-4 py-2 rounded-lg', 
+                                selectedCategory === cat.id 
+                                    ? 'bg-blue-500 text-white' 
+                                    : 'bg-gray-200 text-gray-700']">
+                        {{ cat.emoji }} {{ cat.name }}
+                    </button>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow mb-6">
+                <h2 class="text-xl font-semibold mb-4">Test Noktası</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Enlem</label>
+                        <input type="number" v-model.number="testPoint.lat" step="any" class="w-full p-2 border rounded">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Boylam</label>
+                        <input type="number" v-model.number="testPoint.lon" step="any" class="w-full p-2 border rounded">
+                    </div>
+                </div>
+                <button 
+                    @click="scoreTestPoint"
+                    class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg">
+                    Test Et
+                </button>
+            </div>
+            
+            <div v-if="currentScore" class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Skor Sonucu</h2>
+                <div class="text-center mb-6">
+                    <div class="text-5xl font-bold mb-2">{{ currentScore.total_score }}/100</div>
+                    <div class="text-xl">{{ currentScore.category }}</div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div v-if="currentScore.breakdown?.hospital_proximity">
+                        <h3 class="font-medium">🏥 Hastane</h3>
+                        <div>{{ currentScore.breakdown.hospital_proximity.score }}/100</div>
+                    </div>
+                    <div v-if="currentScore.breakdown?.competitors">
+                        <h3 class="font-medium">🏪 Rakip</h3>
+                        <div>{{ currentScore.breakdown.competitors.score }}/100</div>
+                    </div>
+                    <div v-if="currentScore.breakdown?.demographics">
+                        <h3 class="font-medium">👥 Demografi</h3>
+                        <div>{{ currentScore.breakdown.demographics.score }}/100</div>
+                    </div>
+                    <div v-if="currentScore.breakdown?.important_places">
+                        <h3 class="font-medium">🚇 Önemli Yerler</h3>
+                        <div>{{ currentScore.breakdown.important_places.score }}/100</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+        
+        const app = createApp({
+            data() {
+                return {
+                    categories: [
+                        { id: 'eczane', name: 'Eczane', emoji: '💊' },
+                        { id: 'cafe', name: 'Cafe', emoji: '☕' },
+                        { id: 'restoran', name: 'Restoran', emoji: '🍽️' },
+                        { id: 'market', name: 'Market', emoji: '🛒' },
+                        { id: 'firin', name: 'Fırın', emoji: '🍞' }
+                    ],
+                    selectedCategory: 'eczane',
+                    testPoint: {
+                        lat: 39.969169,
+                        lon: 32.783675
+                    },
+                    currentScore: null,
+                    isLoading: false
+                }
+            },
+            methods: {
+                selectCategory(category) {
+                    this.selectedCategory = category;
+                    console.log('Selected category:', category);
+                },
+                async scoreTestPoint() {
+                    try {
+                        this.isLoading = true;
+                        console.log('Scoring test point:', this.testPoint);
+                        
+                        const response = await fetch('/api/admin/testing/score-point', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                lat: this.testPoint.lat,
+                                lon: this.testPoint.lon,
+                                category: this.selectedCategory
+                            })
+                        });
+                        
+                        if (response.ok) {
+                            this.currentScore = await response.json();
+                            console.log('Score result:', this.currentScore);
+                        } else {
+                            const error = await response.json();
+                            alert('Hata: ' + (error.error || 'Bilinmeyen hata'));
+                        }
+                    } catch (error) {
+                        console.error('Scoring error:', error);
+                        alert('Hata: ' + error.message);
+                    } finally {
+                        this.isLoading = false;
+                    }
+                }
+            },
+            mounted() {
+                console.log('Vue.js app mounted successfully');
+            }
+        });
+        
+        app.mount('#admin-app');
+        console.log('Advanced Scoring Control Panel loaded');
+    </script>
+</body>
+</html>

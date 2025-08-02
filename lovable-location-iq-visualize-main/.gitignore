@@ -1,0 +1,8 @@
+# Sanal ortam
+venv/
+# Pycache ve derlenmiş dosyalar
+__pycache__/
+*.pyc
+# Yerel veritabanı
+*.db
+parameter_optimization.db

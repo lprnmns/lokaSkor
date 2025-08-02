@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocationIQ - Modern Lokasyon Analizi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/design_system.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <style>
+        /* Modern Landing Page Styles */
+        * {
+            visibility: visible !important;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, sans-serif !important;
+            background: linear-gradient(135deg, #f8fafc 0%, #dbeafe 50%, #e0e7ff 100%) !important;
+            min-height: 100vh !important;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Landing page specific styles will be handled by floating_background component */
+
+        /* Navigation */
+        .nav-fixed {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 50;
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: #3b82f6;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+        }
+
+        .nav-link {
+            color: #4b5563;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: #111827;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-button {
+            color: #2563eb;
+            font-weight: 500;
+            text-decoration: underline;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .nav-button:hover {
+            color: #1d4ed8;
+        }        
+/* Hero Section */
+        .hero-section {
+            padding: 8rem 1rem 6rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-container {
+            max-width: 72rem;
+            margin: 0 auto;
+        }
+
+        .hero-content {
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: #dbeafe;
+            border: 1px solid #93c5fd;
+            border-radius: 9999px;
+            color: #1d4ed8;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+        @media (min-width: 768px) {
+            .hero-title {
+                font-size: 4.5rem;
+            }
+        }
+
+        .hero-title-highlight {
+            display: block;
+            color: #2563eb;
+            margin-top: 0.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: #4b5563;
+            margin-bottom: 3rem;
+            max-width: 64rem;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        @media (min-width: 768px) {
+            .hero-subtitle {
+                font-size: 1.5rem;
+            }
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        @media (min-width: 640px) {
+            .hero-buttons {
+                flex-direction: row;
+            }
+        }
+
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            background: #2563eb;
+            color: white;
+            padding: 1.25rem 2.5rem;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            display: flex;
+            align-items: center;
+            color: #374151;
+            padding: 1.25rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 1px solid #d1d5db;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-secondary:hover {
+            color: #111827;
+            border-color: #9ca3af;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .play-icon {
+            width: 3rem;
+            height: 3rem;
+            background: #dbeafe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            border: 1px solid #93c5fd;
+            transition: transform 0.3s;
+        }
+
+        .btn-secondary:hover .play-icon {
+            transform: scale(1.1);
+        }        
+/* Features Section */
+        .features-section {
+            padding: 6rem 1rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .features-container {
+            max-width: 80rem;
+            margin: 0 auto;
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .features-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .features-title {
+                font-size: 3rem;
+            }
+        }
+
+        .features-subtitle {
+            font-size: 1.25rem;
+            color: #4b5563;
+            max-width: 48rem;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .feature-card {
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid;
+            transition: all 0.5s;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform: translateY(-8px);
+        }
+
+        .feature-card.blue {
+            background: rgba(219, 234, 254, 0.5);
+            border-color: #93c5fd;
+        }
+
+        .feature-card.purple {
+            background: rgba(237, 233, 254, 0.5);
+            border-color: #c4b5fd;
+        }
+
+        .feature-card.cyan {
+            background: rgba(207, 250, 254, 0.5);
+            border-color: #67e8f9;
+        }
+
+        .feature-icon-container {
+            width: 5rem;
+            height: 5rem;
+            background: white;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f3f4f6;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover .feature-icon-container {
+            transform: scale(1.1);
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+
+        .feature-description {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 5rem 1rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stats-container {
+            max-width: 80rem;
+            margin: 0 auto;
+        }
+
+        .stats-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(4px);
+            border: 1px solid #e5e7eb;
+            border-radius: 1.5rem;
+            padding: 3rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 0.5rem;
+            transition: transform 0.3s;
+        }
+
+        .stat-item:hover .stat-number {
+            transform: scale(1.1);
+        }
+
+        .stat-label {
+            color: #4b5563;
+            font-weight: 500;
+        }  
+      /* CTA Section */
+        .cta-section {
+            padding: 6rem 1rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cta-container {
+            max-width: 64rem;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .cta-card {
+            background: linear-gradient(to right, #2563eb, #4f46e5);
+            border-radius: 1.5rem;
+            padding: 3rem;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+            color: white;
+        }
+
+        .cta-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .cta-title {
+                font-size: 3rem;
+            }
+        }
+
+        .cta-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            max-width: 32rem;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        @media (min-width: 640px) {
+            .cta-buttons {
+                flex-direction: row;
+            }
+        }
+
+        .btn-white {
+            background: white;
+            color: #2563eb;
+            padding: 1rem 2.5rem;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-white:hover {
+            background: #f9fafb;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            backdrop-filter: blur(4px);
+            background: none;
+            cursor: pointer;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+            border-top: 1px solid #e5e7eb;
+            padding: 4rem 1rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-container {
+            max-width: 80rem;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: #2563eb;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-brand-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .footer-description {
+            color: #4b5563;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-link {
+            color: #4b5563;
+            text-decoration: none;
+            transition: color 0.2s;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-link:hover {
+            color: #111827;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #e5e7eb;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .footer-copyright {
+            margin-bottom: 1rem;
+        }
+
+        .footer-windows {
+            font-size: 0.875rem;
+        }
+
+        .footer-windows-title {
+            color: #9ca3af;
+        }
+
+        .footer-windows-desc {
+            color: #9ca3af;
+            font-size: 0.75rem;
+        }
+    </style>
+</head><body>
+    {% include 'components/floating_background.html' %}
+    {% include 'components/simple_button_effects.html' %}
+    {% include 'components/safe_page_transition.html' %}
+    {% include 'components/sticky_navigation.html' %} 
+   <!-- Hero Section -->
+    <section class="main-content hero-section" style="padding-top: 8rem;">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.5rem;">
+                        <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                    </svg>
+                    Yapay Zeka Destekli Analiz
+                </div>
+                
+                <h1 class="hero-title">
+                    Lokasyon Analizinde
+                    <span class="hero-title-highlight">Yeni Dönem</span>
+                </h1>
+                
+                <p class="hero-subtitle">
+                    Yapay zeka destekli lokasyon analizi ile işletmeniz için en uygun yeri bulun. 
+                    Modern arayüz, detaylı analizler ve gerçek zamanlı sonuçlar.
+                </p>
+                
+                <div class="hero-buttons">
+                    <a href="/business-selection" class="btn-primary" data-safe-transition="slide-right">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right: 0.5rem;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                        Analize Başla
+                    </a>
+                    <a href="/animation-demo" class="btn-secondary" data-safe-transition="slide-right">
+                        <div class="play-icon">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        Demo İzle
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="main-content features-section">
+        <div class="features-container">
+            <div class="features-header">
+                <h2 class="features-title">Neden LocationIQ?</h2>
+                <p class="features-subtitle">
+                    Modern teknoloji ile güçlendirilmiş lokasyon analizi araçları
+                </p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card blue">
+                    <div class="feature-icon-container">
+                        <svg width="32" height="32" fill="#2563eb" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Yapay Zeka Analizi</h3>
+                    <p class="feature-description">
+                        Gelişmiş algoritmaları kullanarak en uygun lokasyonları belirler ve size önerir.
+                    </p>
+                </div>
+                
+                <div class="feature-card purple">
+                    <div class="feature-icon-container">
+                        <svg width="32" height="32" fill="#7c3aed" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Detaylı Raporlama</h3>
+                    <p class="feature-description">
+                        Kapsamlı analiz raporları ile lokasyon potansiyelini tam olarak anlayın.
+                    </p>
+                </div>
+                
+                <div class="feature-card cyan">
+                    <div class="feature-icon-container">
+                        <svg width="32" height="32" fill="#06b6d4" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Gerçek Zamanlı Haritalar</h3>
+                    <p class="feature-description">
+                        Güncel verilerle desteklenen interaktif haritalar üzerinde analiz yapın.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="main-content stats-section">
+        <div class="stats-container">
+            <div class="stats-card">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Analiz Edilen Lokasyon</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">Doğruluk Oranı</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Kesintisiz Hizmet</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100+</div>
+                        <div class="stat-label">Memnun Müşteri</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> 
+   <!-- CTA Section -->
+    <section class="main-content cta-section">
+        <div class="cta-container">
+            <div class="cta-card">
+                <h2 class="cta-title">Hemen Başlayın</h2>
+                <p class="cta-subtitle">
+                    İşletmeniz için en uygun lokasyonu bulmak hiç bu kadar kolay olmamıştı.
+                </p>
+                <div class="cta-buttons">
+                    <a href="/business-selection" class="btn-white" data-safe-transition="slide-right">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right: 0.5rem;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                        Ücretsiz Analiz Başlat
+                    </a>
+                    <a href="/animation-demo" class="btn-outline" data-transition="true">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right: 0.5rem;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.01M15 10h1.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Demo İzle
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-content footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">
+                        <div class="footer-logo">
+                            <svg width="24" height="24" fill="white" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <span class="footer-brand-text">LocationIQ</span>
+                    </div>
+                    <p class="footer-description">
+                        Yapay zeka destekli lokasyon analizi ile işletmeniz için en uygun yeri bulun.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="footer-title">Ürün</h3>
+                    <ul class="footer-links">
+                        <li><a href="/business-selection" class="footer-link">Analiz Başlat</a></li>
+                        <li><a href="/animation-demo" class="footer-link">Demo</a></li>
+                        <li><a href="#features" class="footer-link">Özellikler</a></li>
+                        <li><a href="/admin" class="footer-link">Admin Panel</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="footer-title">Şirket</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" class="footer-link">Hakkımızda</a></li>
+                        <li><a href="#" class="footer-link">Blog</a></li>
+                        <li><a href="#" class="footer-link">Kariyer</a></li>
+                        <li><a href="#" class="footer-link">İletişim</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="footer-title">Destek</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" class="footer-link">Yardım Merkezi</a></li>
+                        <li><a href="#" class="footer-link">Dokümantasyon</a></li>
+                        <li><a href="#" class="footer-link">API</a></li>
+                        <li><a href="#" class="footer-link">Durum</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    © 2024 LocationIQ. Tüm hakları saklıdır.
+                </div>
+                <div class="footer-windows">
+                    <div class="footer-windows-title">Windows Platformu</div>
+                    <div class="footer-windows-desc">Windows 11 için optimize edilmiştir</div>
+                </div>
+            </div>
+        </div>
+    </footer>  
+  <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/new_ui/animation_performance.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/animation_manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/micro_interactions.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/sticky_navigation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/enhanced_scroll_animations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/performance_monitor.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/ui_integration_manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/ui_test_suite.js') }}"></script>
+    
+    <script>
+        // Landing page specific enhancements
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize animation systems
+            try {
+                if (typeof AnimationPerformance !== 'undefined') {
+                    window.animationPerformance = new AnimationPerformance();
+                }
+                if (typeof AnimationManager !== 'undefined') {
+                    window.animationManager = new AnimationManager();
+                }
+                if (typeof MicroInteractions !== 'undefined') {
+                    window.microInteractions = new MicroInteractions();
+                }
+            } catch (error) {
+                console.error('JavaScript initialization error:', error);
+            }
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Navbar scroll effect
+            let lastScrollY = window.scrollY;
+            const navbar = document.querySelector('.nav-fixed');
+
+            window.addEventListener('scroll', () => {
+                const currentScrollY = window.scrollY;
+                
+                if (currentScrollY > 100) {
+                    navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                    navbar.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+                } else {
+                    navbar.style.background = 'rgba(255, 255, 255, 0.8)';
+                    navbar.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+                }
+                
+                lastScrollY = currentScrollY;
+            });
+
+            // Stats counter animation
+            const statsNumbers = document.querySelectorAll('.stat-number');
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = entry.target;
+                        const finalValue = target.textContent;
+                        const isPercentage = finalValue.includes('%');
+                        const isTime = finalValue.includes('/');
+                        
+                        if (!isPercentage && !isTime) {
+                            const numericValue = parseInt(finalValue.replace('+', ''));
+                            animateCounter(target, 0, numericValue, 2000, '+');
+                        } else if (isPercentage) {
+                            const numericValue = parseInt(finalValue.replace('%', ''));
+                            animateCounter(target, 0, numericValue, 2000, '%');
+                        }
+                        
+                        statsObserver.unobserve(target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            statsNumbers.forEach(stat => {
+                statsObserver.observe(stat);
+            });
+
+            function animateCounter(element, start, end, duration, suffix = '') {
+                const startTime = performance.now();
+                
+                function updateCounter(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    const current = Math.floor(start + (end - start) * easeOutQuart(progress));
+                    element.textContent = current + suffix;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(updateCounter);
+                    }
+                }
+                
+                requestAnimationFrame(updateCounter);
+            }
+
+            function easeOutQuart(t) {
+                return 1 - Math.pow(1 - t, 4);
+            }
+        });
+    </script>
+</body>
+</html>

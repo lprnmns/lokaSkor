@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karşılaştırma Arenası</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.sync@0.2.4/L.Map.Sync.min.js"></script>
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 0; background-color: #e9ecef; }
+        .arena-container { display: flex; height: 100vh; width: 100vw; flex-direction: column; }
+        .maps-container { display: flex; flex-grow: 1; }
+        .panel { flex: 1; display: flex; flex-direction: column; border: 1px solid #ccc; }
+        .map { height: 60%; background-color: #555; }
+        .details { padding: 15px; overflow-y: auto; background-color: #fff; height: 40%; }
+        .details h3 { margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .details ul { padding-left: 0; margin: 0; list-style-type: none; }
+        .details li { margin-bottom: 5px; font-size: 14px; }
+        .controls-container { padding: 20px; background-color: #343a40; color: white; text-align: center; box-shadow: 0 -2px 5px rgba(0,0,0,0.2); z-index: 1000; }
+        .controls-container h3 { margin-top: 0; }
+        .controls-container button { font-size: 16px; padding: 10px 20px; margin: 0 10px; cursor: pointer; border-radius: 5px; border: none; transition: transform 0.1s ease; }
+        .controls-container button:hover { transform: scale(1.05); }
+        .btn-better { background-color: #28a745; color: white; }
+        .btn-worse { background-color: #dc3545; color: white; }
+        .btn-equal { background-color: #ffc107; color: black; }
+        .notes { margin-top: 15px; }
+        .notes textarea { width: 80%; max-width: 500px; padding: 8px; border-radius: 5px; border: 1px solid #666; }
+        .emoji-icon { font-size: 20px; text-shadow: 0 0 3px black; }
+    </style>
+</head>
+<body>
+    {% include 'components/floating_background.html' %}
+    {% include 'components/simple_button_effects.html' %}
+    {% include 'components/safe_page_transition.html' %}
+    <div class="main-content arena-container">
+        <div class="maps-container">
+            <!-- Nokta A Paneli -->
+            <div class="panel">
+                <div id="mapA" class="map"></div>
+                <div id="detailsA" class="details"><h3>Nokta A Detayları Yükleniyor...</h3></div>
+            </div>
+            <!-- Nokta B Paneli -->
+            <div class="panel">
+                <div id="mapB" class="map"></div>
+                <div id="detailsB" class="details"><h3>Nokta B Detayları Yükleniyor...</h3></div>
+            </div>
+        </div>
+        <!-- Karar Verme Kontrolleri -->
+        <div class="controls-container">
+            <h3>Hangisi Daha İyi Bir Konum?</h3>
+            <div>
+                <button class="btn-better" onclick="makeDecision('A_cok_daha_iyi')">&lt;&lt; A Çok Daha İyi</button>
+                <button class="btn-better" onclick="makeDecision('A_daha_iyi')">&lt; A Daha İyi</button>
+                <button class="btn-equal" onclick="makeDecision('Esit')">Eşit</button>
+                <button class="btn-worse" onclick="makeDecision('B_daha_iyi')">B Daha İyi &gt;</button>
+                <button class="btn-worse" onclick="makeDecision('B_cok_daha_iyi')">B Çok Daha İyi &gt;&gt;</button>
+            </div>
+            <div class="notes">
+                <textarea id="comparison-notes" rows="2" placeholder="Neden bu kararı verdiniz? (Opsiyonel)"></textarea>
+            </div>
+        </div>
+    </div>
+    <script src="/static/compare.js"></script>
+</body>
+</html>

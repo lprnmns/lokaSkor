@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js Test</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>Vue.js Test</h1>
+        <p v-if="isLoading">Yükleniyor...</p>
+        <p v-else>Vue.js çalışıyor! Mesaj: {{ message }}</p>
+        <button @click="toggleLoading">Toggle Loading</button>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+        
+        const app = createApp({
+            data() {
+                return {
+                    message: 'Merhaba Vue.js!',
+                    isLoading: true
+                }
+            },
+            methods: {
+                toggleLoading() {
+                    this.isLoading = !this.isLoading;
+                }
+            },
+            mounted() {
+                console.log('Vue.js app mounted successfully');
+                setTimeout(() => {
+                    this.isLoading = false;
+                }, 2000);
+            }
+        });
+        
+        app.mount('#app');
+        console.log('Vue.js test app loaded');
+    </script>
+</body>
+</html>

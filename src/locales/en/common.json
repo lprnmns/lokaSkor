@@ -1,0 +1,39 @@
+{
+  "dashboard": {
+    "title": "Location Analysis",
+    "lastUpdated": "Last updated:",
+    "dataPoints": "data points",
+    "loading": "Analyzing...",
+    "retry": "Retry",
+    "retrying": "Retrying...",
+    "error": {
+      "title": "Error occurred",
+      "message": "An error occurred while processing your request. Please try again.",
+      "action": "Retry"
+    }
+  },
+  "analysis": {
+    "modes": {
+      "point": "Point Analysis",
+      "area": "Area Analysis",
+      "heatmap": "Heatmap View"
+    },
+    "categories": {
+      "cafe": "Cafe",
+      "restaurant": "Restaurant",
+      "retail": "Retail",
+      "pharmacy": "Pharmacy"
+    },
+    "toggles": {
+      "trafficData": "Traffic Data",
+      "competitorAnalysis": "Competitor Analysis",
+      "demographics": "Demographics"
+    },
+    "controls": {
+      "refresh": "Refresh"
+    }
+  },
+  "map": {
+    "placeholder": "Click on the map to select a location for analysis"
+  }
+}

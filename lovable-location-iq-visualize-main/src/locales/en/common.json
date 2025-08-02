@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "LocationIQ Pro",
+    "description": "Advanced Site Selection & Market Analysis"
+  },
+  "analysisMode": {
+    "title": "Analysis Mode",
+    "point": {
+      "title": "Point Analysis",
+      "description": "Analyze specific locations"
+    },
+    "area": {
+      "title": "Area Analysis",
+      "description": "Compare neighborhoods"
+    },
+    "heatmap": {
+      "title": "Heatmap View",
+      "description": "Visualize data density"
+    }
+  },
+  "businessCategory": {
+    "title": "Business Category",
+    "cafe": "Cafe",
+    "restaurant": "Restaurant",
+    "retail": "Retail",
+    "pharmacy": "Pharmacy"
+  },
+  "locationControls": {
+    "title": "Location Controls",
+    "targetArea": "Target Area",
+    "downtown": "Downtown Core",
+    "suburbs": "Suburbs",
+    "waterfront": "Waterfront",
+    "trafficData": "Traffic Data",
+    "competitorAnalysis": "Competitor Analysis",
+    "demographics": "Demographics",
+    "runAnalysis": "Run Analysis",
+    "advancedSettings": "Advanced Settings"
+  },
+  "siteScore": {
+    "title": "Site Score",
+    "outOf": "out of 100",
+    "footTraffic": "Foot Traffic",
+    "competition": "Competition",
+    "demographics": "Demographics",
+    "accessibility": "Accessibility",
+    "high": "High",
+    "medium": "Medium",
+    "excellent": "Excellent",
+    "veryGood": "Very Good",
+    "exportReport": "Export Report"
+  },
+  "mapView": {
+    "title": "Interactive Map View",
+    "heatmapView": "Heatmap View",
+    "layers": "Layers",
+    "zoomToFit": "Zoom to Fit",
+    "mapPlaceholder": {
+      "title": "Interactive Map",
+      "description": "Your location analysis will be displayed here with markers, heatmaps, and demographic overlays.",
+      "analyzing": "Analyzing Downtown Core"
+    },
+    "legend": {
+      "title": "Legend",
+      "highScore": "High Score (80-100)",
+      "mediumScore": "Medium Score (60-79)",
+      "lowScore": "Low Score (0-59)"
+    }
+  }
+}

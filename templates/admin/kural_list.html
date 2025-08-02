@@ -1,0 +1,33 @@
+{% extends 'admin/model/list.html' %}
+
+{% block list_header %}
+  <div class="form-inline" style="margin-bottom: 20px;">
+    <label for="isletmeTuruSelect" style="margin-right: 10px; font-weight: bold;">İşletme Türü Seçin:</label>
+    <select id="isletmeTuruSelect" class="form-control" onchange="filterByCategory()">
+        <option value="">--- Tümünü Göster ---</option>
+        {% for tur in isletme_turleri %}
+            <option value="{{ tur.id }}" {% if tur.id == request.args.get('flt0_0', type=int) %}selected{% endif %}>
+                {{ tur.aciklama }}
+            </option>
+        {% endfor %}
+    </select>
+  </div>
+
+  <script>
+    function filterByCategory() {
+      var select = document.getElementById('isletmeTuruSelect');
+      var selectedId = select.value;
+      var currentUrl = new URL(window.location.href);
+      
+      // Mevcut filtreyi silip yenisini ekliyoruz
+      currentUrl.searchParams.delete('flt0_0');
+      if (selectedId) {
+        currentUrl.searchParams.set('flt0_0', selectedId);
+      }
+      
+      window.location.href = currentUrl.toString();
+    }
+  </script>
+
+  {{ super() }}
+{% endblock %}

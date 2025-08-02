@@ -1,0 +1,25 @@
+{% extends 'admin/model/create.html' %}
+{% from 'admin/lib.html' import render_field %}
+
+{% block form_fields %}
+  {# Form alanlarını manuel olarak çizerek tam kontrol sağlıyoruz #}
+  {{ render_field(form.isletme_turu) }}
+  {{ render_field(form.parametre) }}
+  
+  <div class="form-group">
+      {{ form.mesafe_bandi.label(class="form-label") }}
+      <div>
+        {% for subfield in form.mesafe_bandi %}
+          <div class="form-check form-check-inline">
+            {{ subfield(class="form-check-input") }}
+            {{ subfield.label(class="form-check-label") }}
+          </div>
+        {% endfor %}
+      </div>
+  </div>
+
+  {{ render_field(form.deger) }}
+  {{ render_field(form.puan) }}
+  {{ render_field(form.aktif) }}
+
+{% endblock %}

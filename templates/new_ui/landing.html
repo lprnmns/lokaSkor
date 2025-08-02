@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="landing.title">LocationIQ - İşletmeniz için en doğru konumu zekayla bulun</title>
+    
+    <!-- Meta Tags for SEO -->
+    <meta name="description" content="Türkiye'deki KOBİ'lerin ve girişimcilerin yeni işletme açarken en doğru lokasyonu bulmasını sağlayan akıllı analiz platformu.">
+    <meta name="keywords" content="lokasyon analizi, işletme yeri, kobi, girişimci, eczane, fırın, market, cafe, restoran">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="LocationIQ - Akıllı Lokasyon Analizi">
+    <meta property="og:description" content="İşletmeniz için en doğru konumu zekayla bulun">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="/static/css/design_system.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="stylesheet" href="/static/css/animations.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        /* Landing Page Specific Styles */
+        .hero-gradient {
+            background: linear-gradient(135deg, 
+                hsl(var(--primary)) 0%, 
+                hsl(var(--primary) / 0.8) 50%, 
+                hsl(var(--accent)) 100%);
+        }
+        
+        .hero-pattern {
+            background-image: 
+                radial-gradient(circle at 25% 25%, hsl(var(--primary) / 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, hsl(var(--accent) / 0.1) 0%, transparent 50%);
+        }
+        
+        .feature-card {
+            backdrop-filter: blur(10px);
+            background: hsl(var(--card) / 0.8);
+        }
+        
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+        }
+        
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+            80%, 100% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+        
+        .stats-counter {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        /* Language Selector Styles */
+        .language-selector {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 9999;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .language-selector__button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .language-selector__button:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-color: #cbd5e0;
+        }
+
+        .language-selector__flag {
+            font-size: 16px;
+        }
+
+        .language-selector__code {
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .language-selector__arrow {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .language-selector__dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 8px;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            min-width: 160px;
+            overflow: hidden;
+            animation: fadeIn 0.2s ease;
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .language-selector__option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .language-selector__option:hover {
+            background-color: #f1f5f9;
+        }
+
+        .language-selector__option--active {
+            background-color: #dbeafe;
+            font-weight: 600;
+        }
+
+        .language-selector__name {
+            color: #334155;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .language-selector {
+                top: 12px;
+                left: 12px;
+            }
+            
+            .language-selector__button {
+                padding: 6px 10px;
+            }
+            
+            .language-selector__code {
+                font-size: 14px;
+            }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+                line-height: 1.2;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.125rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-foreground">
+    <!-- Language Selector -->
+    <div class="language-selector" id="languageSelector">
+        <button class="language-selector__button" id="languageButton" aria-label="Select language">
+            <span class="language-selector__flag" id="currentFlag">🇹🇷</span>
+            <span class="language-selector__code" id="currentCode">TR</span>
+            <span class="language-selector__arrow" id="arrow">▼</span>
+        </button>
+
+        <div class="language-selector__dropdown" id="languageDropdown">
+            <button class="language-selector__option language-selector__option--active" data-lang="tr">
+                <span class="language-selector__flag">🇹🇷</span>
+                <span class="language-selector__name">Türkçe</span>
+            </button>
+            <button class="language-selector__option" data-lang="en">
+                <span class="language-selector__flag">🇬🇧</span>
+                <span class="language-selector__name">English</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-primary-foreground"></i>
+                    </div>
+                    <span class="text-xl font-bold text-foreground">LocationIQ</span>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-muted-foreground hover:text-foreground transition-colors" data-i18n="landing.features">Özellikler</a>
+                    <a href="#how-it-works" class="text-muted-foreground hover:text-foreground transition-colors" data-i18n="landing.howItWorks">Nasıl Çalışır</a>
+                    <a href="#contact" class="text-muted-foreground hover:text-foreground transition-colors" data-i18n="landing.contact">İletişim</a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden btn btn-ghost btn-sm" id="mobile-menu-btn">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-background border-t border-border" id="mobile-menu">
+            <div class="px-4 py-2 space-y-2">
+                <a href="#features" class="block py-2 text-muted-foreground hover:text-foreground transition-colors" data-i18n="landing.features">Özellikler</a>
+                <a href="#how-it-works" class="block py-2 text-muted-foreground hover:text-foreground transition-colors" data-i18n="landing.howItWorks">Nasıl Çalışır</a>
+                <a href="#contact" class="block py-2 text-muted-foreground hover:text-foreground transition-colors" data-i18n="landing.contact">İletişim</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center hero-gradient hero-pattern overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl floating-animation"></div>
+            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl floating-animation" style="animation-delay: -3s;"></div>
+        </div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <!-- Main Heading -->
+            <div class="animate-fade-in">
+                <h1 class="hero-title text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+                    <span data-i18n="landing.heroTitle">İşletmeniz için en doğru konumu</span>
+                    <span class="text-yellow-300" data-i18n="landing.heroHighlight"> zekayla</span>
+                    <span data-i18n="landing.heroTitle"> bulun</span>
+                </h1>
+                
+                <p class="hero-subtitle text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed" data-i18n="landing.heroSubtitle">
+                    Türkiye'deki KOBİ'lerin ve girişimcilerin yeni bir işletme açarken 
+                    veri analizi ile en kârlı lokasyonu keşfetmesini sağlayan akıllı platform
+                </p>
+            </div>
+            
+            <!-- CTA Button -->
+            <div class="animate-scale-in animate-delay-300">
+                <div class="relative inline-block">
+                    <!-- Pulse Ring Effect -->
+                    <div class="absolute inset-0 bg-white/20 rounded-full pulse-ring"></div>
+                    
+                    <!-- Main Button -->
+                    <button 
+                        id="start-analysis-btn" 
+                        class="btn btn-xl bg-white text-primary hover:bg-white/90 hover:scale-105 font-semibold px-8 py-4 shadow-xl transition-all duration-300"
+                    >
+                        <i data-lucide="zap" class="w-6 h-6 mr-2"></i>
+                        <span data-i18n="landing.startAnalysis">Analize Başla</span>
+                    </button>
+                </div>
+                
+                <p class="text-white/70 text-sm mt-4" data-i18n="landing.freeBadge">
+                    Ücretsiz • Kayıt gerektirmez • Anında sonuç
+                </p>
+            </div>
+            
+            <!-- Stats -->
+            <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 animate-slide-in-from-bottom animate-delay-500">
+                <div class="text-center">
+                    <div class="stats-counter text-3xl font-bold text-white mb-2" data-target="10000">0</div>
+                    <div class="text-white/80" data-i18n="landing.stats.locations">Analiz Edilen Lokasyon</div>
+                </div>
+                <div class="text-center">
+                    <div class="stats-counter text-3xl font-bold text-white mb-2" data-target="500">0</div>
+                    <div class="text-white/80" data-i18n="landing.stats.businesses">Başarılı İşletme</div>
+                </div>
+                <div class="text-center">
+                    <div class="stats-counter text-3xl font-bold text-white mb-2" data-target="95">0</div>
+                    <div class="text-white/80" data-i18n="landing.stats.accuracy">% Doğruluk Oranı</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <div class="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
+                <div class="w-1 h-3 bg-white/50 rounded-full mt-2 animate-pulse"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-background">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-foreground mb-4" data-i18n="landing.whyTitle">
+                    Neden LocationIQ?
+                </h2>
+                <p class="text-xl text-muted-foreground max-w-2xl mx-auto" data-i18n="landing.whySubtitle">
+                    Gelişmiş veri analizi ve yapay zeka ile lokasyon kararlarınızı güçlendirin
+                </p>
+            </div>
+            
+            <!-- Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="feature-card card card-interactive p-6 border-2 hover:border-primary/50 stagger-item">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="target" class="w-6 h-6 text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.featuresList.precise.title">Hassas Lokasyon Analizi</h3>
+                    <p class="text-muted-foreground" data-i18n="landing.featuresList.precise.description">
+                        Nüfus yoğunluğu, rakip analizi, ulaşım ağları ve demografik verilerle 
+                        en uygun konumları belirleyin.
+                    </p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="feature-card card card-interactive p-6 border-2 hover:border-primary/50 stagger-item">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="bar-chart-3" class="w-6 h-6 text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.featuresList.businessSpecific.title">İşletme Türüne Özel</h3>
+                    <p class="text-muted-foreground" data-i18n="landing.featuresList.businessSpecific.description">
+                        Eczane, fırın, market, cafe ve restoran için özelleştirilmiş 
+                        analiz kriterleri ve skorlama sistemi.
+                    </p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="feature-card card card-interactive p-6 border-2 hover:border-primary/50 stagger-item">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="map" class="w-6 h-6 text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.featuresList.interactiveMap.title">İnteraktif Harita</h3>
+                    <p class="text-muted-foreground" data-i18n="landing.featuresList.interactiveMap.description">
+                        Sonuçları görsel harita üzerinde inceleyin, 
+                        ısı haritası ile potansiyel alanları keşfedin.
+                    </p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="feature-card card card-interactive p-6 border-2 hover:border-primary/50 stagger-item">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="zap" class="w-6 h-6 text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.featuresList.instantResults.title">Anında Sonuç</h3>
+                    <p class="text-muted-foreground" data-i18n="landing.featuresList.instantResults.description">
+                        Saniyeler içinde detaylı analiz sonuçları alın, 
+                        zaman kaybetmeden karar verin.
+                    </p>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="feature-card card card-interactive p-6 border-2 hover:border-primary/50 stagger-item">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.featuresList.reliableData.title">Güvenilir Veri</h3>
+                    <p class="text-muted-foreground" data-i18n="landing.featuresList.reliableData.description">
+                        Güncel ve doğrulanmış verilerle desteklenen 
+                        analiz sonuçları, güvenilir öneriler.
+                    </p>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="feature-card card card-interactive p-6 border-2 hover:border-primary/50 stagger-item">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="users" class="w-6 h-6 text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.featuresList.smeFocused.title">KOBİ Odaklı</h3>
+                    <p class="text-muted-foreground" data-i18n="landing.featuresList.smeFocused.description">
+                        Küçük ve orta ölçekli işletmelerin ihtiyaçlarına 
+                        özel tasarlanmış analiz algoritmaları.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-20 bg-muted/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-foreground mb-4" data-i18n="landing.howItWorksTitle">
+                    Nasıl Çalışır?
+                </h2>
+                <p class="text-xl text-muted-foreground max-w-2xl mx-auto" data-i18n="landing.howItWorksSubtitle">
+                    3 basit adımda işletmeniz için en uygun lokasyonu bulun
+                </p>
+            </div>
+            
+            <!-- Steps -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Step 1 -->
+                <div class="text-center stagger-item">
+                    <div class="relative mb-6">
+                        <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl font-bold text-primary-foreground">1</span>
+                        </div>
+                        <div class="hidden md:block absolute top-10 left-full w-full h-0.5 bg-border -translate-y-1/2"></div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.steps.step1.title">İşletme Türünü Seçin</h3>
+                    <p class="text-muted-foreground" data-i18n="landing.steps.step1.description">
+                        Eczane, fırın, market, cafe veya restoran gibi 
+                        işletme türünüzü belirleyin.
+                    </p>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="text-center stagger-item">
+                    <div class="relative mb-6">
+                        <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl font-bold text-primary-foreground">2</span>
+                        </div>
+                        <div class="hidden md:block absolute top-10 left-full w-full h-0.5 bg-border -translate-y-1/2"></div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.steps.step2.title">Analiz Modunu Seçin</h3>
+                    <p class="text-muted-foreground" data-i18n="landing.steps.step2.description">
+                        İhtiyacınıza en uygun analiz yöntemini seçerek lokasyon araştırmanızı başlatın
+                    </p>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="text-center stagger-item">
+                    <div class="relative mb-6">
+                        <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl font-bold text-primary-foreground">3</span>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.steps.step3.title">Sonuçları İnceleyin</h3>
+                    <p class="text-muted-foreground" data-i18n="landing.steps.step3.description">
+                        Analiz sonuçlarını harita üzerinde inceleyerek en iyi lokasyonu belirleyin
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript Files -->
+    <script src="/static/js/new_ui/translation-utils.js"></script>
+    <script src="/static/js/new_ui/language-selector.js"></script>
+    <script src="/static/js/new_ui/translation-engine.js"></script>
+    <script src="/static/js/new_ui/api_client.js"></script>
+    <script src="/static/js/new_ui/error_handler.js"></script>
+    <script src="/static/js/new_ui/main.js"></script>
+    <script src="/static/js/new_ui/test-translation.js"></script>
+    
+    <script>
+        // Initialize Lucide icons
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            
+            // Initialize translation if available
+            if (window.translationUtils) {
+                window.translationUtils.translatePage();
+            }
+        });
+    </script>
+</body>
+</html>

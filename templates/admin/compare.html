@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parametre Optimizasyon - Karşılaştırma Arenası</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.sync@0.2.4/L.Map.Sync.min.js"></script>
+    <style>
+        body { 
+            font-family: system-ui, sans-serif; 
+            margin: 0; 
+            background-color: #f8f9fa; 
+        }
+        
+        .header {
+            background-color: #343a40;
+            color: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .header .subtitle {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .arena-container { 
+            display: flex; 
+            height: calc(100vh - 80px); 
+            width: 100vw; 
+            flex-direction: column; 
+        }
+        
+        .maps-container { 
+            display: flex; 
+            flex-grow: 1; 
+            gap: 2px;
+        }
+        
+        .panel { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            background: white;
+            border-radius: 8px;
+            margin: 10px 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .panel-header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 12px 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .map { 
+            height: 60%; 
+            background-color: #e9ecef; 
+        }
+        
+        .details { 
+            padding: 15px; 
+            overflow-y: auto; 
+            background-color: #fff; 
+            height: 40%; 
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .details h3 { 
+            margin-top: 0; 
+            color: #495057;
+            border-bottom: 2px solid #e9ecef; 
+            padding-bottom: 8px; 
+        }
+        
+        .score-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        
+        .score-negative {
+            color: #dc3545;
+        }
+        
+        .details ul { 
+            padding-left: 0; 
+            margin: 0; 
+            list-style-type: none; 
+        }
+        
+        .details li { 
+            margin-bottom: 8px; 
+            font-size: 14px;
+            padding: 6px 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border-left: 3px solid #007bff;
+        }
+        
+        .controls-container { 
+            padding: 20px; 
+            background: white;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .controls-container h3 { 
+            margin-top: 0; 
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+        
+        .comparison-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .controls-container button { 
+            font-size: 14px; 
+            padding: 12px 20px; 
+            cursor: pointer; 
+            border-radius: 6px; 
+            border: none; 
+            transition: all 0.2s ease;
+            font-weight: 500;
+            min-width: 140px;
+        }
+        
+        .controls-container button:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .btn-much-better { 
+            background: linear-gradient(135deg, #28a745, #20c997); 
+            color: white; 
+        }
+        
+        .btn-better { 
+            background: linear-gradient(135deg, #17a2b8, #138496); 
+            color: white; 
+        }
+        
+        .btn-equal { 
+            background: linear-gradient(135deg, #ffc107, #e0a800); 
+            color: #212529; 
+        }
+        
+        .btn-worse { 
+            background: linear-gradient(135deg, #fd7e14, #e55a00); 
+            color: white; 
+        }
+        
+        .btn-much-worse { 
+            background: linear-gradient(135deg, #dc3545, #c82333); 
+            color: white; 
+        }
+        
+        .notes-section { 
+            margin: 20px 0; 
+        }
+        
+        .notes-section textarea { 
+            width: 80%; 
+            max-width: 500px; 
+            padding: 12px; 
+            border-radius: 6px; 
+            border: 2px solid #dee2e6;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.2s ease;
+        }
+        
+        .notes-section textarea:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        
+        .stats-section {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+        
+        .emoji-icon { 
+            font-size: 18px; 
+            text-shadow: 0 0 3px rgba(0,0,0,0.3); 
+        }
+        
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #6c757d;
+            font-size: 16px;
+        }
+        
+        .loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #dee2e6;
+            border-top: 2px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .mahalle-info {
+            background: #e3f2fd;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 Parametre Optimizasyon Sistemi</h1>
+        <div class="subtitle">İki lokasyonu karşılaştırarak skorlama parametrelerini optimize edin</div>
+    </div>
+
+    <div class="arena-container">
+        <div class="maps-container">
+            <!-- Nokta A Paneli -->
+            <div class="panel">
+                <div class="panel-header">📍 Lokasyon A</div>
+                <div id="mapA" class="map"></div>
+                <div id="detailsA" class="details">
+                    <div class="loading">Nokta A detayları yükleniyor</div>
+                </div>
+            </div>
+            
+            <!-- Nokta B Paneli -->
+            <div class="panel">
+                <div class="panel-header">📍 Lokasyon B</div>
+                <div id="mapB" class="map"></div>
+                <div id="detailsB" class="details">
+                    <div class="loading">Nokta B detayları yükleniyor</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Karar Verme Kontrolleri -->
+        <div class="controls-container">
+            <h3>🤔 Hangi lokasyon daha iyi bir seçim?</h3>
+            
+            <div class="comparison-buttons">
+                <button class="btn-much-better" onclick="makeDecision('A_cok_daha_iyi')">
+                    ⭐⭐ A Çok Daha İyi
+                </button>
+                <button class="btn-better" onclick="makeDecision('A_daha_iyi')">
+                    ⭐ A Daha İyi
+                </button>
+                <button class="btn-equal" onclick="makeDecision('Esit')">
+                    ⚖️ Eşit
+                </button>
+                <button class="btn-worse" onclick="makeDecision('B_daha_iyi')">
+                    ⭐ B Daha İyi
+                </button>
+                <button class="btn-much-worse" onclick="makeDecision('B_cok_daha_iyi')">
+                    ⭐⭐ B Çok Daha İyi
+                </button>
+            </div>
+            
+            <div class="notes-section">
+                <textarea id="comparison-notes" rows="3" 
+                         placeholder="Kararınızın nedenini açıklayabilirsiniz (isteğe bağlı)..."></textarea>
+            </div>
+            
+            <div class="stats-section">
+                <div class="stat-item">
+                    <div class="stat-number" id="total-comparisons">-</div>
+                    <div class="stat-label">Toplam Karşılaştırma</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="optimization-status">-</div>
+                    <div class="stat-label">Optimizasyon Durumu</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="current-category">Eczane</div>
+                    <div class="stat-label">Mevcut Kategori</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/admin-compare.js"></script>
+</body>
+</html>

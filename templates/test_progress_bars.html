@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Bar Test - LocationIQ</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="static/css/design_system.css">
+    <link rel="stylesheet" href="static/css/mod1_comparison.css">
+    
+    <style>
+        body {
+            padding: 2rem;
+            background: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-section {
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+        }
+        
+        .test-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+        
+        .test-item {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 0.5rem;
+        }
+        
+        .test-label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Test için progress bar container */
+        .test-progress-container {
+            width: 100%;
+            margin: 1rem 0;
+        }
+        
+        .debug-info {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+        
+        .error-info {
+            background: #fee2e2;
+            border: 1px solid #dc2626;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #dc2626;
+        }
+        
+        .success-info {
+            background: #dcfce7;
+            border: 1px solid #16a34a;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #16a34a;
+        }
+        
+        .test-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+        
+        .test-button:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 class="test-title">🎨 Colorful Progress Bars Test</h1>
+        
+        <!-- Test 1: ColorCalculator Test -->
+        <div class="test-section">
+            <h2 class="test-title">1. ColorCalculator Test</h2>
+            <div id="colorCalculatorTest">
+                <div class="test-item">
+                    <div class="test-label">Color Calculation Test</div>
+                    <button class="test-button" onclick="testColorCalculator()">Test ColorCalculator</button>
+                    <div id="colorResults"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test 2: BarRenderer Test -->
+        <div class="test-section">
+            <h2 class="test-title">2. BarRenderer Test</h2>
+            <div id="barRendererTest">
+                <div class="test-item">
+                    <div class="test-label">Single Progress Bar Test</div>
+                    <div id="singleProgressContainer" class="test-progress-container"></div>
+                    <button class="test-button" onclick="testSingleProgressBar()">Render Single Bar</button>
+                </div>
+                
+                <div class="test-item">
+                    <div class="test-label">Multiple Progress Bars Test</div>
+                    <div id="multipleProgressContainer" class="test-progress-container"></div>
+                    <button class="test-button" onclick="testMultipleProgressBars()">Render Multiple Bars</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test 3: Animation Test -->
+        <div class="test-section">
+            <h2 class="test-title">3. Animation Test</h2>
+            <div id="animationTest">
+                <div class="test-item">
+                    <div class="test-label">Animation Controller Test</div>
+                    <div id="animationProgressContainer" class="test-progress-container"></div>
+                    <button class="test-button" onclick="testAnimation()">Test Animation</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test 4: Real Data Simulation -->
+        <div class="test-section">
+            <h2 class="test-title">4. Real Data Simulation</h2>
+            <div id="realDataTest">
+                <div class="test-item">
+                    <div class="test-label">Simulate Real Location Data</div>
+                    <div id="realDataContainer" class="test-progress-container"></div>
+                    <button class="test-button" onclick="testRealDataSimulation()">Simulate Real Data</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Debug Information -->
+        <div class="test-section">
+            <h2 class="test-title">5. Debug Information</h2>
+            <div id="debugInfo">
+                <button class="test-button" onclick="showDebugInfo()">Show Debug Info</button>
+                <div id="debugResults"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Progress Bar Components -->
+    <script src="static/js/components/ColorCalculator.js"></script>
+    <script src="static/js/components/BarRenderer.js"></script>
+    <script src="static/js/components/AnimationController.js"></script>
+    
+    <script>
+        // Test Functions
+        
+        function testColorCalculator() {
+            const resultsDiv = document.getElementById('colorResults');
+            resultsDiv.innerHTML = '';
+            
+            try {
+                if (!window.ColorCalculator) {
+                    throw new Error('ColorCalculator not loaded');
+                }
+                
+                const testScores = [0, 25, 50, 75, 100];
+                let html = '<div class="success-info">ColorCalculator loaded successfully!</div>';
+                
+                html += '<div class="debug-info">';
+                testScores.forEach(score => {
+                    const color = ColorCalculator.getColorForScore(score);
+                    html += `<div style="display: flex; align-items: center; margin: 0.5rem 0;">
+                        <span style="width: 60px;">Score ${score}:</span>
+                        <div style="width: 50px; height: 20px; background-color: ${color}; border: 1px solid #ccc; margin: 0 1rem;"></div>
+                        <span>${color}</span>
+                    </div>`;
+                });
+                html += '</div>';
+                
+                resultsDiv.innerHTML = html;
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error-info">Error: ${error.message}</div>`;
+            }
+        }
+        
+        function testSingleProgressBar() {
+            const container = document.getElementById('singleProgressContainer');
+            container.innerHTML = '';
+            
+            try {
+                if (!window.BarRenderer) {
+                    throw new Error('BarRenderer not loaded');
+                }
+                
+                const testConfig = {
+                    container: 'singleProgressContainer',
+                    score: 75,
+                    label: 'Test Progress Bar',
+                    animate: true
+                };
+                
+                const result = BarRenderer.renderProgressBar(testConfig);
+                
+                if (result) {
+                    console.log('✅ Single progress bar rendered successfully');
+                } else {
+                    throw new Error('BarRenderer returned null');
+                }
+                
+            } catch (error) {
+                container.innerHTML = `<div class="error-info">Error: ${error.message}</div>`;
+                console.error('❌ Single progress bar test failed:', error);
+            }
+        }
+        
+        function testMultipleProgressBars() {
+            const container = document.getElementById('multipleProgressContainer');
+            container.innerHTML = '';
+            
+            try {
+                if (!window.BarRenderer) {
+                    throw new Error('BarRenderer not loaded');
+                }
+                
+                // Create multiple containers
+                const configs = [
+                    { score: 85, label: 'Hospital Proximity' },
+                    { score: 45, label: 'Competition Level' },
+                    { score: 70, label: 'Demographics' },
+                    { score: 60, label: 'Important Places' }
+                ];
+                
+                let html = '';
+                configs.forEach((config, index) => {
+                    const containerId = `multiBar${index}`;
+                    html += `<div id="${containerId}" style="margin: 1rem 0;"></div>`;
+                });
+                container.innerHTML = html;
+                
+                // Render bars
+                const barConfigs = configs.map((config, index) => ({
+                    container: `multiBar${index}`,
+                    score: config.score,
+                    label: config.label,
+                    animate: true
+                }));
+                
+                const results = BarRenderer.renderMultipleProgressBars(barConfigs, 100);
+                const successCount = results.filter(r => r !== null).length;
+                
+                console.log(`✅ Rendered ${successCount}/${configs.length} progress bars`);
+                
+            } catch (error) {
+                container.innerHTML = `<div class="error-info">Error: ${error.message}</div>`;
+                console.error('❌ Multiple progress bars test failed:', error);
+            }
+        }
+        
+        function testAnimation() {
+            const container = document.getElementById('animationProgressContainer');
+            container.innerHTML = '';
+            
+            try {
+                if (!window.AnimationController) {
+                    throw new Error('AnimationController not loaded');
+                }
+                
+                // Create a progress bar first
+                const config = {
+                    container: 'animationProgressContainer',
+                    score: 0,
+                    label: 'Animation Test',
+                    animate: false
+                };
+                
+                BarRenderer.renderProgressBar(config);
+                
+                // Animate to different values
+                setTimeout(() => {
+                    const barElement = container.querySelector('.metric-progress-bar');
+                    if (barElement) {
+                        AnimationController.animateProgressBar(barElement, 80, true);
+                    }
+                }, 500);
+                
+            } catch (error) {
+                container.innerHTML = `<div class="error-info">Error: ${error.message}</div>`;
+                console.error('❌ Animation test failed:', error);
+            }
+        }
+        
+        function testRealDataSimulation() {
+            const container = document.getElementById('realDataContainer');
+            container.innerHTML = '';
+            
+            try {
+                // Simulate real location comparison data
+                const locations = [
+                    {
+                        id: 'loc_1',
+                        name: 'Test Location 1',
+                        scores: {
+                            hospital: 85,
+                            competitor: 45,
+                            demographic: 70,
+                            important: 60
+                        }
+                    },
+                    {
+                        id: 'loc_2',
+                        name: 'Test Location 2',
+                        scores: {
+                            hospital: 60,
+                            competitor: 80,
+                            demographic: 55,
+                            important: 75
+                        }
+                    }
+                ];
+                
+                let html = '';
+                locations.forEach((location, locIndex) => {
+                    html += `<div style="margin: 2rem 0; padding: 1rem; border: 1px solid #e5e7eb; border-radius: 0.5rem;">`;
+                    html += `<h4>${location.name}</h4>`;
+                    
+                    Object.entries(location.scores).forEach(([metric, score]) => {
+                        const containerId = `real_${metric}_${location.id}`;
+                        html += `<div id="${containerId}" style="margin: 1rem 0;"></div>`;
+                    });
+                    
+                    html += `</div>`;
+                });
+                
+                container.innerHTML = html;
+                
+                // Render progress bars
+                const configs = [];
+                locations.forEach(location => {
+                    Object.entries(location.scores).forEach(([metric, score]) => {
+                        configs.push({
+                            container: `real_${metric}_${location.id}`,
+                            score: score,
+                            label: `${metric.charAt(0).toUpperCase() + metric.slice(1)} (${location.name})`,
+                            animate: true
+                        });
+                    });
+                });
+                
+                const results = BarRenderer.renderMultipleProgressBars(configs, 150);
+                const successCount = results.filter(r => r !== null).length;
+                
+                console.log(`✅ Real data simulation: ${successCount}/${configs.length} bars rendered`);
+                
+            } catch (error) {
+                container.innerHTML = `<div class="error-info">Error: ${error.message}</div>`;
+                console.error('❌ Real data simulation failed:', error);
+            }
+        }
+        
+        function showDebugInfo() {
+            const resultsDiv = document.getElementById('debugResults');
+            
+            let html = '<div class="debug-info">';
+            html += '<h4>Component Status:</h4>';
+            html += `<p>ColorCalculator: ${window.ColorCalculator ? '✅ Loaded' : '❌ Not loaded'}</p>`;
+            html += `<p>BarRenderer: ${window.BarRenderer ? '✅ Loaded' : '❌ Not loaded'}</p>`;
+            html += `<p>AnimationController: ${window.AnimationController ? '✅ Loaded' : '❌ Not loaded'}</p>`;
+            
+            html += '<h4>CSS Classes Available:</h4>';
+            const cssClasses = [
+                'metric-progress-container',
+                'metric-progress-bar-wrapper', 
+                'metric-progress-bar',
+                'metric-progress-header',
+                'metric-label',
+                'metric-score'
+            ];
+            
+            cssClasses.forEach(className => {
+                const testElement = document.createElement('div');
+                testElement.className = className;
+                document.body.appendChild(testElement);
+                const styles = window.getComputedStyle(testElement);
+                const hasStyles = styles.display !== 'inline' || styles.width !== 'auto' || styles.height !== 'auto';
+                document.body.removeChild(testElement);
+                
+                html += `<p>${className}: ${hasStyles ? '✅ Styled' : '❌ No styles'}</p>`;
+            });
+            
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+        }
+        
+        // Auto-run debug info on page load
+        window.addEventListener('load', () => {
+            setTimeout(showDebugInfo, 1000);
+        });
+    </script>
+</body>
+</html>

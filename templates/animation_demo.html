@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocationIQ - Animation Demo</title>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/design_system.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+</head>
+
+<body>
+    {% include 'components/floating_background.html' %}
+    {% include 'components/simple_button_effects.html' %}
+    {% include 'components/safe_page_transition.html' %}
+    {% include 'components/sticky_navigation.html' %}
+
+    <!-- Back Button -->
+    <div style="position: fixed; top: 1rem; right: 1rem; z-index: 1001;">
+        <a href="/new-ui" class="btn btn-outline btn-sm" data-safe-transition="slide-left"
+            style="display: inline-flex; align-items: center; padding: 0.5rem 0.75rem; border: 1px solid #3b82f6; color: #3b82f6; text-decoration: none; border-radius: 0.5rem; font-size: 0.875rem; background: rgba(255, 255, 255, 0.9);">←
+            Ana Sayfaya Dön</a>
+    </div>
+
+    <div class="main-content min-h-screen">
+        <div class="container mx-auto px-6 py-8" style="padding-top: 6rem;">
+            <header class="text-center mb-8">
+                <h1 class="text-4xl font-bold mb-4">LocationIQ Animation Demo</h1>
+                <p class="text-lg text-muted-foreground">Modern animasyonlar ve mikro-etkileşimler</p>
+            </header>
+
+            <!-- Demo Buttons -->
+            <div class="grid md:grid-cols-4 gap-4 mb-8">
+                <button class="btn btn-primary" onclick="showNotification('Başarılı!', 'success')">Success</button>
+                <button class="btn btn-secondary" onclick="showNotification('Bilgi mesajı', 'info')">Info</button>
+                <button class="btn btn-outline" onclick="showNotification('Uyarı!', 'warning')">Warning</button>
+                <button class="btn btn-destructive" onclick="showNotification('Hata!', 'error')">Error</button>
+            </div>
+
+            <!-- Counter Demo -->
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <div class="card p-6 text-center">
+                    <h3 class="text-lg font-semibold mb-4">Counter Animation</h3>
+                    <div class="text-3xl font-bold text-primary counter" data-target="1250">0</div>
+                </div>
+
+                <div class="card p-6 text-center">
+                    <h3 class="text-lg font-semibold mb-4">Progress Bar</h3>
+                    <div class="progress-bar" style="--progress: 75%;">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="card p-6 text-center">
+                    <h3 class="text-lg font-semibold mb-4">Loading Spinner</h3>
+                    <div class="loading-spinner mx-auto"></div>
+                </div>
+            </div>
+
+            <!-- Interactive Cards -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card-interactive p-6">
+                    <h3 class="text-lg font-semibold mb-2">Interactive Card</h3>
+                    <p class="text-muted-foreground">Hover üzerinde animasyon efekti</p>
+                </div>
+
+                <div class="card-interactive p-6">
+                    <h3 class="text-lg font-semibold mb-2">Micro Interactions</h3>
+                    <p class="text-muted-foreground">Detaylı hover animasyonları</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/new_ui/animation_performance.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/animation_manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/micro_interactions.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/sticky_navigation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/enhanced_scroll_animations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/performance_monitor.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/ui_integration_manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/new_ui/ui_test_suite.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize animation systems
+            if (typeof AnimationPerformance !== 'undefined') {
+                window.animationPerformance = new AnimationPerformance();
+            }
+            if (typeof AnimationManager !== 'undefined') {
+                window.animationManager = new AnimationManager();
+            }
+            if (typeof MicroInteractions !== 'undefined') {
+                window.microInteractions = new MicroInteractions();
+            }
+        });
+
+        function showNotification(message, type) {
+            if (window.microInteractions) {
+                window.microInteractions.showNotification(message, type, 3000);
+            }
+        }
+    </script>
+</body>
+
+</html>

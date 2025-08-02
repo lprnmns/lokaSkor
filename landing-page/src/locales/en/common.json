@@ -1,0 +1,61 @@
+{
+  "navigation": {
+    "features": "Features",
+    "demo": "Demo",
+    "contact": "Contact",
+    "adminPanel": "Admin Panel",
+    "oldVersion": "Old Version"
+  },
+  "hero": {
+    "tagline": "AI-powered location analysis",
+    "title": "Location Analysis",
+    "subtitle": "New Era",
+    "description": "Find the most suitable location for your business with AI-powered location analysis. Modern tools, detailed analyses, and real-time results.",
+    "startAnalysis": "Start Analysis",
+    "watchDemo": "Watch Demo"
+  },
+  "features": {
+    "title": "Advanced Analysis Tools",
+    "description": "All the location data your business needs for success in one platform",
+    "detailedAnalysis": {
+      "title": "Detailed Analysis",
+      "description": "Comprehensive reports with demographic data, traffic density, and competitive analysis"
+    },
+    "realTimeData": {
+      "title": "Real-time Data",
+      "description": "Stay up-to-date with instant updates and live data"
+    },
+    "securePlatform": {
+      "title": "Secure Platform",
+      "description": "Your data is encrypted and security is our priority"
+    }
+  },
+  "stats": {
+    "locations": "Analyzed Locations",
+    "customers": "Happy Customers",
+    "uptime": "Uptime Guarantee",
+    "support": "Support Service"
+  },
+  "cta": {
+    "title": "Get Started Now",
+    "description": "Start your location analysis today and make the right decisions for your business",
+    "tryFree": "Try Free",
+    "moreInfo": "More Information"
+  },
+  "footer": {
+    "description": "AI-powered location analysis platform",
+    "product": "Product",
+    "company": "Company",
+    "support": "Support",
+    "features": "Features",
+    "pricing": "Pricing",
+    "api": "API",
+    "about": "About Us",
+    "blog": "Blog",
+    "careers": "Careers",
+    "helpCenter": "Help Center",
+    "contact": "Contact",
+    "status": "Status",
+    "copyright": "2024 LocationIQ. All rights reserved."
+  }
+}

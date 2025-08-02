@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Admin Panel - Lokasyon Analiz Ayarları</title>
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .modern-admin-panel {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .panel-header {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .panel-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .tab:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .tab.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .weight-section, .parameter-section, .preview-section {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .weight-sliders {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .slider-group {
+            background: var(--background);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .slider-group:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .weight-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--border);
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .preview-panel {
+            background: var(--background);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .sample-location {
+            text-align: center;
+        }
+
+        .sample-location h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .score-breakdown {
+            display: grid;
+            gap: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--surface);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .score-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            background: var(--success-color);
+        }
+
+        .toast.error {
+            background: var(--danger-color);
+        }
+
+        .loading {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .parameter-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .parameter-card {
+            background: var(--background);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .parameter-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .parameter-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .parameter-controls {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .parameter-control {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .parameter-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .parameter-value {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .parameter-slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border);
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        .parameter-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .parameter-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .parameter-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .modern-admin-panel {
+                padding: 1rem;
+            }
+            
+            .weight-sliders {
+                grid-template-columns: 1fr;
+            }
+            
+            .category-tabs {
+                gap: 0.5rem;
+            }
+            
+            .tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .panel-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="modern-admin-panel">
+        <!-- Header -->
+        <div class="panel-header">
+            <h1>🎯 Lokasyon Analiz Ayarları</h1>
+            <div class="category-tabs">
+                <button class="tab active" data-category="eczane">💊 Eczane</button>
+                <button class="tab" data-category="cafe">☕ Cafe</button>
+                <button class="tab" data-category="restoran">🍽️ Restoran</button>
+                <button class="tab" data-category="market">🛒 Market</button>
+                <button class="tab" data-category="firin">🍞 Fırın</button>
+            </div>
+        </div>
+
+        <!-- Weight Controls -->
+        <div class="weight-section">
+            <h2 class="section-title">⚖️ Puan Ağırlıkları</h2>
+            <div class="weight-sliders">
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>🏥 Hastane Yakınlığı</span>
+                        <span class="weight-value" id="hospital-weight-value">30%</span>
+                    </div>
+                    <input type="range" class="slider" id="hospital-weight" min="0" max="100" value="30">
+                </div>
+                
+                <div class="slider-group">
+                    <div class="slider-label">
+                                                        <span>🏪 Rekabet Analizi</span>
+                        <span class="weight-value" id="competitor-weight-value">30%</span>
+                    </div>
+                    <input type="range" class="slider" id="competitor-weight" min="0" max="100" value="30">
+                </div>
+                
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>🚇 Önemli Yerler</span>
+                        <span class="weight-value" id="important-weight-value">30%</span>
+                    </div>
+                    <input type="range" class="slider" id="important-weight" min="0" max="100" value="30">
+                </div>
+                
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>👥 Demografi</span>
+                        <span class="weight-value" id="demographics-weight-value">10%</span>
+                    </div>
+                    <input type="range" class="slider" id="demographics-weight" min="0" max="100" value="10">
+                </div>
+            </div>
+        </div>
+
+        <!-- Parameter Details -->
+        <div class="parameter-section">
+            <h2 class="section-title">🔧 Parametre Detayları</h2>
+            <div class="parameter-cards" id="parameter-cards">
+                <!-- Parameter cards will be loaded dynamically -->
+            </div>
+        </div>
+
+        <!-- Real-time Preview -->
+        <div class="preview-section">
+            <h2 class="section-title">👁️ Gerçek Zamanlı Önizleme</h2>
+            <div class="preview-panel">
+                <div class="sample-location">
+                    <h3>📍 Örnek Lokasyon: Kızılay, Ankara</h3>
+                    <div class="score-breakdown" id="score-breakdown">
+                        <div class="score-item">
+                            <span>🏥 Hastane Yakınlığı:</span>
+                            <span class="score" id="hospital-score">85/100</span>
+                        </div>
+                        <div class="score-item">
+                                                            <span>🏪 Rekabet Analizi:</span>
+                            <span class="score" id="competitor-score">25/100</span>
+                        </div>
+                        <div class="score-item">
+                            <span>🚇 Önemli Yerler:</span>
+                            <span class="score" id="important-score">70/100</span>
+                        </div>
+                        <div class="score-item">
+                            <span>👥 Demografi:</span>
+                            <span class="score" id="demographics-score">60/100</span>
+                        </div>
+                        <div class="score-total">
+                            <span>🎯 Toplam Puan:</span>
+                            <span class="total-score" id="total-score">67/100</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-success" id="save-settings">💾 Ayarları Kaydet</button>
+            <button class="btn btn-warning" id="reset-settings">🔄 Varsayılana Sıfırla</button>
+            <button class="btn btn-primary" id="test-location">🧪 Test Lokasyonu</button>
+            <a href="/admin" class="btn btn-primary">⬅️ Eski Admin Paneli</a>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Loading Spinner -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <div style="text-align: center;">İşleniyor...</div>
+    </div>
+
+    <script>
+        class ModernAdminPanel {
+            constructor() {
+                this.currentCategory = 'eczane';
+                this.weights = {
+                    hospital_weight: 0.30,
+                    competitor_weight: 0.30,
+                    important_places_weight: 0.30,
+                    demographics_weight: 0.10
+                };
+                this.updateTimer = null;
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupEventListeners();
+                this.loadWeights();
+                this.loadParameters();
+                this.updatePreview();
+            }
+            
+            setupEventListeners() {
+                // Category tabs
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        this.switchCategory(e.target.dataset.category);
+                    });
+                });
+                
+                // Weight sliders
+                document.querySelectorAll('.slider').forEach(slider => {
+                    slider.addEventListener('input', (e) => {
+                        this.updateWeights();
+                    });
+                });
+                
+                // Action buttons
+                document.getElementById('save-settings').addEventListener('click', () => {
+                    this.saveSettings();
+                });
+                
+                document.getElementById('reset-settings').addEventListener('click', () => {
+                    this.resetSettings();
+                });
+                
+                document.getElementById('test-location').addEventListener('click', () => {
+                    window.open('/modern', '_blank');
+                });
+            }
+            
+            switchCategory(category) {
+                this.currentCategory = category;
+                
+                // Update active tab
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.querySelector(`[data-category="${category}"]`).classList.add('active');
+                
+                // Load weights and parameters for new category
+                this.loadWeights();
+                this.loadParameters();
+            }
+            
+            async loadParameters() {
+                try {
+                    const response = await fetch(`/api/admin/parameters/${this.currentCategory}`);
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        this.renderParameterCards(data.parameters);
+                    } else {
+                        this.showToast('error', data.error || 'Parametreler yüklenemedi');
+                    }
+                } catch (error) {
+                    this.showToast('error', 'Parametre yükleme hatası: ' + error.message);
+                }
+            }
+            
+            renderParameterCards(parameters) {
+                const container = document.getElementById('parameter-cards');
+                container.innerHTML = '';
+                
+                const parameterConfigs = {
+                    'hastane': { icon: '🏥', name: 'Hastane Yakınlığı', defaultMax: 100, defaultDistance: 1000, defaultLog: 2.0 },
+                    'rakip_eczane': { icon: '🏪', name: 'Rakip Eczane', defaultMax: -100, defaultDistance: 700, defaultLog: 3.0 },
+                    'metro': { icon: '🚇', name: 'Metro İstasyonu', defaultMax: 50, defaultDistance: 800, defaultLog: 2.0 },
+                    'universite': { icon: '🎓', name: 'Üniversite', defaultMax: 30, defaultDistance: 1000, defaultLog: 1.5 },
+                    'avm': { icon: '🛍️', name: 'AVM', defaultMax: 40, defaultDistance: 800, defaultLog: 2.0 }
+                };
+                
+                Object.keys(parameterConfigs).forEach(paramKey => {
+                    const config = parameterConfigs[paramKey];
+                    const param = parameters[paramKey] || {
+                        max_score: config.defaultMax,
+                        effect_distance: config.defaultDistance,
+                        log_coefficient: config.defaultLog,
+                        is_active: true
+                    };
+                    
+                    const card = this.createParameterCard(paramKey, config, param);
+                    container.appendChild(card);
+                });
+            }
+            
+            createParameterCard(paramKey, config, param) {
+                const card = document.createElement('div');
+                card.className = 'parameter-card';
+                
+                card.innerHTML = `
+                    <h3>${config.icon} ${config.name}</h3>
+                    <div class="parameter-controls">
+                        <div class="parameter-control">
+                            <div class="parameter-label">
+                                <span>Max Puan:</span>
+                                <span class="parameter-value" id="${paramKey}-max-value">${param.max_score}</span>
+                            </div>
+                            <input type="range" class="parameter-slider" id="${paramKey}-max-slider" 
+                                   min="-200" max="200" value="${param.max_score}" step="5">
+                        </div>
+                        
+                        <div class="parameter-control">
+                            <div class="parameter-label">
+                                <span>Etki Mesafesi:</span>
+                                <span class="parameter-value" id="${paramKey}-distance-value">${param.effect_distance}m</span>
+                            </div>
+                            <input type="range" class="parameter-slider" id="${paramKey}-distance-slider" 
+                                   min="100" max="3000" value="${param.effect_distance}" step="50">
+                        </div>
+                        
+                        <div class="parameter-control">
+                            <div class="parameter-label">
+                                <span>Log Katsayısı:</span>
+                                <span class="parameter-value" id="${paramKey}-log-value">${param.log_coefficient}</span>
+                            </div>
+                            <input type="range" class="parameter-slider" id="${paramKey}-log-slider" 
+                                   min="0.5" max="5.0" value="${param.log_coefficient}" step="0.1">
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listeners for parameter sliders
+                const maxSlider = card.querySelector(`#${paramKey}-max-slider`);
+                const distanceSlider = card.querySelector(`#${paramKey}-distance-slider`);
+                const logSlider = card.querySelector(`#${paramKey}-log-slider`);
+                
+                maxSlider.addEventListener('input', () => {
+                    const value = parseInt(maxSlider.value);
+                    document.getElementById(`${paramKey}-max-value`).textContent = value;
+                    this.updateParameter(paramKey, 'max_score', value);
+                });
+                
+                distanceSlider.addEventListener('input', () => {
+                    const value = parseInt(distanceSlider.value);
+                    document.getElementById(`${paramKey}-distance-value`).textContent = value + 'm';
+                    this.updateParameter(paramKey, 'effect_distance', value);
+                });
+                
+                logSlider.addEventListener('input', () => {
+                    const value = parseFloat(logSlider.value);
+                    document.getElementById(`${paramKey}-log-value`).textContent = value.toFixed(1);
+                    this.updateParameter(paramKey, 'log_coefficient', value);
+                });
+                
+                return card;
+            }
+            
+            async updateParameter(paramKey, field, value) {
+                try {
+                    const response = await fetch(`/api/admin/parameters/${this.currentCategory}/${paramKey}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            [field]: value
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        const data = await response.json();
+                        this.showToast('error', data.error || 'Parametre güncellenemedi');
+                    }
+                    
+                    // Update preview after parameter change
+                    this.debouncedPreviewUpdate();
+                } catch (error) {
+                    this.showToast('error', 'Parametre güncelleme hatası: ' + error.message);
+                }
+            }
+            
+            async loadWeights() {
+                try {
+                    this.showLoading(true);
+                    const response = await fetch(`/api/admin/weights/${this.currentCategory}`);
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        this.weights = {
+                            hospital_weight: data.hospital_weight,
+                            competitor_weight: data.competitor_weight,
+                            important_places_weight: data.important_places_weight,
+                            demographics_weight: data.demographics_weight
+                        };
+                        
+                        this.updateSliders();
+                        this.updatePreview();
+                    } else {
+                        this.showToast('error', data.error || 'Ağırlıklar yüklenemedi');
+                    }
+                } catch (error) {
+                    this.showToast('error', 'Bağlantı hatası: ' + error.message);
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+            
+            updateSliders() {
+                document.getElementById('hospital-weight').value = this.weights.hospital_weight * 100;
+                document.getElementById('competitor-weight').value = this.weights.competitor_weight * 100;
+                document.getElementById('important-weight').value = this.weights.important_places_weight * 100;
+                document.getElementById('demographics-weight').value = this.weights.demographics_weight * 100;
+                
+                this.updateWeightLabels();
+            }
+            
+            updateWeights() {
+                const hospitalWeight = parseInt(document.getElementById('hospital-weight').value);
+                const competitorWeight = parseInt(document.getElementById('competitor-weight').value);
+                const importantWeight = parseInt(document.getElementById('important-weight').value);
+                const demographicsWeight = parseInt(document.getElementById('demographics-weight').value);
+                
+                // Normalize to 100%
+                const total = hospitalWeight + competitorWeight + importantWeight + demographicsWeight;
+                if (total > 0) {
+                    this.weights = {
+                        hospital_weight: hospitalWeight / total,
+                        competitor_weight: competitorWeight / total,
+                        important_places_weight: importantWeight / total,
+                        demographics_weight: demographicsWeight / total
+                    };
+                }
+                
+                this.updateWeightLabels();
+                this.debouncedPreviewUpdate();
+            }
+            
+            updateWeightLabels() {
+                document.getElementById('hospital-weight-value').textContent = 
+                    Math.round(this.weights.hospital_weight * 100) + '%';
+                document.getElementById('competitor-weight-value').textContent = 
+                    Math.round(this.weights.competitor_weight * 100) + '%';
+                document.getElementById('important-weight-value').textContent = 
+                    Math.round(this.weights.important_places_weight * 100) + '%';
+                document.getElementById('demographics-weight-value').textContent = 
+                    Math.round(this.weights.demographics_weight * 100) + '%';
+            }
+            
+            debouncedPreviewUpdate() {
+                clearTimeout(this.updateTimer);
+                this.updateTimer = setTimeout(() => {
+                    this.updatePreview();
+                }, 300);
+            }
+            
+            async updatePreview() {
+                try {
+                    const response = await fetch(`/api/admin/preview/${this.currentCategory}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            weights: this.weights
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.displayPreviewResults(data);
+                    } else {
+                        // Fallback to simulated scores if API fails
+                        this.displaySimulatedPreview();
+                    }
+                } catch (error) {
+                    // Fallback to simulated scores if API fails
+                    this.displaySimulatedPreview();
+                }
+            }
+            
+            displayPreviewResults(data) {
+                const breakdown = data.breakdown || {};
+                
+                document.getElementById('hospital-score').textContent = 
+                    `${Math.round(breakdown.hospital_proximity?.score || 0)}/100`;
+                document.getElementById('competitor-score').textContent = 
+                    `${Math.round(breakdown.competitors?.score || 0)}/100`;
+                document.getElementById('important-score').textContent = 
+                    `${Math.round(breakdown.important_places?.score || 0)}/100`;
+                document.getElementById('demographics-score').textContent = 
+                    `${Math.round(breakdown.demographics?.score || 0)}/100`;
+                document.getElementById('total-score').textContent = 
+                    `${Math.round(data.total_score || 0)}/100`;
+            }
+            
+            displaySimulatedPreview() {
+                // Simulate score calculation with current weights
+                const baseScores = {
+                    hospital: 85,
+                    competitor: 25,
+                    important: 70,
+                    demographics: 60
+                };
+                
+                const totalScore = Math.round(
+                    baseScores.hospital * this.weights.hospital_weight +
+                    baseScores.competitor * this.weights.competitor_weight +
+                    baseScores.important * this.weights.important_places_weight +
+                    baseScores.demographics * this.weights.demographics_weight
+                );
+                
+                document.getElementById('hospital-score').textContent = `${baseScores.hospital}/100`;
+                document.getElementById('competitor-score').textContent = `${baseScores.competitor}/100`;
+                document.getElementById('important-score').textContent = `${baseScores.important}/100`;
+                document.getElementById('demographics-score').textContent = `${baseScores.demographics}/100`;
+                document.getElementById('total-score').textContent = `${totalScore}/100`;
+            }
+            
+            async saveSettings() {
+                try {
+                    this.showLoading(true);
+                    const response = await fetch(`/api/admin/weights/${this.currentCategory}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(this.weights)
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        this.showToast('success', 'Ayarlar başarıyla kaydedildi!');
+                    } else {
+                        this.showToast('error', data.error || 'Kaydetme hatası');
+                    }
+                } catch (error) {
+                    this.showToast('error', 'Bağlantı hatası: ' + error.message);
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+            
+            async resetSettings() {
+                if (!confirm('Ayarları varsayılan değerlere sıfırlamak istediğinizden emin misiniz?')) {
+                    return;
+                }
+                
+                try {
+                    this.showLoading(true);
+                    const response = await fetch(`/api/admin/weights/${this.currentCategory}/reset`, {
+                        method: 'POST'
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        this.showToast('success', 'Ayarlar varsayılan değerlere sıfırlandı!');
+                        this.loadWeights();
+                    } else {
+                        this.showToast('error', data.error || 'Sıfırlama hatası');
+                    }
+                } catch (error) {
+                    this.showToast('error', 'Bağlantı hatası: ' + error.message);
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+            
+            showToast(type, message) {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = `toast ${type}`;
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+            
+            showLoading(show) {
+                const loading = document.getElementById('loading');
+                if (show) {
+                    loading.classList.add('show');
+                } else {
+                    loading.classList.remove('show');
+                }
+            }
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new ModernAdminPanel();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lokasyon Karşılaştırma - LocationIQ</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/design_system.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mod1_comparison.css') }}">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    {% include 'components/simple_button_effects.html' %}
+    {% include 'components/safe_page_transition.html' %}
+    
+    <!-- Main Container -->
+    <div class="main-content comparison-container">
+        <!-- Header -->
+        <header class="comparison-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <svg width="24" height="24" fill="white" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text">LocationIQ</span>
+                </div>
+                <button class="back-button" data-safe-transition="slide-left" onclick="navigateWithSafeTransition('/mode-selection?business_type={{ business_type }}', 'slide-left')">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Geri
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <div class="main-layout">
+            <!-- Modern Sidebar -->
+            <div class="location-selector-sidebar">
+                <!-- Sidebar Header -->
+                <div class="sidebar-header">
+                    <div class="brand-section">
+                        <div class="brand-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                        </div>
+                        <div class="brand-info">
+                            <h1>LocationIQ</h1>
+                            <p>{{ business_type|title }} Analiz Aracı</p>
+                        </div>
+                    </div>
+                    
+                    <div class="search-section">
+                        <form class="smart-search-bar" id="locationSearchForm">
+                            <div class="search-input-container">
+                                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <path d="m21 21-4.35-4.35"/>
+                                </svg>
+                                <input type="text" 
+                                       class="search-input" 
+                                       placeholder="Adres arayın veya koordinat yapıştırın"
+                                       id="searchInput"
+                                       aria-describedby="input-help" />
+                            </div>
+                        </form>
+                        <div id="searchResults" class="search-results"></div>
+                        <p class="input-help" id="input-help">
+                            veya eklemek için haritadan bir konum seçin
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Sidebar Content -->
+                <div class="sidebar-content">
+                    <div class="selected-locations-section">
+                        <h3>
+                            Seçilen Konumlar (<span id="locationCount">0</span>/3)
+                        </h3>
+                        
+                        <div id="statusMessages" class="status-messages"></div>
+                        <div id="selectedLocationsList" class="location-cards-container"></div>
+                    </div>
+                </div>
+                
+                <!-- Sidebar Footer -->
+                <div class="sidebar-footer" id="comparisonFooter" style="display: none;">
+                    <button class="comparison-button" id="startComparisonBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <polyline points="13,17 18,12 13,7"/>
+                            <polyline points="6,17 11,12 6,7"/>
+                        </svg>
+                        Karşılaştırmaya Başla
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Map Container -->
+            <main class="map-container">
+                <div id="comparisonMap" class="comparison-map"></div>
+                
+                <!-- Map Status Message (replaces old CTA button) -->
+                <div class="map-status-container">
+                    <div id="mapStatusMessage" class="map-status-message" data-state="empty">
+                        <span class="status-icon">📍</span>
+                        <span class="status-text">Konum eklemek için haritaya tıklayın</span>
+                    </div>
+                </div>
+                
+                <div class="map-controls">
+                    <button id="resetMapBtn" class="map-control-btn">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                        Sıfırla
+                    </button>
+                </div>
+            </main>
+        </div>
+
+        <!-- Comparison Results (Hidden Initially) -->
+        <section id="comparisonResults" class="comparison-results" style="display: none;">
+            <div class="results-header">
+                <h2>Karşılaştırma Sonuçları</h2>
+                <button id="newComparisonBtn" class="btn-outline">Yeni Karşılaştırma</button>
+            </div>
+            <div id="resultsContent" class="results-content">
+                <!-- Results will be populated here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="analysisLoading" class="analysis-loading" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3>Lokasyonlar Analiz Ediliyor...</h3>
+            <p>Lütfen bekleyin, bu işlem birkaç saniye sürebilir.</p>
+            <div class="loading-progress">
+                <div class="progress-bar" id="analysisProgress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='js/turkey_geo_data.js') }}"></script>
+    
+    <!-- Detail Panel System Components -->
+    <script src="{{ url_for('static', filename='js/components/CategoryExpander.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/components/DetailPanelManager.js') }}"></script>
+    
+    <!-- Colorful Progress Bar System -->
+    <script src="{{ url_for('static', filename='js/components/ColorCalculator.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/components/BarRenderer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/components/AnimationController.js') }}"></script>
+    
+    <!-- Main Comparison Logic -->
+    <script src="{{ url_for('static', filename='js/mod1_comparison.js') }}"></script>
+    
+    <script>
+        // Initialize the comparison system
+        document.addEventListener('DOMContentLoaded', () => {
+            const businessType = '{{ business_type }}';
+            window.locationComparison = new LocationComparison(businessType);
+        });
+    </script>
+</body>
+</html>

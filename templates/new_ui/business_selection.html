@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="businessSelection.title">İşletme Türü Seçimi - LocationIQ</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="İşletmeniz için en uygun lokasyon analizini başlatmak için işletme türünüzü seçin.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="/static/css/design_system.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="stylesheet" href="/static/css/animations.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        /* Business Selection Specific Styles */
+        .business-card {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--card) / 0.95) 100%);
+        }
+        
+        .business-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px hsl(var(--primary) / 0.15);
+            border-color: hsl(var(--primary));
+        }
+        
+        .business-card.selected {
+            border-color: hsl(var(--primary));
+            box-shadow: 0 0 0 3px hsl(var(--primary) / 0.2);
+            background: linear-gradient(135deg, hsl(var(--primary) / 0.05) 0%, hsl(var(--primary) / 0.02) 100%);
+        }
+        
+        .business-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .business-card:hover::before {
+            left: 100%;
+        }
+        
+        .business-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .business-card:hover .business-icon {
+            transform: scale(1.1);
+        }
+        
+        .business-card.selected .business-icon {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            transform: scale(1.1);
+        }
+        
+        .business-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .business-card.selected .business-title {
+            color: hsl(var(--primary));
+        }
+        
+        .business-description {
+            color: hsl(var(--muted-foreground));
+            font-size: 0.875rem;
+            line-height: 1.5;
+            transition: color 0.3s ease;
+        }
+        
+        .business-card.selected .business-description {
+            color: hsl(var(--foreground) / 0.8);
+        }
+        
+        .selection-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+        
+        .business-card.selected .selection-indicator {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: hsl(var(--primary));
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .step {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+        
+        .step.active {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+        
+        .step.completed {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+        
+        .step.inactive {
+            background: hsl(var(--muted));
+            color: hsl(var(--muted-foreground));
+        }
+        
+        .step-connector {
+            width: 2rem;
+            height: 2px;
+            background: hsl(var(--border));
+            transition: background-color 0.3s ease;
+        }
+        
+        .step-connector.completed {
+            background: hsl(var(--primary));
+        }
+        
+        /* Language Selector Styles */
+        .language-selector {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 9999;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .language-selector__button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .language-selector__button:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-color: #cbd5e0;
+        }
+
+        .language-selector__flag {
+            font-size: 16px;
+        }
+
+        .language-selector__code {
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .language-selector__arrow {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .language-selector__dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 8px;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            min-width: 160px;
+            overflow: hidden;
+            animation: fadeIn 0.2s ease;
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .language-selector__option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .language-selector__option:hover {
+            background-color: #f1f5f9;
+        }
+
+        .language-selector__option--active {
+            background-color: #dbeafe;
+            font-weight: 600;
+        }
+
+        .language-selector__name {
+            color: #334155;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .language-selector {
+                top: 12px;
+                left: 12px;
+            }
+            
+            .language-selector__button {
+                padding: 6px 10px;
+            }
+            
+            .language-selector__code {
+                font-size: 14px;
+            }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .business-card {
+                padding: 1.5rem;
+            }
+            
+            .business-icon {
+                width: 3rem;
+                height: 3rem;
+            }
+            
+            .business-title {
+                font-size: 1.125rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-foreground min-h-screen">
+    <!-- Language Selector -->
+    <div class="language-selector" id="languageSelector">
+        <button class="language-selector__button" id="languageButton" aria-label="Select language">
+            <span class="language-selector__flag" id="currentFlag">🇹🇷</span>
+            <span class="language-selector__code" id="currentCode">TR</span>
+            <span class="language-selector__arrow" id="arrow">▼</span>
+        </button>
+
+        <div class="language-selector__dropdown" id="languageDropdown">
+            <button class="language-selector__option language-selector__option--active" data-lang="tr">
+                <span class="language-selector__flag">🇹🇷</span>
+                <span class="language-selector__name">Türkçe</span>
+            </button>
+            <button class="language-selector__option" data-lang="en">
+                <span class="language-selector__flag">🇬🇧</span>
+                <span class="language-selector__name">English</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Progress Bar -->
+    <div class="progress-bar" style="width: 33.33%"></div>
+    
+    <!-- Navigation -->
+    <nav class="border-b border-border bg-background/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-primary-foreground"></i>
+                    </div>
+                    <span class="text-xl font-bold text-foreground">LocationIQ</span>
+                </div>
+                
+                <!-- Back Button -->
+                <button id="back-btn" class="btn btn-ghost btn-sm">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                    <span data-i18n="businessSelection.back">Geri</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Step Indicator -->
+            <div class="step-indicator animate-fade-in">
+                <div class="step completed">1</div>
+                <div class="step-connector completed"></div>
+                <div class="step active">2</div>
+                <div class="step-connector inactive"></div>
+                <div class="step inactive">3</div>
+            </div>
+            
+            <!-- Header -->
+            <div class="text-center mb-12 animate-slide-in-from-top">
+                <h1 class="text-3xl md:text-4xl font-bold text-foreground mb-4" data-i18n="businessSelection.stepIndicator">
+                    İşletme Türünüzü Seçin
+                </h1>
+                <p class="text-xl text-muted-foreground max-w-2xl mx-auto" data-i18n="businessSelection.stepSubtitle">
+                    Size en uygun lokasyon analizini yapabilmemiz için işletmenizin türünü belirleyin
+                </p>
+            </div>
+            
+            <!-- Business Type Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <!-- Eczane -->
+                <div class="business-card card p-6 text-center stagger-item" data-business-type="eczane">
+                    <div class="selection-indicator">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                    </div>
+                    <div class="business-icon bg-blue-100 text-blue-600">
+                        <i data-lucide="cross" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="business-title" data-i18n="businessSelection.businessTypes.pharmacy.title">Eczane</h3>
+                    <p class="business-description" data-i18n="businessSelection.businessTypes.pharmacy.description">
+                        Sağlık hizmetleri odaklı analiz. Hastane yakınlığı, yaşlı nüfus yoğunluğu ve ulaşım kolaylığı öncelikli.
+                    </p>
+                </div>
+                
+                <!-- Fırın -->
+                <div class="business-card card p-6 text-center stagger-item" data-business-type="firin">
+                    <div class="selection-indicator">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                    </div>
+                    <div class="business-icon bg-orange-100 text-orange-600">
+                        <i data-lucide="wheat" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="business-title" data-i18n="businessSelection.businessTypes.bakery.title">Fırın</h3>
+                    <p class="business-description" data-i18n="businessSelection.businessTypes.bakery.description">
+                        Günlük ihtiyaç odaklı analiz. Konut yoğunluğu, yaya trafiği ve rekabet analizi ön planda.
+                    </p>
+                </div>
+                
+                <!-- Market -->
+                <div class="business-card card p-6 text-center stagger-item" data-business-type="market">
+                    <div class="selection-indicator">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                    </div>
+                    <div class="business-icon bg-green-100 text-green-600">
+                        <i data-lucide="shopping-cart" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="business-title" data-i18n="businessSelection.businessTypes.market.title">Market</h3>
+                    <p class="business-description" data-i18n="businessSelection.businessTypes.market.description">
+                        Perakende odaklı analiz. Nüfus yoğunluğu, gelir seviyesi ve park imkanları değerlendirilir.
+                    </p>
+                </div>
+                
+                <!-- Cafe -->
+                <div class="business-card card p-6 text-center stagger-item" data-business-type="cafe">
+                    <div class="selection-indicator">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                    </div>
+                    <div class="business-icon bg-purple-100 text-purple-600">
+                        <i data-lucide="coffee" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="business-title" data-i18n="businessSelection.businessTypes.cafe.title">Cafe</h3>
+                    <p class="business-description" data-i18n="businessSelection.businessTypes.cafe.description">
+                        Sosyal mekan odaklı analiz. Genç nüfus, öğrenci yoğunluğu ve sosyal aktivite alanları öncelikli.
+                    </p>
+                </div>
+                
+                <!-- Restoran -->
+                <div class="business-card card p-6 text-center stagger-item" data-business-type="restoran">
+                    <div class="selection-indicator">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                    </div>
+                    <div class="business-icon bg-red-100 text-red-600">
+                        <i data-lucide="utensils" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="business-title" data-i18n="businessSelection.businessTypes.restaurant.title">Restoran</h3>
+                    <p class="business-description" data-i18n="businessSelection.businessTypes.restaurant.description">
+                        Yemek hizmeti odaklı analiz. İş merkezi yakınlığı, gelir seviyesi ve akşam trafiği değerlendirilir.
+                    </p>
+                </div>
+                
+                <!-- Diğer (Placeholder for future expansion) -->
+                <div class="business-card card p-6 text-center stagger-item opacity-50 cursor-not-allowed" data-business-type="diger">
+                    <div class="business-icon bg-gray-100 text-gray-400">
+                        <i data-lucide="more-horizontal" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="business-title text-gray-400" data-i18n="businessSelection.businessTypes.other.title">Diğer</h3>
+                    <p class="business-description text-gray-400" data-i18n="businessSelection.businessTypes.other.description">
+                        Yakında daha fazla işletme türü eklenecek...
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex justify-center space-x-4 animate-slide-in-from-bottom">
+                <button id="continue-btn" class="btn btn-lg btn-primary px-8 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    <span id="continue-text" data-i18n="businessSelection.continue">İşletme Türü Seçin</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
+                </button>
+            </div>
+            
+            <!-- Help Text -->
+            <div class="text-center mt-8 animate-fade-in animate-delay-500">
+                <p class="text-sm text-muted-foreground">
+                    <i data-lucide="info" class="w-4 h-4 inline mr-1"></i>
+                    <span data-i18n="businessSelection.helpText">İşletme türünüz listede yoksa, en yakın türü seçebilirsiniz</span>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center h-full">
+            <div class="text-center">
+                <div class="loading-spinner w-8 h-8 mx-auto mb-4"></div>
+                <p class="text-muted-foreground" data-i18n="businessSelection.loading">Analiz paneli hazırlanıyor...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/static/js/new_ui/translation-utils.js"></script>
+    <script src="/static/js/new_ui/language-selector.js"></script>
+    <script src="/static/js/new_ui/translation-engine.js"></script>
+    <script src="/static/js/new_ui/api_client.js"></script>
+    <script src="/static/js/new_ui/error_handler.js"></script>
+    <script src="/static/js/new_ui/main.js"></script>
+    <script src="/static/js/new_ui/test-translation.js"></script>
+    
+    <script>
+        // Initialize Lucide icons
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            
+            // Initialize translation if available
+            if (window.translationUtils) {
+                window.translationUtils.translatePage();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akıllı Lokasyon Danışmanı</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    
+    <!-- Cache busting -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <style>
+        body { 
+            font-family: system-ui, sans-serif; 
+            margin: 0; 
+            display: flex; 
+            height: 100vh; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        #map { 
+            flex-grow: 1; 
+            height: 100%; 
+            border-radius: 0 12px 12px 0;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+        }
+        
+        #sidebar {
+            width: 380px;
+            background: white;
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin: 0;
+        }
+        
+        .mode-selector {
+            margin-bottom: 25px;
+        }
+        
+        .mode-selector h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 16px;
+        }
+        
+        .mode-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .mode-btn {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+        
+        .mode-btn:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .mode-btn.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .mode-btn .title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .mode-btn .desc {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .control-group {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .control-group h3 {
+            margin: 0 0 15px 0;
+            color: #495057;
+            font-size: 16px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+            box-sizing: border-box;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .poi-toggles {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .poi-toggle {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .poi-toggle:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .poi-toggle input {
+            margin-right: 8px;
+        }
+        
+        .poi-toggle span {
+            font-size: 13px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+        
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+        }
+        
+        .mahalle-selector {
+            margin-bottom: 15px;
+        }
+        
+        .top-locations {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        .location-item {
+            padding: 12px;
+            border-bottom: 1px solid #f8f9fa;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        
+        .location-item:hover {
+            background: #f8f9ff;
+        }
+        
+        .location-item:last-child {
+            border-bottom: none;
+        }
+        
+        .location-score {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .location-details {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .score-display {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        .score-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .score-category {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .score-details {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    {% include 'components/floating_background.html' %}
+    {% include 'components/simple_button_effects.html' %}
+    {% include 'components/safe_page_transition.html' %}
+
+    <div id="sidebar" class="main-content">
+        <div class="header">
+            <h1>🎯 Akıllı Lokasyon Danışmanı v2.0</h1>
+            <div class="subtitle">İşletmeniz için en uygun lokasyonu bulun - GÜNCEL VERSİYON</div>
+        </div>
+        
+        <!-- Mod Seçimi -->
+        <div class="mode-selector">
+            <h3>Analiz Modu Seçin</h3>
+            <div class="mode-buttons">
+                <div class="mode-btn active" onclick="setMode('point')" id="mode-point">
+                    <div class="title">📍 Nokta Analizi</div>
+                    <div class="desc">Haritada tıkladığınız noktayı analiz eder</div>
+                </div>
+                <div class="mode-btn" onclick="setMode('area')" id="mode-area">
+                    <div class="title">🏘️ Bölge Analizi</div>
+                    <div class="desc">Seçili mahallede en iyi 5 lokasyonu gösterir</div>
+                </div>
+                <div class="mode-btn" onclick="setMode('heatmap')" id="mode-heatmap">
+                    <div class="title">🗺️ Isı Haritası</div>
+                    <div class="desc">Yakınlaştırınca uygunluk ısı haritasını gösterir</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Kategori Seçimi -->
+        <div class="control-group">
+            <h3>İşletme Kategorisi</h3>
+            <select id="business-type" class="form-control">
+                <option value="eczane">💊 Eczane</option>
+                <option value="firin">🍞 Fırın</option>
+                <option value="cafe">☕ Cafe</option>
+                <option value="market">🛒 Market</option>
+                <option value="restoran">🍽️ Restoran</option>
+            </select>
+        </div>
+        
+        <!-- Bölge Analizi Kontrolleri -->
+        <div class="control-group hidden" id="area-controls">
+            <h3>Mahalle Seçimi</h3>
+            <div class="mahalle-selector">
+                <select id="mahalle-select" class="form-control">
+                    <option value="">Mahalle seçin...</option>
+                </select>
+            </div>
+            <button class="btn btn-success" onclick="analyzeArea()">
+                ⭐ En İyi 5 Lokasyonu Göster
+            </button>
+            
+            <div id="top-locations" class="top-locations hidden"></div>
+        </div>
+        
+        <!-- Harita Katmanları -->
+        <div class="control-group">
+            <h3>Haritada Gösterilecek Yerler</h3>
+            <div class="poi-toggles">
+                <div class="poi-toggle" onclick="togglePOI('hastane')">
+                    <input type="checkbox" id="toggle-hastane">
+                    <span>🏥 Hastaneler</span>
+                </div>
+                <div class="poi-toggle" onclick="togglePOI('eczane')">
+                    <input type="checkbox" id="toggle-eczane">
+                    <span>💊 Eczaneler</span>
+                </div>
+                <div class="poi-toggle" onclick="togglePOI('avm')">
+                    <input type="checkbox" id="toggle-avm">
+                    <span>🛍️ AVM'ler</span>
+                </div>
+                <div class="poi-toggle" onclick="togglePOI('metro')">
+                    <input type="checkbox" id="toggle-metro">
+                    <span>🚇 Metrolar</span>
+                </div>
+                <div class="poi-toggle" onclick="togglePOI('universite')">
+                    <input type="checkbox" id="toggle-universite">
+                    <span>🎓 Üniversiteler</span>
+                </div>
+                <div class="poi-toggle" onclick="togglePOI('okul')">
+                    <input type="checkbox" id="toggle-okul">
+                    <span>🏫 Okullar</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Hızlı İşlemler -->
+        <div class="control-group">
+            <h3>Hızlı İşlemler</h3>
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="enableAllGrids()">
+                    ✅ Tüm Gridleri Aktif Et
+                </button>
+                <button class="btn btn-info" onclick="clearMap()">
+                    🧹 Haritayı Temizle
+                </button>
+            </div>
+        </div>
+        
+        <!-- Sonuç Gösterimi -->
+        <div id="result-display" class="hidden">
+            <div class="score-display">
+                <div class="score-number" id="score-number">-</div>
+                <div class="score-category" id="score-category">-</div>
+                <div class="score-details" id="score-details">Bir noktaya tıklayın</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="/static/map.js?v={{ timestamp }}"></script>
+
+</body>
+</html>

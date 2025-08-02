@@ -1,0 +1,462 @@
+/* LocationIQ UI/UX Refactoring - CSS Test Styles */
+/* This file contains test styles and validations for the refactored components */
+
+/* ============================================
+   TASK 1: SIDEBAR LAYOUT AND ALIGNMENT TESTS
+   ============================================ */
+
+/* Test: Header alignment consistency */
+.header-content {
+  padding-left: 2rem; /* 32px */
+  padding-right: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Test: Sidebar content alignment with header */
+.sidebar-content.aligned-content {
+  padding-left: 2rem; /* Should match header-content padding */
+  margin-left: 0.5rem; /* Fine-tune alignment for visual balance */
+}
+
+/* Test: Location cards with colored badges */
+.location-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.location-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.location-card.highlighted {
+  background: rgba(59, 130, 246, 0.05);
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
+}
+
+/* Test: Badge positioning and styling */
+.location-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+/* Test: Badge color scheme */
+.badge-1 {
+  background-color: #ef4444; /* Red */
+}
+
+.badge-2 {
+  background-color: #3b82f6; /* Blue */
+}
+
+.badge-3 {
+  background-color: #10b981; /* Green */
+}
+
+/* Test: Badge content (numbers) */
+.badge-1::before { content: "1"; }
+.badge-2::before { content: "2"; }
+.badge-3::before { content: "3"; }
+
+/* Test: Responsive layout validation */
+@media (max-width: 1200px) {
+  .header-content,
+  .sidebar-content.aligned-content {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-content,
+  .sidebar-content.aligned-content {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* ============================================
+   TASK 2: MAP CTA BUTTON REPOSITIONING TESTS
+   ============================================ */
+
+/* Test: CTA container positioning */
+.map-cta-container {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* Test: Button base styling */
+.map-cta-button {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Test: Waiting state styling */
+.map-cta-button[data-state="waiting"] {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #6b7280;
+  border: 2px solid rgba(107, 114, 128, 0.3);
+}
+
+.map-cta-button[data-state="waiting"]:hover {
+  background-color: rgba(255, 255, 255, 1);
+  border-color: rgba(107, 114, 128, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Test: Ready state styling */
+.map-cta-button[data-state="ready"] {
+  background-color: #3b82f6;
+  color: white;
+  border: 2px solid #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.map-cta-button[data-state="ready"]:hover {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* Test: Button disabled state */
+.map-cta-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Test: Button icon styling */
+.cta-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Test: Responsive button positioning */
+@media (max-width: 768px) {
+  .map-cta-container {
+    bottom: 16px;
+  }
+  
+  .map-cta-button {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+}
+
+/* ============================================
+   TASK 3: RESULTS SECTION MODERNIZATION TESTS
+   ============================================ */
+
+/* Test: Circular progress bar container */
+.score-circle {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+}
+
+/* Test: SVG progress ring */
+.progress-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.progress-ring-background {
+  fill: none;
+  stroke: rgba(229, 231, 235, 0.3);
+  stroke-width: 8;
+}
+
+.progress-ring-progress {
+  fill: none;
+  stroke: #3b82f6;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.5s ease-out;
+}
+
+/* Test: Score value in center */
+.score-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1;
+}
+
+/* Test: Best option badge */
+.best-option-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+  z-index: 10;
+}
+
+.best-option-badge::before {
+  content: "En İyi";
+}
+
+/* Test: Metric items with icons */
+.metric-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  border-left: 4px solid var(--metric-color, #3b82f6);
+}
+
+.metric-item.winning {
+  background: rgba(34, 197, 94, 0.1);
+  border-left-color: #22c55e;
+}
+
+/* Test: Metric icon styling */
+.metric-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--metric-color, #3b82f6);
+}
+
+.metric-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+/* Test: Metric content layout */
+.metric-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.metric-label {
+  font-weight: 500;
+  color: #374151;
+  font-size: 14px;
+}
+
+.metric-score {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* Test: Enhanced progress bars */
+.metric-progress {
+  width: 100%;
+  height: 8px;
+  background: rgba(229, 231, 235, 0.5);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.metric-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--metric-color, #3b82f6), var(--metric-color-light, #60a5fa));
+  border-radius: 4px;
+  transition: width 1s ease-out;
+}
+
+/* Test: Color coding system */
+.metric-hospital {
+  --metric-color: #ef4444;
+  --metric-color-light: #f87171;
+}
+
+.metric-competition {
+  --metric-color: #10b981;
+  --metric-color-light: #34d399;
+}
+
+.metric-demographics {
+  --metric-color: #8b5cf6;
+  --metric-color-light: #a78bfa;
+}
+
+.metric-important {
+  --metric-color: #f59e0b;
+  --metric-color-light: #fbbf24;
+}
+
+/* Test: Result cards layout */
+.result-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.result-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.result-card.rank-1 {
+  border-color: #fbbf24;
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.2);
+}
+
+/* Test: SVG Icons */
+.icon-hospital {
+  /* Hospital/Medical Cross Icon */
+}
+
+.icon-competition {
+  /* Store/Shop Icon */
+}
+
+.icon-demographics {
+  /* People/Users Icon */
+}
+
+.icon-important {
+  /* Star/Important Places Icon */
+}
+
+/* ============================================
+   ANIMATION AND INTERACTION TESTS
+   ============================================ */
+
+/* Test: Hover effect performance */
+.location-card,
+.map-cta-button,
+.result-card {
+  will-change: transform;
+}
+
+/* Test: Smooth transitions */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Test: Focus states for accessibility */
+.location-card:focus,
+.map-cta-button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Test: Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================
+   VALIDATION CLASSES FOR TESTING
+   ============================================ */
+
+/* Classes to validate specific test scenarios */
+.test-alignment-check {
+  border: 1px dashed #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.test-color-validation {
+  position: relative;
+}
+
+.test-color-validation::after {
+  content: attr(data-color);
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #000;
+  color: #fff;
+  padding: 2px 4px;
+  font-size: 10px;
+  border-radius: 2px;
+}
+
+.test-interactive-element {
+  border: 2px solid #22c55e;
+}
+
+.test-interactive-element:hover {
+  border-color: #16a34a;
+  background: rgba(34, 197, 94, 0.1);
+}
+
+/* Test: Layout debugging */
+.debug-layout .location-sidebar {
+  background: rgba(239, 68, 68, 0.1) !important;
+}
+
+.debug-layout .map-container {
+  background: rgba(34, 197, 94, 0.1) !important;
+}
+
+.debug-layout .map-cta-container {
+  background: rgba(59, 130, 246, 0.3) !important;
+  border: 2px dashed #3b82f6;
+} 

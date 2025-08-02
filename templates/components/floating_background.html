@@ -1,0 +1,667 @@
+<!-- Floating Background Component -->
+<style>
+    /* Modern Background Styles */
+    body {
+        font-family: system-ui, -apple-system, sans-serif !important;
+        background: linear-gradient(135deg, #f8fafc 0%, #dbeafe 50%, #e0e7ff 100%) !important;
+        background-attachment: fixed !important;
+        min-height: 100vh !important;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* Ensure background covers full page */
+    html {
+        background: linear-gradient(135deg, #f8fafc 0%, #dbeafe 50%, #e0e7ff 100%) !important;
+        background-attachment: fixed !important;
+    }
+
+    /* Animated Background Elements */
+    .floating-element {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-height: 100vh;
+        height: 100vh; /* Will be dynamically adjusted */
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    }
+
+    .floating-map-pin {
+        animation: space-drift-1 8s ease-in-out infinite;
+        transition: all 0.3s ease;
+    }
+
+    .floating-building {
+        animation: space-drift-2 12s ease-in-out infinite;
+        transition: all 0.3s ease;
+    }
+
+    .floating-chart {
+        animation: space-drift-3 10s ease-in-out infinite;
+        transition: all 0.3s ease;
+    }
+
+    /* Space-like floating animations with random directions */
+    @keyframes space-drift-1 {
+        0% { transform: translate(0px, 0px) rotate(0deg); }
+        25% { transform: translate(15px, -20px) rotate(90deg); }
+        50% { transform: translate(-10px, -15px) rotate(180deg); }
+        75% { transform: translate(-20px, 10px) rotate(270deg); }
+        100% { transform: translate(0px, 0px) rotate(360deg); }
+    }
+
+    @keyframes space-drift-2 {
+        0% { transform: translate(0px, 0px) rotate(0deg); }
+        20% { transform: translate(-25px, 15px) rotate(72deg); }
+        40% { transform: translate(20px, -25px) rotate(144deg); }
+        60% { transform: translate(30px, 20px) rotate(216deg); }
+        80% { transform: translate(-15px, -30px) rotate(288deg); }
+        100% { transform: translate(0px, 0px) rotate(360deg); }
+    }
+
+    @keyframes space-drift-3 {
+        0% { transform: translate(0px, 0px) rotate(0deg); }
+        30% { transform: translate(20px, 25px) rotate(108deg); }
+        60% { transform: translate(-30px, -10px) rotate(216deg); }
+        100% { transform: translate(0px, 0px) rotate(360deg); }
+    }
+
+    /* Enhanced scroll-based animation classes */
+    .scroll-accelerated {
+        animation-duration: 2s !important;
+        animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    }
+
+    .scroll-enhanced {
+        animation-duration: 4s !important;
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transform: scale(1.05) !important;
+    }
+
+    /* Additional space drift variations */
+    @keyframes space-drift-4 {
+        0% { transform: translate(0px, 0px) rotate(0deg) scale(1); }
+        33% { transform: translate(-18px, 22px) rotate(120deg) scale(1.1); }
+        66% { transform: translate(25px, -18px) rotate(240deg) scale(0.9); }
+        100% { transform: translate(0px, 0px) rotate(360deg) scale(1); }
+    }
+
+    @keyframes space-drift-5 {
+        0% { transform: translate(0px, 0px) rotate(0deg) scale(1); }
+        40% { transform: translate(22px, -15px) rotate(144deg) scale(1.05); }
+        80% { transform: translate(-20px, 25px) rotate(288deg) scale(0.95); }
+        100% { transform: translate(0px, 0px) rotate(360deg) scale(1); }
+    }
+
+    /* Pulsing glow effect during scroll */
+    .scroll-glow {
+        box-shadow: 0 0 20px currentColor !important;
+        opacity: 0.4 !important;
+    }
+
+    /* Gentle floating animation for decorative elements */
+    @keyframes gentle-float {
+        0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+        }
+        50% {
+            transform: translateY(-10px) rotate(5deg);
+        }
+    }
+
+    /* Particle animation for fast scrolling */
+    @keyframes particle-fade {
+        0% { 
+            opacity: 0.6; 
+            transform: scale(1) rotate(0deg); 
+        }
+        50% { 
+            opacity: 0.8; 
+            transform: scale(1.5) rotate(180deg); 
+        }
+        100% { 
+            opacity: 0; 
+            transform: scale(0) rotate(360deg); 
+        }
+    }
+
+    /* Enhanced glow effects during scroll */
+    .scroll-glow {
+        box-shadow: 0 0 20px currentColor !important;
+        opacity: 0.4 !important;
+    }
+
+    /* Twinkling stars animation */
+    @keyframes twinkle {
+        0%, 100% { opacity: 0.1; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(1.5); }
+    }
+
+    /* Ensure content is above floating elements */
+    .main-content {
+        position: relative;
+        z-index: 10;
+    }
+</style>
+
+<!-- Animated Background Elements -->
+<div class="floating-element">
+    <!-- Floating Map Pins - Better distributed -->
+    <div class="floating-map-pin" style="position: absolute; top: 10vh; left: 5vw; width: 3rem; height: 3rem; background: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); opacity: 0.2;">
+        <svg width="18" height="18" fill="white" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+        </svg>
+    </div>
+    <div class="floating-map-pin" style="position: absolute; top: 15vh; right: 10vw; width: 2.5rem; height: 2.5rem; background: #06b6d4; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); opacity: 0.25;">
+        <svg width="15" height="15" fill="white" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+        </svg>
+    </div>
+    <div class="floating-map-pin" style="position: absolute; top: 25vh; right: 20vw; width: 3.5rem; height: 3.5rem; background: #4f46e5; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); opacity: 0.15;">
+        <svg width="21" height="21" fill="white" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+        </svg>
+    </div>
+    <div class="floating-map-pin" style="position: absolute; bottom: 30vh; right: 5vw; width: 2.75rem; height: 2.75rem; background: #7c3aed; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); opacity: 0.2;">
+        <svg width="16" height="16" fill="white" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+        </svg>
+    </div>
+    <div class="floating-map-pin" style="position: absolute; bottom: 25vh; left: 8vw; width: 2.8rem; height: 2.8rem; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); opacity: 0.18;">
+        <svg width="16" height="16" fill="white" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+        </svg>
+    </div>
+
+    <!-- Floating Buildings - Better positioned -->
+    <div class="floating-building" style="position: absolute; top: 20vh; right: 30vw; width: 4rem; height: 5rem; background: linear-gradient(to top, #9ca3af, #d1d5db); opacity: 0.1; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); clip-path: polygon(0 100%, 0 20%, 50% 0%, 100% 20%, 100% 100%);"></div>
+    <div class="floating-building" style="position: absolute; bottom: 35vh; left: 25vw; width: 5rem; height: 6rem; background: linear-gradient(to top, #60a5fa, #93c5fd); opacity: 0.15; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); clip-path: polygon(0 100%, 0 25%, 50% 0%, 100% 25%, 100% 100%);"></div>
+    <div class="floating-building" style="position: absolute; top: 50vh; right: 15vw; width: 3rem; height: 4rem; background: linear-gradient(to top, #818cf8, #a5b4fc); opacity: 0.12; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); clip-path: polygon(0 100%, 0 30%, 50% 0%, 100% 30%, 100% 100%);"></div>
+    <div class="floating-building" style="position: absolute; top: 40vh; left: 12vw; width: 3.5rem; height: 4.5rem; background: linear-gradient(to top, #f59e0b, #fbbf24); opacity: 0.13; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); clip-path: polygon(0 100%, 0 25%, 50% 0%, 100% 25%, 100% 100%);"></div>
+
+    <!-- Floating Chart Elements - More spread out -->
+    <div class="floating-chart" style="position: absolute; top: 18vh; right: 25vw; width: 4rem; height: 3rem; background: linear-gradient(to right, #10b981, #34d399); opacity: 0.1; border-radius: 0.5rem; display: flex; align-items: end; justify-content: center; gap: 0.25rem; padding: 0.5rem;">
+        <div style="width: 0.5rem; height: 1rem; background: white; border-radius: 0.125rem;"></div>
+        <div style="width: 0.5rem; height: 1.5rem; background: white; border-radius: 0.125rem;"></div>
+        <div style="width: 0.5rem; height: 0.75rem; background: white; border-radius: 0.125rem;"></div>
+        <div style="width: 0.5rem; height: 2rem; background: white; border-radius: 0.125rem;"></div>
+    </div>
+    <div class="floating-chart" style="position: absolute; bottom: 20vh; left: 30vw; width: 3.5rem; height: 3.5rem; background: linear-gradient(135deg, #f59e0b, #ef4444); opacity: 0.15; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <svg width="18" height="18" fill="white" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+        </svg>
+    </div>
+    <div class="floating-chart" style="position: absolute; top: 60vh; right: 35vw; width: 3.8rem; height: 3.8rem; background: linear-gradient(135deg, #8b5cf6, #a78bfa); opacity: 0.12; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+    </div>
+
+    <!-- Additional decorative elements - More spread vertically -->
+    <div style="position: absolute; top: 35vh; right: 8vw; width: 2rem; height: 2rem; background: radial-gradient(circle, #06b6d4, #0891b2); opacity: 0.1; border-radius: 50%; animation: gentle-float 5s ease-in-out infinite;"></div>
+    <div style="position: absolute; top: 80vh; left: 85vw; width: 1.5rem; height: 1.5rem; background: radial-gradient(circle, #8b5cf6, #7c3aed); opacity: 0.15; border-radius: 50%; animation: gentle-float 4s ease-in-out infinite reverse;"></div>
+    <div style="position: absolute; top: 90vh; left: 3vw; width: 1.8rem; height: 1.8rem; background: radial-gradient(circle, #10b981, #059669); opacity: 0.12; border-radius: 50%; animation: gentle-float 6s ease-in-out infinite;"></div>
+    
+    <!-- Dynamic elements container for longer pages -->
+    <div id="dynamicElementsContainer"></div>
+
+    <!-- Subtle Grid Pattern -->
+    <div style="position: absolute; inset: 0; background: linear-gradient(rgba(59,130,246,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.02) 1px, transparent 1px); background-size: 60px 60px;"></div>
+</div>
+
+<script>
+// Enhanced Universal Floating Animation System
+document.addEventListener('DOMContentLoaded', () => {
+    // Universal Background Management System
+    class UniversalBackground {
+        constructor() {
+            this.floatingElement = document.querySelector('.floating-element');
+            this.dynamicContainer = document.getElementById('dynamicElementsContainer');
+            this.lastDocumentHeight = 0;
+            this.elementTemplates = this.createElementTemplates();
+            this.init();
+        }
+
+        init() {
+            if (!this.floatingElement) return;
+            
+            this.adjustFloatingHeight();
+            this.setupObservers();
+            this.distributeElements();
+            
+            console.log('Universal Background System initialized');
+        }
+
+        // Adjust floating element container height based on document height
+        adjustFloatingHeight() {
+            const documentHeight = Math.max(
+                document.body.scrollHeight,
+                document.body.offsetHeight,
+                document.documentElement.clientHeight,
+                document.documentElement.scrollHeight,
+                document.documentElement.offsetHeight
+            );
+            
+            const targetHeight = Math.max(documentHeight, window.innerHeight);
+            this.floatingElement.style.height = targetHeight + 'px';
+            
+            // If document height changed significantly, redistribute elements
+            if (Math.abs(documentHeight - this.lastDocumentHeight) > 200) {
+                this.distributeElements();
+                this.lastDocumentHeight = documentHeight;
+            }
+            
+            console.log('Background height adjusted:', targetHeight + 'px');
+        }
+
+        // Create element templates for dynamic distribution
+        createElementTemplates() {
+            return [
+                {
+                    type: 'pin',
+                    html: `<div class="floating-map-pin dynamic-element" style="width: 2.5rem; height: 2.5rem; background: #f59e0b; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); opacity: 0.18;">
+                        <svg width="14" height="14" fill="white" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>`
+                },
+                {
+                    type: 'building',
+                    html: `<div class="floating-building dynamic-element" style="width: 3rem; height: 4rem; background: linear-gradient(to top, #ef4444, #f87171); opacity: 0.11; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); clip-path: polygon(0 100%, 0 25%, 50% 0%, 100% 25%, 100% 100%);"></div>`
+                },
+                {
+                    type: 'chart',
+                    html: `<div class="floating-chart dynamic-element" style="width: 3.2rem; height: 3.2rem; background: linear-gradient(135deg, #06b6d4, #0891b2); opacity: 0.13; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <svg width="16" height="16" fill="white" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                    </div>`
+                }
+            ];
+        }
+
+        // Distribute elements throughout the page height
+        distributeElements() {
+            if (!this.dynamicContainer) return;
+
+            // Clear existing dynamic elements
+            this.dynamicContainer.innerHTML = '';
+
+            const documentHeight = parseInt(this.floatingElement.style.height) || window.innerHeight;
+            const viewportHeight = window.innerHeight;
+            
+            // Calculate how many additional elements we need based on page height
+            const additionalSections = Math.floor(documentHeight / viewportHeight) - 1;
+            
+            if (additionalSections > 0) {
+                for (let section = 1; section <= additionalSections; section++) {
+                    const sectionTop = section * viewportHeight;
+                    
+                    // Add 2-3 elements per section
+                    const elementsPerSection = 2 + Math.floor(Math.random() * 2);
+                    
+                    for (let i = 0; i < elementsPerSection; i++) {
+                        const template = this.elementTemplates[Math.floor(Math.random() * this.elementTemplates.length)];
+                        const element = document.createElement('div');
+                        element.innerHTML = template.html;
+                        
+                        const child = element.firstElementChild;
+                        
+                        // Position element randomly within the section
+                        const top = sectionTop + (Math.random() * viewportHeight * 0.8);
+                        const left = 10 + Math.random() * 80; // 10% to 90% of viewport width
+                        
+                        child.style.position = 'absolute';
+                        child.style.top = top + 'px';
+                        child.style.left = left + 'vw';
+                        
+                        // Add random animation
+                        const animations = ['gentle-float', 'space-drift-1', 'space-drift-2', 'space-drift-3'];
+                        const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
+                        const duration = 4 + Math.random() * 4; // 4-8 seconds
+                        const delay = Math.random() * 2; // 0-2 seconds delay
+                        
+                        child.style.animation = `${randomAnimation} ${duration}s ease-in-out infinite`;
+                        child.style.animationDelay = `${delay}s`;
+                        
+                        this.dynamicContainer.appendChild(child);
+                    }
+                }
+            }
+        }
+
+        // Setup observers for content changes with performance optimization
+        setupObservers() {
+            try {
+                // Mutation observer for content changes with throttling
+                const observer = new MutationObserver(() => {
+                    clearTimeout(this.adjustTimeout);
+                    this.adjustTimeout = setTimeout(() => {
+                        try {
+                            this.adjustFloatingHeight();
+                        } catch (error) {
+                            console.error('Error adjusting background height:', error);
+                        }
+                    }, 100); // Increased debounce time for better performance
+                });
+                
+                observer.observe(document.body, { 
+                    childList: true, 
+                    subtree: true, 
+                    attributes: false, // Reduced scope for better performance
+                    characterData: false
+                });
+
+                // Resize observer with throttling
+                window.addEventListener('resize', () => {
+                    clearTimeout(this.resizeTimeout);
+                    this.resizeTimeout = setTimeout(() => {
+                        try {
+                            this.adjustFloatingHeight();
+                            this.distributeElements();
+                        } catch (error) {
+                            console.error('Error handling resize:', error);
+                        }
+                    }, 250);
+                });
+
+                // Scroll-based height check with reduced frequency
+                let scrollTimeout;
+                let scrollCheckCount = 0;
+                window.addEventListener('scroll', () => {
+                    scrollCheckCount++;
+                    // Only check every 10th scroll event for performance
+                    if (scrollCheckCount % 10 === 0) {
+                        clearTimeout(scrollTimeout);
+                        scrollTimeout = setTimeout(() => {
+                            try {
+                                this.adjustFloatingHeight();
+                            } catch (error) {
+                                console.error('Error in scroll height check:', error);
+                            }
+                        }, 300);
+                    }
+                });
+
+                // Periodic check for height changes with error handling
+                setInterval(() => {
+                    try {
+                        this.adjustFloatingHeight();
+                    } catch (error) {
+                        console.error('Error in periodic height check:', error);
+                    }
+                }, 3000); // Reduced frequency for better performance
+                
+            } catch (error) {
+                console.error('Error setting up background observers:', error);
+                // Fallback to basic height setting
+                this.floatingElement.style.height = '100vh';
+            }
+        }
+    }
+
+    // Initialize Universal Background System
+    window.universalBackground = new UniversalBackground();
+
+    // Legacy function for backward compatibility
+    const adjustFloatingHeight = () => {
+        if (window.universalBackground) {
+            window.universalBackground.adjustFloatingHeight();
+        }
+    };
+
+    // Initial adjustment
+    adjustFloatingHeight();
+    
+    // Adjust on window resize and content changes
+    window.addEventListener('resize', adjustFloatingHeight);
+    window.addEventListener('load', adjustFloatingHeight);
+    
+    // Observer for content changes - more aggressive monitoring
+    const observer = new MutationObserver(() => {
+        // Debounce the adjustment to avoid too frequent calls
+        clearTimeout(window.backgroundAdjustTimeout);
+        window.backgroundAdjustTimeout = setTimeout(adjustFloatingHeight, 50);
+    });
+    observer.observe(document.body, { 
+        childList: true, 
+        subtree: true, 
+        attributes: true, 
+        attributeOldValue: true,
+        characterData: true,
+        characterDataOldValue: true
+    });
+    
+    // Also adjust when scrolling stops (in case content is dynamically loaded)
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(adjustFloatingHeight, 200);
+    });
+    
+    // Periodic check for height changes (fallback)
+    setInterval(() => {
+        const currentDocHeight = Math.max(
+            document.body.scrollHeight,
+            document.body.offsetHeight,
+            document.documentElement.clientHeight,
+            document.documentElement.scrollHeight,
+            document.documentElement.offsetHeight
+        );
+        
+        const floatingElement = document.querySelector('.floating-element');
+        if (floatingElement) {
+            const currentBgHeight = parseInt(floatingElement.style.height) || 0;
+            // If document height changed significantly, adjust background
+            if (Math.abs(currentDocHeight - currentBgHeight) > 100) {
+                adjustFloatingHeight();
+            }
+        }
+    }, 1000); // Check every second
+
+    const floatingElements = document.querySelectorAll('.floating-map-pin, .floating-building, .floating-chart');
+    
+    // Assign random space drift animations
+    const spaceAnimations = ['space-drift-1', 'space-drift-2', 'space-drift-3', 'space-drift-4', 'space-drift-5'];
+    
+    floatingElements.forEach((element, index) => {
+        // Add random animation and delay
+        const randomAnimation = spaceAnimations[index % spaceAnimations.length];
+        const randomDelay = Math.random() * 3; // 0-3 seconds random delay
+        const randomDuration = 8 + Math.random() * 8; // 8-16 seconds random duration
+        
+        element.style.animation = `${randomAnimation} ${randomDuration}s ease-in-out infinite`;
+        element.style.animationDelay = `${randomDelay}s`;
+        
+        // Store original animation for reset
+        element.dataset.originalAnimation = element.style.animation;
+        
+        // Add mouse interaction with enhanced effects
+        element.addEventListener('mouseenter', () => {
+            element.classList.add('scroll-glow');
+            element.style.transform += ' scale(1.2)';
+            element.style.zIndex = '5';
+        });
+        
+        element.addEventListener('mouseleave', () => {
+            element.classList.remove('scroll-glow');
+            element.style.zIndex = '1';
+            // Reset transform will be handled by animation
+        });
+    });
+
+    // Scroll detection and animation acceleration
+    let scrollTimeout;
+    let isScrolling = false;
+    let lastScrollY = window.pageYOffset;
+    let scrollVelocity = 0;
+
+    const updateScrollEffects = () => {
+        const currentScrollY = window.pageYOffset;
+        scrollVelocity = Math.abs(currentScrollY - lastScrollY);
+        lastScrollY = currentScrollY;
+
+        // Apply scroll effects based on velocity
+        floatingElements.forEach((element, index) => {
+            if (scrollVelocity > 5) { // Fast scrolling
+                element.classList.add('scroll-accelerated', 'scroll-glow');
+                
+                // Add random directional boost during fast scroll
+                const randomX = (Math.random() - 0.5) * 40;
+                const randomY = (Math.random() - 0.5) * 40;
+                const randomRotation = Math.random() * 360;
+                
+                element.style.transform += ` translate(${randomX}px, ${randomY}px) rotate(${randomRotation}deg)`;
+                
+            } else if (scrollVelocity > 2) { // Medium scrolling
+                element.classList.add('scroll-accelerated');
+                element.classList.remove('scroll-glow');
+            } else { // Slow or no scrolling
+                element.classList.remove('scroll-accelerated', 'scroll-glow');
+            }
+        });
+    };
+
+    // Enhanced parallax with scroll velocity effects
+    let ticking = false;
+    
+    const updateParallax = () => {
+        const scrolled = window.pageYOffset;
+        const parallaxElements = document.querySelectorAll('.floating-element > div');
+        
+        // Update scroll effects
+        updateScrollEffects();
+        
+        parallaxElements.forEach((element, index) => {
+            const baseSpeed = 0.05 + (index * 0.02);
+            const velocityMultiplier = Math.min(scrollVelocity * 0.01, 0.5); // Cap the multiplier
+            const speed = baseSpeed + velocityMultiplier;
+            
+            const yPos = -(scrolled * speed);
+            
+            // Add some horizontal drift based on scroll
+            const xDrift = Math.sin(scrolled * 0.001 + index) * 10;
+            
+            // Apply transform without interfering with CSS animations
+            const currentTransform = element.style.transform || '';
+            const newTransform = currentTransform.replace(/translate\([^)]*\)/g, '') + 
+                                ` translate(${xDrift}px, ${yPos}px)`;
+            element.style.transform = newTransform;
+        });
+        
+        ticking = false;
+    };
+
+    // Scroll event handler with debouncing
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(updateParallax);
+            ticking = true;
+        }
+
+        // Set scrolling state
+        isScrolling = true;
+        clearTimeout(scrollTimeout);
+        
+        // Reset scroll state after scrolling stops
+        scrollTimeout = setTimeout(() => {
+            isScrolling = false;
+            scrollVelocity = 0;
+            
+            // Reset all elements to normal state
+            floatingElements.forEach(element => {
+                element.classList.remove('scroll-accelerated', 'scroll-glow');
+            });
+        }, 150);
+    });
+
+    // Add random particle-like elements that appear during scroll
+    const createScrollParticles = () => {
+        if (!isScrolling || scrollVelocity < 10) return;
+
+        const particle = document.createElement('div');
+        particle.style.cssText = `
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, #60a5fa, #3b82f6);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.6;
+            left: ${Math.random() * window.innerWidth}px;
+            top: ${Math.random() * window.innerHeight}px;
+            animation: particle-fade 1s ease-out forwards;
+        `;
+
+        document.body.appendChild(particle);
+
+        // Remove particle after animation
+        setTimeout(() => {
+            if (particle.parentNode) {
+                particle.parentNode.removeChild(particle);
+            }
+        }, 1000);
+    };
+
+    // Add particle animation keyframes
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes particle-fade {
+            0% { 
+                opacity: 0.6; 
+                transform: scale(1) rotate(0deg); 
+            }
+            50% { 
+                opacity: 0.8; 
+                transform: scale(1.5) rotate(180deg); 
+            }
+            100% { 
+                opacity: 0; 
+                transform: scale(0) rotate(360deg); 
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Create particles during fast scrolling
+    setInterval(createScrollParticles, 100);
+
+    // Add some random twinkling stars
+    const createTwinklingStars = () => {
+        for (let i = 0; i < 20; i++) {
+            const star = document.createElement('div');
+            star.style.cssText = `
+                position: fixed;
+                width: 2px;
+                height: 2px;
+                background: white;
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 1;
+                left: ${Math.random() * 100}vw;
+                top: ${Math.random() * 100}vh;
+                opacity: ${Math.random() * 0.5 + 0.1};
+                animation: twinkle ${2 + Math.random() * 3}s ease-in-out infinite;
+            `;
+            document.querySelector('.floating-element').appendChild(star);
+        }
+    };
+
+    // Add twinkling animation
+    const twinkleStyle = document.createElement('style');
+    twinkleStyle.textContent = `
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.5); }
+        }
+    `;
+    document.head.appendChild(twinkleStyle);
+
+    // Create twinkling stars
+    createTwinklingStars();
+});
+</script>

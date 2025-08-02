@@ -1,0 +1,41 @@
+{
+  "app": {
+    "title": "Lokasyon Ekleme Arayüzü",
+    "description": "Yeni lokasyonlar ekleyin ve yönetin"
+  },
+  "locationCard": {
+    "title": "Lokasyon Bilgileri",
+    "name": "İsim",
+    "address": "Adres",
+    "category": "Kategori",
+    "coordinates": "Koordinatlar",
+    "latitude": "Enlem",
+    "longitude": "Boylam",
+    "save": "Kaydet",
+    "cancel": "İptal"
+  },
+  "locationSelector": {
+    "title": "Lokasyon Seçici",
+    "searchPlaceholder": "Lokasyon ara...",
+    "selectLocation": "Lokasyon Seç",
+    "selectedLocation": "Seçilen Lokasyon",
+    "noLocationSelected": "Hiçbir lokasyon seçilmedi",
+    "clearSelection": "Seçimi Temizle"
+  },
+  "map": {
+    "title": "Harita Görünümü",
+    "selectOnMap": "Haritadan Seç",
+    "clickToSelect": "Bir nokta seçmek için haritaya tıklayın"
+  },
+  "selectedLocations": {
+    "title": "Seçilen Lokasyonlar",
+    "noLocations": "Hiçbir lokasyon seçilmedi",
+    "remove": "Kaldır",
+    "clearAll": "Tümünü Temizle"
+  },
+  "search": {
+    "placeholder": "Lokasyon ara...",
+    "search": "Ara",
+    "clear": "Temizle"
+  }
+}
