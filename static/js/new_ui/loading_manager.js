@@ -330,8 +330,8 @@ class LoadingManager {
             overlay.innerHTML = `
                 <div class="loading-content">
                     <div class="loading-spinner loading-spinner-lg"></div>
-                    <div class="loading-title">${window.translationUtils ? window.translationUtils.t('loading.title') : 'Yükleniyor'}</div>
-                    <div class="loading-message">${window.translationUtils ? window.translationUtils.t('loading.message') : 'Lütfen bekleyin...'}</div>
+                    <div class="loading-title">Yükleniyor</div>
+                    <div class="loading-message">Lütfen bekleyin...</div>
                 </div>
             `;
             
@@ -340,7 +340,7 @@ class LoadingManager {
     }
 
     // Global loading overlay methods
-    showGlobalLoading(title = window.translationUtils ? window.translationUtils.t('loading.title') : 'Yükleniyor', message = window.translationUtils ? window.translationUtils.t('loading.message') : 'Lütfen bekleyin...') {
+    showGlobalLoading(title = 'Yükleniyor', message = 'Lütfen bekleyin...') {
         const overlay = document.getElementById('global-loading-overlay');
         if (overlay) {
             const titleElement = overlay.querySelector('.loading-title');
@@ -455,8 +455,8 @@ class LoadingManager {
             <div class="map-loading-content">
                 <div class="loading-spinner"></div>
                 <div style="margin-top: 1rem;">
-                    <div class="loading-title">${window.translationUtils ? window.translationUtils.t('loading.map.title') : 'Harita Yükleniyor'}</div>
-                    <div class="loading-message">${options.message || (window.translationUtils ? window.translationUtils.t('loading.map.message') : 'Konum verileri alınıyor...')}</div>
+                    <div class="loading-title">Harita Yükleniyor</div>
+                    <div class="loading-message">${options.message || 'Konum verileri alınıyor...'}</div>
                 </div>
             </div>
         `;
@@ -578,10 +578,7 @@ class LoadingManager {
             });
             
             if (options.showGlobal) {
-                this.showGlobalLoading(
-                    options.title || (window.translationUtils ? window.translationUtils.t('loading.title') : 'Yükleniyor'),
-                    options.message || (window.translationUtils ? window.translationUtils.t('loading.message') : 'Lütfen bekleyin...')
-                );
+                this.showGlobalLoading(options.title, options.message);
             }
         } else {
             this.loadingStates.delete(key);
@@ -602,7 +599,7 @@ class LoadingManager {
     }
 
     // Map loading methods
-    showMapLoading(mapContainer, message = window.translationUtils ? window.translationUtils.t('loading.map.message') : 'Harita yükleniyor...') {
+    showMapLoading(mapContainer, message = 'Harita yükleniyor...') {
         if (typeof mapContainer === 'string') {
             mapContainer = document.getElementById(mapContainer) || document.querySelector(mapContainer);
         }

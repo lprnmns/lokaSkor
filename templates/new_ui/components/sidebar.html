@@ -1,48 +1,670 @@
-<div class="sidebar" data-i18n="sidebar.container">
-  <div class="sidebar-header">
-    <h2 data-i18n="sidebar.title">LocationIQ</h2>
-    <p class="sidebar-subtitle" data-i18n="sidebar.subtitle">Lokasyon Analizi Platformu</p>
-  </div>
-  
-  <div class="sidebar-menu">
-    <ul>
-      <li class="sidebar-item">
-        <a href="#dashboard" class="sidebar-link" data-i18n="sidebar.menu.dashboard">Kontrol Paneli</a>
-      </li>
-      <li class="sidebar-item">
-        <a href="#analysis" class="sidebar-link" data-i18n="sidebar.menu.analysis">Analiz</a>
-      </li>
-      <li class="sidebar-item">
-        <a href="#reports" class="sidebar-link" data-i18n="sidebar.menu.reports">Raporlar</a>
-      </li>
-      <li class="sidebar-item">
-        <a href="#settings" class="sidebar-link" data-i18n="sidebar.menu.settings">Ayarlar</a>
-      </li>
-    </ul>
-  </div>
-  
-  <div class="sidebar-content">
-    <div class="sidebar-section">
-      <h3 data-i18n="sidebar.sections.businessTypes">İşletme Türleri</h3>
-      <ul class="sidebar-list">
-        <li class="sidebar-list-item" data-i18n="sidebar.businessTypes.pharmacy">Eczane</li>
-        <li class="sidebar-list-item" data-i18n="sidebar.businessTypes.bakery">Fırın</li>
-        <li class="sidebar-list-item" data-i18n="sidebar.businessTypes.market">Market</li>
-        <li class="sidebar-list-item" data-i18n="sidebar.businessTypes.cafe">Cafe</li>
-        <li class="sidebar-list-item" data-i18n="sidebar.businessTypes.restaurant">Restoran</li>
-      </ul>
+<!-- Sidebar Component Template -->
+<!-- This component is designed to be included in the main analysis dashboard -->
+
+<aside id="sidebar" class="sidebar">
+    <!-- Sidebar Header -->
+    <div class="sidebar-header">
+        <div class="sidebar-title-container">
+            <h2 id="sidebar-title" class="sidebar-title">Analiz Paneli</h2>
+            <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Kenar çubuğunu gizle/göster">
+                <i data-lucide="panel-left-close" class="w-5 h-5"></i>
+            </button>
+        </div>
+        
+        <!-- Business Type & Mode Display -->
+        <div class="sidebar-context">
+            <div class="context-item">
+                <i id="business-icon" data-lucide="store" class="w-4 h-4"></i>
+                <span id="business-name">İşletme Türü</span>
+            </div>
+            <div class="context-separator">•</div>
+            <div class="context-item">
+                <i id="mode-icon" data-lucide="settings" class="w-4 h-4"></i>
+                <span id="mode-name">Analiz Modu</span>
+            </div>
+        </div>
     </div>
     
-    <div class="sidebar-section">
-      <h3 data-i18n="sidebar.sections.analysisModes">Analiz Modları</h3>
-      <ul class="sidebar-list">
-        <li class="sidebar-list-item" data-i18n="sidebar.analysisModes.comparison">Karşılaştırma</li>
-        <li class="sidebar-list-item" data-i18n="sidebar.analysisModes.discovery">Keşif</li>
-      </ul>
+    <!-- Sidebar Content Container -->
+    <div class="sidebar-content">
+        <!-- Mode 1: Comparison Content -->
+        <div id="comparison-content" class="mode-content hidden">
+            <!-- Location Input Section -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i data-lucide="map-pin" class="w-4 h-4"></i>
+                        Karşılaştırılacak Adresler
+                    </h3>
+                    <span class="section-badge" id="location-count">0</span>
+                </div>
+                
+                <div class="input-group">
+                    <div class="input-container">
+                        <input 
+                            type="text" 
+                            id="address-input" 
+                            class="input" 
+                            placeholder="Adresi veya konumu girin..."
+                            autocomplete="off"
+                        >
+                        <button id="add-location-btn" class="btn btn-primary btn-sm">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            Ekle
+                        </button>
+                    </div>
+                    <p class="input-help">
+                        <i data-lucide="info" class="w-3 h-3"></i>
+                        Adres yazın veya haritadan tıklayın
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Location List -->
+            <div class="content-section">
+                <div id="location-list" class="location-list">
+                    <!-- Locations will be dynamically added here -->
+                </div>
+                
+                <!-- Empty State -->
+                <div id="empty-state" class="empty-state">
+                    <i data-lucide="map-pin-off" class="empty-icon"></i>
+                    <p class="empty-text">Henüz lokasyon eklenmedi</p>
+                    <p class="empty-subtext">Karşılaştırmak için en az 2 lokasyon ekleyin</p>
+                </div>
+            </div>
+            
+            <!-- Analysis Button -->
+            <div class="content-section">
+                <button id="analyze-locations-btn" class="btn btn-primary btn-lg w-full" disabled>
+                    <i data-lucide="zap" class="w-5 h-5"></i>
+                    <span id="analyze-btn-text">Konumları Analiz Et</span>
+                </button>
+            </div>
+            
+            <!-- Results Section -->
+            <div id="comparison-results" class="content-section hidden">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                        Analiz Sonuçları
+                    </h3>
+                </div>
+                
+                <div id="results-list" class="results-list">
+                    <!-- Results will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mode 2: Region Content -->
+        <div id="region-content" class="mode-content hidden">
+            <!-- Region Selection -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i data-lucide="map" class="w-4 h-4"></i>
+                        Bölge Seçin
+                    </h3>
+                </div>
+                
+                <div class="select-group">
+                    <div class="select-container">
+                        <label for="il-select" class="select-label">İl</label>
+                        <select id="il-select" class="select-trigger">
+                            <option value="">İl Seçiniz</option>
+                        </select>
+                    </div>
+                    
+                    <div class="select-container">
+                        <label for="ilce-select" class="select-label">İlçe</label>
+                        <select id="ilce-select" class="select-trigger" disabled>
+                            <option value="">İlçe Seçiniz</option>
+                        </select>
+                    </div>
+                    
+                    <div class="select-container">
+                        <label for="mahalle-select" class="select-label">Mahalle</label>
+                        <select id="mahalle-select" class="select-trigger" disabled>
+                            <option value="">Mahalle Seçiniz</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Analysis Button -->
+            <div class="content-section">
+                <button id="analyze-region-btn" class="btn btn-primary btn-lg w-full" disabled>
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                    <span id="region-analyze-btn-text">Potansiyeli Yüksek Bölgeleri Göster</span>
+                </button>
+            </div>
+            
+            <!-- Top Locations Results -->
+            <div id="region-results" class="content-section hidden">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i data-lucide="star" class="w-4 h-4"></i>
+                        En Yüksek Potansiyelli Alanlar
+                    </h3>
+                </div>
+                
+                <div id="top-locations-list" class="top-locations-list">
+                    <!-- Top locations will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Loading State -->
+        <div id="loading-state" class="loading-state hidden">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">Analiz yapılıyor...</p>
+                <p class="loading-subtext">Bu işlem birkaç saniye sürebilir</p>
+            </div>
+        </div>
     </div>
-  </div>
-  
-  <div class="sidebar-footer">
-    <p class="sidebar-copyright" data-i18n="sidebar.copyright">© 2024 LocationIQ. Tüm hakları saklıdır.</p>
-  </div>
-</div>
+    
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+        <button id="reset-analysis-btn" class="btn btn-ghost btn-sm w-full">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+            Analizi Sıfırla
+        </button>
+    </div>
+</aside>
+
+<!-- Sidebar Overlay for Mobile -->
+<div id="sidebar-overlay" class="sidebar-overlay hidden"></div>
+
+<style>
+/* Sidebar Component Styles */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 380px;
+    height: 100vh;
+    background: hsl(var(--card));
+    border-right: 1px solid hsl(var(--border));
+    display: flex;
+    flex-direction: column;
+    z-index: 40;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.sidebar.collapsed {
+    transform: translateX(-100%);
+}
+
+.sidebar-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid hsl(var(--border));
+    background: hsl(var(--muted) / 0.3);
+}
+
+.sidebar-title-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-md);
+}
+
+.sidebar-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+    margin: 0;
+}
+
+.sidebar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: var(--radius);
+    transition: all var(--duration-normal) ease;
+}
+
+.sidebar-toggle:hover {
+    color: hsl(var(--foreground));
+    background: hsl(var(--accent));
+}
+
+.sidebar-context {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 0.875rem;
+    color: hsl(var(--muted-foreground));
+}
+
+.context-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.context-separator {
+    color: hsl(var(--border));
+}
+
+.sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-lg);
+}
+
+.sidebar-footer {
+    padding: var(--spacing-lg);
+    border-top: 1px solid hsl(var(--border));
+    background: hsl(var(--muted) / 0.3);
+}
+
+/* Content Sections */
+.content-section {
+    margin-bottom: var(--spacing-xl);
+}
+
+.content-section:last-child {
+    margin-bottom: 0;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-md);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+    margin: 0;
+}
+
+.section-badge {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    min-width: 1.5rem;
+    text-align: center;
+}
+
+/* Input Groups */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.input-container {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.input-container .input {
+    flex: 1;
+}
+
+.input-help {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    color: hsl(var(--muted-foreground));
+    margin: 0;
+}
+
+/* Select Groups */
+.select-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.select-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.select-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: hsl(var(--foreground));
+}
+
+/* Location List */
+.location-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.location-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md);
+    background: hsl(var(--muted) / 0.5);
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    transition: all var(--duration-normal) ease;
+}
+
+.location-item:hover {
+    background: hsl(var(--accent));
+    border-color: hsl(var(--primary) / 0.5);
+}
+
+.location-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.location-address {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: hsl(var(--foreground));
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.location-coords {
+    font-size: 0.75rem;
+    color: hsl(var(--muted-foreground));
+    font-family: monospace;
+}
+
+.location-actions {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.location-action {
+    background: none;
+    border: none;
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: var(--radius);
+    transition: all var(--duration-normal) ease;
+}
+
+.location-action:hover {
+    color: hsl(var(--foreground));
+    background: hsl(var(--accent));
+}
+
+.location-action.delete:hover {
+    color: hsl(var(--destructive));
+    background: hsl(var(--destructive) / 0.1);
+}
+
+/* Results List */
+.results-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.result-item {
+    padding: var(--spacing-md);
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all var(--duration-normal) ease;
+}
+
+.result-item:hover {
+    border-color: hsl(var(--primary));
+    box-shadow: var(--shadow-md);
+}
+
+.result-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-sm);
+}
+
+.result-address {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: hsl(var(--foreground));
+}
+
+.result-score {
+    font-size: 1.25rem;
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius);
+}
+
+.result-score.high {
+    background: hsl(var(--chart-2) / 0.1);
+    color: hsl(var(--chart-2));
+}
+
+.result-score.medium {
+    background: hsl(var(--chart-3) / 0.1);
+    color: hsl(var(--chart-3));
+}
+
+.result-score.low {
+    background: hsl(var(--chart-5) / 0.1);
+    color: hsl(var(--chart-5));
+}
+
+.result-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-sm);
+    font-size: 0.75rem;
+}
+
+.result-detail {
+    display: flex;
+    justify-content: space-between;
+    color: hsl(var(--muted-foreground));
+}
+
+/* Top Locations List */
+.top-locations-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.top-location-item {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-md);
+    background: hsl(var(--muted) / 0.3);
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all var(--duration-normal) ease;
+}
+
+.top-location-item:hover {
+    background: hsl(var(--accent));
+    border-color: hsl(var(--primary));
+    transform: translateX(4px);
+}
+
+.location-rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 0.875rem;
+    margin-right: var(--spacing-md);
+    flex-shrink: 0;
+}
+
+.location-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.location-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: hsl(var(--foreground));
+    margin-bottom: 0.25rem;
+}
+
+.location-score-text {
+    font-size: 0.75rem;
+    color: hsl(var(--muted-foreground));
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-xl) var(--spacing-md);
+    color: hsl(var(--muted-foreground));
+}
+
+.empty-icon {
+    width: 3rem;
+    height: 3rem;
+    margin: 0 auto var(--spacing-md);
+    opacity: 0.5;
+}
+
+.empty-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.empty-subtext {
+    font-size: 0.75rem;
+    margin: 0;
+}
+
+/* Loading State */
+.loading-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-2xl);
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.loading-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: hsl(var(--foreground));
+    margin: var(--spacing-md) 0 0.25rem;
+}
+
+.loading-subtext {
+    font-size: 0.75rem;
+    color: hsl(var(--muted-foreground));
+    margin: 0;
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: hsl(var(--background) / 0.8);
+    backdrop-filter: blur(4px);
+    z-index: 30;
+    opacity: 0;
+    transition: opacity var(--duration-normal) ease;
+}
+
+.sidebar-overlay.visible {
+    opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 320px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        max-width: 380px;
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .sidebar-toggle {
+        display: block;
+    }
+    
+    .sidebar-content {
+        padding: var(--spacing-md);
+    }
+    
+    .sidebar-header,
+    .sidebar-footer {
+        padding: var(--spacing-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 100vw;
+        max-width: none;
+    }
+    
+    .input-container {
+        flex-direction: column;
+    }
+    
+    .result-details {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Utility Classes */
+.w-full {
+    width: 100%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.mode-content {
+    display: block;
+}
+
+.mode-content.hidden {
+    display: none;
+}
+</style>

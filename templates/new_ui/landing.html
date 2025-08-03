@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="landing.title">LocationIQ - İşletmeniz için en doğru konumu zekayla bulun</title>
+    <title>LokaSkor - İşletmeniz için en doğru konumu zekayla bulun</title>
     
     <!-- Meta Tags for SEO -->
     <meta name="description" content="Türkiye'deki KOBİ'lerin ve girişimcilerin yeni işletme açarken en doğru lokasyonu bulmasını sağlayan akıllı analiz platformu.">
     <meta name="keywords" content="lokasyon analizi, işletme yeri, kobi, girişimci, eczane, fırın, market, cafe, restoran">
     
     <!-- Open Graph Tags -->
-    <meta property="og:title" content="LocationIQ - Akıllı Lokasyon Analizi">
+    <meta property="og:title" content="LokaSkor - Akıllı Lokasyon Analizi">
     <meta property="og:description" content="İşletmeniz için en doğru konumu zekayla bulun">
     <meta property="og:type" content="website">
     
@@ -73,109 +73,6 @@
             font-variant-numeric: tabular-nums;
         }
         
-        /* Language Selector Styles */
-        .language-selector {
-            position: fixed;
-            top: 16px;
-            left: 16px;
-            z-index: 9999;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        }
-
-        .language-selector__button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
-        }
-
-        .language-selector__button:hover {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-color: #cbd5e0;
-        }
-
-        .language-selector__flag {
-            font-size: 16px;
-        }
-
-        .language-selector__code {
-            font-weight: 600;
-            color: #334155;
-        }
-
-        .language-selector__arrow {
-            font-size: 12px;
-            color: #94a3b8;
-        }
-
-        .language-selector__dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            margin-top: 8px;
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            min-width: 160px;
-            overflow: hidden;
-            animation: fadeIn 0.2s ease;
-            display: none;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .language-selector__option {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-            padding: 12px 16px;
-            background: none;
-            border: none;
-            text-align: left;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-
-        .language-selector__option:hover {
-            background-color: #f1f5f9;
-        }
-
-        .language-selector__option--active {
-            background-color: #dbeafe;
-            font-weight: 600;
-        }
-
-        .language-selector__name {
-            color: #334155;
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .language-selector {
-                top: 12px;
-                left: 12px;
-            }
-            
-            .language-selector__button {
-                padding: 6px 10px;
-            }
-            
-            .language-selector__code {
-                font-size: 14px;
-            }
-        }
-        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .hero-title {
@@ -190,26 +87,6 @@
     </style>
 </head>
 <body class="bg-background text-foreground">
-    <!-- Language Selector -->
-    <div class="language-selector" id="languageSelector">
-        <button class="language-selector__button" id="languageButton" aria-label="Select language">
-            <span class="language-selector__flag" id="currentFlag">🇹🇷</span>
-            <span class="language-selector__code" id="currentCode">TR</span>
-            <span class="language-selector__arrow" id="arrow">▼</span>
-        </button>
-
-        <div class="language-selector__dropdown" id="languageDropdown">
-            <button class="language-selector__option language-selector__option--active" data-lang="tr">
-                <span class="language-selector__flag">🇹🇷</span>
-                <span class="language-selector__name">Türkçe</span>
-            </button>
-            <button class="language-selector__option" data-lang="en">
-                <span class="language-selector__flag">🇬🇧</span>
-                <span class="language-selector__name">English</span>
-            </button>
-        </div>
-    </div>
-
     <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -219,14 +96,14 @@
                     <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                         <i data-lucide="map-pin" class="w-5 h-5 text-primary-foreground"></i>
                     </div>
-                    <span class="text-xl font-bold text-foreground">LocationIQ</span>
+                    <span class="text-xl font-bold text-foreground">LokaSkor</span>
                 </div>
                 
                 <!-- Navigation Links -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#features" class="text-muted-foreground hover:text-foreground transition-colors" data-i18n="landing.features">Özellikler</a>
-                    <a href="#how-it-works" class="text-muted-foreground hover:text-foreground transition-colors" data-i18n="landing.howItWorks">Nasıl Çalışır</a>
-                    <a href="#contact" class="text-muted-foreground hover:text-foreground transition-colors" data-i18n="landing.contact">İletişim</a>
+                    <a href="#features" class="text-muted-foreground hover:text-foreground transition-colors">Özellikler</a>
+                    <a href="#how-it-works" class="text-muted-foreground hover:text-foreground transition-colors">Nasıl Çalışır</a>
+                    <a href="#contact" class="text-muted-foreground hover:text-foreground transition-colors">İletişim</a>
                 </div>
                 
                 <!-- Mobile Menu Button -->
@@ -239,9 +116,9 @@
         <!-- Mobile Menu -->
         <div class="md:hidden hidden bg-background border-t border-border" id="mobile-menu">
             <div class="px-4 py-2 space-y-2">
-                <a href="#features" class="block py-2 text-muted-foreground hover:text-foreground transition-colors" data-i18n="landing.features">Özellikler</a>
-                <a href="#how-it-works" class="block py-2 text-muted-foreground hover:text-foreground transition-colors" data-i18n="landing.howItWorks">Nasıl Çalışır</a>
-                <a href="#contact" class="block py-2 text-muted-foreground hover:text-foreground transition-colors" data-i18n="landing.contact">İletişim</a>
+                <a href="#features" class="block py-2 text-muted-foreground hover:text-foreground transition-colors">Özellikler</a>
+                <a href="#how-it-works" class="block py-2 text-muted-foreground hover:text-foreground transition-colors">Nasıl Çalışır</a>
+                <a href="#contact" class="block py-2 text-muted-foreground hover:text-foreground transition-colors">İletişim</a>
             </div>
         </div>
     </nav>
@@ -258,12 +135,11 @@
             <!-- Main Heading -->
             <div class="animate-fade-in">
                 <h1 class="hero-title text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-                    <span data-i18n="landing.heroTitle">İşletmeniz için en doğru konumu</span>
-                    <span class="text-yellow-300" data-i18n="landing.heroHighlight"> zekayla</span>
-                    <span data-i18n="landing.heroTitle"> bulun</span>
+                    İşletmeniz için en doğru konumu 
+                    <span class="text-yellow-300">zekayla</span> bulun
                 </h1>
                 
-                <p class="hero-subtitle text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed" data-i18n="landing.heroSubtitle">
+                <p class="hero-subtitle text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
                     Türkiye'deki KOBİ'lerin ve girişimcilerin yeni bir işletme açarken 
                     veri analizi ile en kârlı lokasyonu keşfetmesini sağlayan akıllı platform
                 </p>
@@ -281,11 +157,11 @@
                         class="btn btn-xl bg-white text-primary hover:bg-white/90 hover:scale-105 font-semibold px-8 py-4 shadow-xl transition-all duration-300"
                     >
                         <i data-lucide="zap" class="w-6 h-6 mr-2"></i>
-                        <span data-i18n="landing.startAnalysis">Analize Başla</span>
+                        Analize Başla
                     </button>
                 </div>
                 
-                <p class="text-white/70 text-sm mt-4" data-i18n="landing.freeBadge">
+                <p class="text-white/70 text-sm mt-4">
                     Ücretsiz • Kayıt gerektirmez • Anında sonuç
                 </p>
             </div>
@@ -294,15 +170,15 @@
             <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 animate-slide-in-from-bottom animate-delay-500">
                 <div class="text-center">
                     <div class="stats-counter text-3xl font-bold text-white mb-2" data-target="10000">0</div>
-                    <div class="text-white/80" data-i18n="landing.stats.locations">Analiz Edilen Lokasyon</div>
+                    <div class="text-white/80">Analiz Edilen Lokasyon</div>
                 </div>
                 <div class="text-center">
                     <div class="stats-counter text-3xl font-bold text-white mb-2" data-target="500">0</div>
-                    <div class="text-white/80" data-i18n="landing.stats.businesses">Başarılı İşletme</div>
+                    <div class="text-white/80">Başarılı İşletme</div>
                 </div>
                 <div class="text-center">
                     <div class="stats-counter text-3xl font-bold text-white mb-2" data-target="95">0</div>
-                    <div class="text-white/80" data-i18n="landing.stats.accuracy">% Doğruluk Oranı</div>
+                    <div class="text-white/80">% Doğruluk Oranı</div>
                 </div>
             </div>
         </div>
@@ -320,10 +196,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Section Header -->
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-foreground mb-4" data-i18n="landing.whyTitle">
-                    Neden LocationIQ?
+                <h2 class="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                    Neden LokaSkor?
                 </h2>
-                <p class="text-xl text-muted-foreground max-w-2xl mx-auto" data-i18n="landing.whySubtitle">
+                <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
                     Gelişmiş veri analizi ve yapay zeka ile lokasyon kararlarınızı güçlendirin
                 </p>
             </div>
@@ -335,8 +211,8 @@
                     <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                         <i data-lucide="target" class="w-6 h-6 text-primary"></i>
                     </div>
-                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.featuresList.precise.title">Hassas Lokasyon Analizi</h3>
-                    <p class="text-muted-foreground" data-i18n="landing.featuresList.precise.description">
+                    <h3 class="text-xl font-semibold mb-3">Hassas Lokasyon Analizi</h3>
+                    <p class="text-muted-foreground">
                         Nüfus yoğunluğu, rakip analizi, ulaşım ağları ve demografik verilerle 
                         en uygun konumları belirleyin.
                     </p>
@@ -347,8 +223,8 @@
                     <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                         <i data-lucide="bar-chart-3" class="w-6 h-6 text-primary"></i>
                     </div>
-                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.featuresList.businessSpecific.title">İşletme Türüne Özel</h3>
-                    <p class="text-muted-foreground" data-i18n="landing.featuresList.businessSpecific.description">
+                    <h3 class="text-xl font-semibold mb-3">İşletme Türüne Özel</h3>
+                    <p class="text-muted-foreground">
                         Eczane, fırın, market, cafe ve restoran için özelleştirilmiş 
                         analiz kriterleri ve skorlama sistemi.
                     </p>
@@ -359,8 +235,8 @@
                     <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                         <i data-lucide="map" class="w-6 h-6 text-primary"></i>
                     </div>
-                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.featuresList.interactiveMap.title">İnteraktif Harita</h3>
-                    <p class="text-muted-foreground" data-i18n="landing.featuresList.interactiveMap.description">
+                    <h3 class="text-xl font-semibold mb-3">İnteraktif Harita</h3>
+                    <p class="text-muted-foreground">
                         Sonuçları görsel harita üzerinde inceleyin, 
                         ısı haritası ile potansiyel alanları keşfedin.
                     </p>
@@ -371,8 +247,8 @@
                     <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                         <i data-lucide="zap" class="w-6 h-6 text-primary"></i>
                     </div>
-                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.featuresList.instantResults.title">Anında Sonuç</h3>
-                    <p class="text-muted-foreground" data-i18n="landing.featuresList.instantResults.description">
+                    <h3 class="text-xl font-semibold mb-3">Anında Sonuç</h3>
+                    <p class="text-muted-foreground">
                         Saniyeler içinde detaylı analiz sonuçları alın, 
                         zaman kaybetmeden karar verin.
                     </p>
@@ -383,8 +259,8 @@
                     <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                         <i data-lucide="shield-check" class="w-6 h-6 text-primary"></i>
                     </div>
-                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.featuresList.reliableData.title">Güvenilir Veri</h3>
-                    <p class="text-muted-foreground" data-i18n="landing.featuresList.reliableData.description">
+                    <h3 class="text-xl font-semibold mb-3">Güvenilir Veri</h3>
+                    <p class="text-muted-foreground">
                         Güncel ve doğrulanmış verilerle desteklenen 
                         analiz sonuçları, güvenilir öneriler.
                     </p>
@@ -395,8 +271,8 @@
                     <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                         <i data-lucide="users" class="w-6 h-6 text-primary"></i>
                     </div>
-                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.featuresList.smeFocused.title">KOBİ Odaklı</h3>
-                    <p class="text-muted-foreground" data-i18n="landing.featuresList.smeFocused.description">
+                    <h3 class="text-xl font-semibold mb-3">KOBİ Odaklı</h3>
+                    <p class="text-muted-foreground">
                         Küçük ve orta ölçekli işletmelerin ihtiyaçlarına 
                         özel tasarlanmış analiz algoritmaları.
                     </p>
@@ -410,10 +286,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Section Header -->
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-foreground mb-4" data-i18n="landing.howItWorksTitle">
+                <h2 class="text-3xl md:text-4xl font-bold text-foreground mb-4">
                     Nasıl Çalışır?
                 </h2>
-                <p class="text-xl text-muted-foreground max-w-2xl mx-auto" data-i18n="landing.howItWorksSubtitle">
+                <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
                     3 basit adımda işletmeniz için en uygun lokasyonu bulun
                 </p>
             </div>
@@ -428,8 +304,8 @@
                         </div>
                         <div class="hidden md:block absolute top-10 left-full w-full h-0.5 bg-border -translate-y-1/2"></div>
                     </div>
-                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.steps.step1.title">İşletme Türünü Seçin</h3>
-                    <p class="text-muted-foreground" data-i18n="landing.steps.step1.description">
+                    <h3 class="text-xl font-semibold mb-3">İşletme Türünü Seçin</h3>
+                    <p class="text-muted-foreground">
                         Eczane, fırın, market, cafe veya restoran gibi 
                         işletme türünüzü belirleyin.
                     </p>
@@ -443,9 +319,10 @@
                         </div>
                         <div class="hidden md:block absolute top-10 left-full w-full h-0.5 bg-border -translate-y-1/2"></div>
                     </div>
-                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.steps.step2.title">Analiz Modunu Seçin</h3>
-                    <p class="text-muted-foreground" data-i18n="landing.steps.step2.description">
-                        İhtiyacınıza en uygun analiz yöntemini seçerek lokasyon araştırmanızı başlatın
+                    <h3 class="text-xl font-semibold mb-3">Analiz Modunu Seçin</h3>
+                    <p class="text-muted-foreground">
+                        Belirli adresleri karşılaştırın veya 
+                        yeni fırsatları keşfedin.
                     </p>
                 </div>
                 
@@ -456,33 +333,174 @@
                             <span class="text-2xl font-bold text-primary-foreground">3</span>
                         </div>
                     </div>
-                    <h3 class="text-xl font-semibold mb-3" data-i18n="landing.steps.step3.title">Sonuçları İnceleyin</h3>
-                    <p class="text-muted-foreground" data-i18n="landing.steps.step3.description">
-                        Analiz sonuçlarını harita üzerinde inceleyerek en iyi lokasyonu belirleyin
+                    <h3 class="text-xl font-semibold mb-3">Sonuçları İnceleyin</h3>
+                    <p class="text-muted-foreground">
+                        Detaylı analiz sonuçlarını harita üzerinde 
+                        görün ve en iyi kararı verin.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- CTA Section -->
+    <section class="py-20 bg-primary text-primary-foreground">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                Başarılı İşletmenizin İlk Adımını Atın
+            </h2>
+            <p class="text-xl mb-8 opacity-90">
+                Doğru lokasyon seçimi ile işletmenizin başarısını garanti altına alın
+            </p>
+            <button 
+                id="cta-start-btn" 
+                class="btn btn-xl bg-white text-primary hover:bg-white/90 hover:scale-105 font-semibold px-8 py-4 shadow-xl transition-all duration-300"
+            >
+                <i data-lucide="arrow-right" class="w-6 h-6 mr-2"></i>
+                Hemen Başla
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-card border-t border-border py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Logo & Description -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-primary-foreground"></i>
+                        </div>
+                        <span class="text-xl font-bold">LokaSkor</span>
+                    </div>
+                    <p class="text-muted-foreground mb-4 max-w-md">
+                        Türkiye'deki KOBİ'lerin ve girişimcilerin en doğru lokasyon 
+                        kararlarını vermesini sağlayan akıllı analiz platformu.
+                    </p>
+                </div>
+                
+                <!-- Links -->
+                <div>
+                    <h3 class="font-semibold mb-4">Platform</h3>
+                    <ul class="space-y-2 text-muted-foreground">
+                        <li><a href="#features" class="hover:text-foreground transition-colors">Özellikler</a></li>
+                        <li><a href="#how-it-works" class="hover:text-foreground transition-colors">Nasıl Çalışır</a></li>
+                        <li><a href="#" class="hover:text-foreground transition-colors">Fiyatlandırma</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h3 class="font-semibold mb-4">İletişim</h3>
+                    <ul class="space-y-2 text-muted-foreground">
+                        <li><a href="#" class="hover:text-foreground transition-colors">Destek</a></li>
+                        <li><a href="#" class="hover:text-foreground transition-colors">İletişim</a></li>
+                        <li><a href="#" class="hover:text-foreground transition-colors">Gizlilik</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-border mt-8 pt-8 text-center text-muted-foreground">
+                <p>&copy; 2024 LokaSkor. Tüm hakları saklıdır.</p>
+            </div>
+        </div>
+    </footer>
+
     <!-- JavaScript Files -->
-    <script src="/static/js/new_ui/translation-utils.js"></script>
-    <script src="/static/js/new_ui/language-selector.js"></script>
-    <script src="/static/js/new_ui/translation-engine.js"></script>
     <script src="/static/js/new_ui/api_client.js"></script>
     <script src="/static/js/new_ui/error_handler.js"></script>
     <script src="/static/js/new_ui/main.js"></script>
-    <script src="/static/js/new_ui/test-translation.js"></script>
     
     <script>
-        // Initialize Lucide icons
+        // Landing page specific JavaScript
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Lucide icons
             lucide.createIcons();
             
-            // Initialize translation if available
-            if (window.translationUtils) {
-                window.translationUtils.translatePage();
-            }
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuBtn?.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Stats counter animation
+            const animateCounter = (element, target) => {
+                let current = 0;
+                const increment = target / 100;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    element.textContent = Math.floor(current).toLocaleString();
+                }, 20);
+            };
+            
+            // Intersection Observer for stats animation
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = parseInt(entry.target.dataset.target);
+                        animateCounter(entry.target, target);
+                        statsObserver.unobserve(entry.target);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.stats-counter').forEach(counter => {
+                statsObserver.observe(counter);
+            });
+            
+            // CTA button handlers
+            const handleStartAnalysis = () => {
+                if (window.LokaSkorApp) {
+                    window.LokaSkorApp.navigate('business-selection');
+                } else {
+                    // Fallback for direct navigation
+                    window.location.href = '/business-selection';
+                }
+            };
+            
+            document.getElementById('start-analysis-btn')?.addEventListener('click', handleStartAnalysis);
+            document.getElementById('cta-start-btn')?.addEventListener('click', handleStartAnalysis);
+            
+            // Stagger animation for feature cards
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const staggerObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = `${Array.from(entry.target.parentNode.children).indexOf(entry.target) * 0.1}s`;
+                        entry.target.classList.add('animate-fade-in');
+                        staggerObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.stagger-item').forEach(item => {
+                staggerObserver.observe(item);
+            });
         });
     </script>
 </body>

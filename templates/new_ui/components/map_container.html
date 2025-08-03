@@ -1,21 +1,548 @@
-<div class="map-container" data-i18n="map.container">
-  <div class="map-header">
-    <h3 data-i18n="map.title">Harita</h3>
-    <div class="map-controls">
-      <button class="btn btn-sm btn-outline" data-i18n="map.controls.zoomIn">Yakınlaştır</button>
-      <button class="btn btn-sm btn-outline" data-i18n="map.controls.zoomOut">Uzaklaştır</button>
-      <button class="btn btn-sm btn-outline" data-i18n="map.controls.reset">Sıfırla</button>
+<!-- Map Container Component Template -->
+<!-- This component provides the map interface with enhanced interactions -->
+
+<div id="map-container" class="map-container">
+    <!-- Map Loading State -->
+    <div id="map-loading" class="map-loading">
+        <div class="map-loading-content">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Harita yükleniyor...</p>
+        </div>
     </div>
-  </div>
-  <div class="map-content">
+    
+    <!-- Main Map Element -->
     <div id="map" class="map-element"></div>
-    <div class="map-overlay" data-i18n="map.overlay">
-      Harita yükleniyor...
+    
+    <!-- Map Controls -->
+    <div class="map-controls">
+        <!-- Zoom Controls -->
+        <div class="control-group zoom-controls">
+            <button id="zoom-in-btn" class="map-control-btn" title="Yakınlaştır">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+            </button>
+            <button id="zoom-out-btn" class="map-control-btn" title="Uzaklaştır">
+                <i data-lucide="minus" class="w-4 h-4"></i>
+            </button>
+        </div>
+        
+        <!-- View Controls -->
+        <div class="control-group view-controls">
+            <button id="center-view-btn" class="map-control-btn" title="Merkeze odakla">
+                <i data-lucide="crosshair" class="w-4 h-4"></i>
+            </button>
+            <button id="fullscreen-btn" class="map-control-btn" title="Tam ekran">
+                <i data-lucide="maximize" class="w-4 h-4"></i>
+            </button>
+        </div>
+        
+        <!-- Layer Controls -->
+        <div class="control-group layer-controls">
+            <button id="toggle-heatmap-btn" class="map-control-btn" title="Isı haritasını aç/kapat">
+                <i data-lucide="thermometer" class="w-4 h-4"></i>
+            </button>
+            <button id="toggle-pins-btn" class="map-control-btn active" title="Pinleri aç/kapat">
+                <i data-lucide="map-pin" class="w-4 h-4"></i>
+            </button>
+        </div>
     </div>
-  </div>
-  <div class="map-footer">
-    <div class="map-info" data-i18n="map.info">
-      Harita bilgileri burada gösterilecek
+    
+    <!-- Map Info Panel -->
+    <div id="map-info-panel" class="map-info-panel hidden">
+        <div class="info-panel-header">
+            <h3 class="info-panel-title">Lokasyon Detayları</h3>
+            <button id="close-info-panel" class="info-panel-close">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+        <div class="info-panel-content">
+            <div id="info-panel-body">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
     </div>
-  </div>
+    
+    <!-- Map Legend -->
+    <div id="map-legend" class="map-legend hidden">
+        <div class="legend-header">
+            <h4 class="legend-title">Skor Aralıkları</h4>
+            <button id="toggle-legend" class="legend-toggle">
+                <i data-lucide="chevron-up" class="w-4 h-4"></i>
+            </button>
+        </div>
+        <div class="legend-content">
+            <div class="legend-item">
+                <div class="legend-color high-score"></div>
+                <span class="legend-label">Yüksek (80-100)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color medium-score"></div>
+                <span class="legend-label">Orta (60-79)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color low-score"></div>
+                <span class="legend-label">Düşük (0-59)</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Click Coordinates Display -->
+    <div id="coordinates-display" class="coordinates-display hidden">
+        <span id="coordinates-text">39.9334, 32.8597</span>
+        <button id="add-coordinate-btn" class="btn btn-sm btn-primary">
+            <i data-lucide="plus" class="w-3 h-3"></i>
+            Ekle
+        </button>
+    </div>
 </div>
+
+<style>
+/* Map Container Styles */
+.map-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: hsl(var(--muted));
+    overflow: hidden;
+}
+
+.map-element {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+/* Map Loading State */
+.map-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: hsl(var(--background));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: opacity 0.3s ease;
+}
+
+.map-loading.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.map-loading-content {
+    text-align: center;
+}
+
+.map-loading .loading-text {
+    margin-top: var(--spacing-md);
+    color: hsl(var(--muted-foreground));
+    font-size: 0.875rem;
+}
+
+/* Map Controls */
+.map-controls {
+    position: absolute;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.map-control-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: hsl(var(--card));
+    border: none;
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+    transition: all var(--duration-normal) ease;
+    position: relative;
+}
+
+.map-control-btn:hover {
+    background: hsl(var(--accent));
+    color: hsl(var(--foreground));
+}
+
+.map-control-btn.active {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+}
+
+.map-control-btn:not(:last-child) {
+    border-bottom: 1px solid hsl(var(--border));
+}
+
+/* Map Info Panel */
+.map-info-panel {
+    position: absolute;
+    bottom: var(--spacing-lg);
+    left: var(--spacing-lg);
+    width: 320px;
+    max-height: 400px;
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    z-index: 30;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.map-info-panel:not(.hidden) {
+    transform: translateY(0);
+}
+
+.info-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md);
+    border-bottom: 1px solid hsl(var(--border));
+    background: hsl(var(--muted) / 0.3);
+}
+
+.info-panel-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+    margin: 0;
+}
+
+.info-panel-close {
+    background: none;
+    border: none;
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: var(--radius);
+    transition: all var(--duration-normal) ease;
+}
+
+.info-panel-close:hover {
+    background: hsl(var(--accent));
+    color: hsl(var(--foreground));
+}
+
+.info-panel-content {
+    padding: var(--spacing-md);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Map Legend */
+.map-legend {
+    position: absolute;
+    bottom: var(--spacing-lg);
+    right: var(--spacing-lg);
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    z-index: 25;
+    min-width: 180px;
+    transform: translateY(calc(100% - 2.5rem));
+    transition: transform 0.3s ease;
+}
+
+.map-legend.expanded {
+    transform: translateY(0);
+}
+
+.legend-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 1px solid hsl(var(--border));
+    background: hsl(var(--muted) / 0.3);
+    cursor: pointer;
+}
+
+.legend-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+    margin: 0;
+}
+
+.legend-toggle {
+    background: none;
+    border: none;
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: transform 0.3s ease;
+}
+
+.map-legend.expanded .legend-toggle {
+    transform: rotate(180deg);
+}
+
+.legend-content {
+    padding: var(--spacing-md);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.legend-item:last-child {
+    margin-bottom: 0;
+}
+
+.legend-color {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.legend-color.high-score {
+    background: hsl(var(--chart-2));
+}
+
+.legend-color.medium-score {
+    background: hsl(var(--chart-3));
+}
+
+.legend-color.low-score {
+    background: hsl(var(--chart-5));
+}
+
+.legend-label {
+    font-size: 0.75rem;
+    color: hsl(var(--muted-foreground));
+}
+
+/* Coordinates Display */
+.coordinates-display {
+    position: absolute;
+    bottom: var(--spacing-lg);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: var(--spacing-sm) var(--spacing-md);
+    box-shadow: var(--shadow-md);
+    z-index: 25;
+    opacity: 0;
+    transform: translateX(-50%) translateY(100%);
+    transition: all 0.3s ease;
+}
+
+.coordinates-display:not(.hidden) {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+#coordinates-text {
+    font-family: monospace;
+    font-size: 0.875rem;
+    color: hsl(var(--foreground));
+}
+
+/* Custom Map Markers */
+.custom-marker {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.custom-marker::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 50% 50% 50% 0;
+    background: inherit;
+    opacity: 0.8;
+}
+
+.custom-marker i {
+    transform: rotate(45deg);
+    z-index: 1;
+    position: relative;
+}
+
+.custom-marker.high-score {
+    background: hsl(var(--chart-2));
+    color: white;
+}
+
+.custom-marker.medium-score {
+    background: hsl(var(--chart-3));
+    color: white;
+}
+
+.custom-marker.low-score {
+    background: hsl(var(--chart-5));
+    color: white;
+}
+
+.custom-marker:hover {
+    transform: rotate(-45deg) scale(1.2);
+    z-index: 1000;
+}
+
+.custom-marker.selected {
+    transform: rotate(-45deg) scale(1.3);
+    z-index: 1001;
+    animation: pulse-ring 2s infinite;
+}
+
+/* Heatmap Overlay */
+.heatmap-overlay {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.heatmap-overlay.visible {
+    opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .map-controls {
+        top: var(--spacing-md);
+        right: var(--spacing-md);
+        gap: var(--spacing-sm);
+    }
+    
+    .control-group {
+        flex-direction: row;
+    }
+    
+    .map-control-btn {
+        width: 2rem;
+        height: 2rem;
+    }
+    
+    .map-control-btn:not(:last-child) {
+        border-bottom: none;
+        border-right: 1px solid hsl(var(--border));
+    }
+    
+    .map-info-panel {
+        left: var(--spacing-md);
+        right: var(--spacing-md);
+        width: auto;
+        bottom: var(--spacing-md);
+    }
+    
+    .map-legend {
+        right: var(--spacing-md);
+        bottom: 5rem;
+        min-width: 160px;
+    }
+    
+    .coordinates-display {
+        bottom: var(--spacing-md);
+        left: var(--spacing-md);
+        right: var(--spacing-md);
+        transform: none;
+        justify-content: space-between;
+    }
+    
+    .coordinates-display:not(.hidden) {
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 480px) {
+    .map-controls {
+        gap: 0.25rem;
+    }
+    
+    .map-control-btn {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+    
+    .custom-marker {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+    
+    .coordinates-display {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+}
+
+/* Animation Keyframes */
+@keyframes pulse-ring {
+    0% {
+        box-shadow: 0 0 0 0 hsl(var(--primary) / 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px hsl(var(--primary) / 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 hsl(var(--primary) / 0);
+    }
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+/* Leaflet Overrides */
+.leaflet-container {
+    background: hsl(var(--muted));
+}
+
+.leaflet-popup-content-wrapper {
+    background: hsl(var(--card));
+    color: hsl(var(--foreground));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+}
+
+.leaflet-popup-tip {
+    background: hsl(var(--card));
+}
+
+.leaflet-control-zoom {
+    display: none; /* We use custom controls */
+}
+
+.leaflet-control-attribution {
+    background: hsl(var(--card) / 0.9);
+    color: hsl(var(--muted-foreground));
+    font-size: 0.75rem;
+}
+</style>

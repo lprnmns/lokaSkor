@@ -1,5 +1,5 @@
 /**
- * LocationIQ Modern UI - API Client
+ * LokaSkor Modern UI - API Client
  * Handles all communication with backend APIs
  */
 
@@ -80,9 +80,9 @@ class ApiClient {
         
         // Transform error types
         if (lastError.name === 'AbortError') {
-            throw new NetworkError(window.translationUtils ? window.translationUtils.t('api.errors.timeout') : 'Request timeout', lastError);
+            throw new NetworkError('Request timeout', lastError);
         } else if (lastError instanceof TypeError) {
-            throw new NetworkError(window.translationUtils ? window.translationUtils.t('api.errors.network') : 'Network error - check your connection', lastError);
+            throw new NetworkError('Network error - check your connection', lastError);
         } else {
             throw lastError;
         }
@@ -113,7 +113,7 @@ class ApiClient {
                 return { message: await response.text() };
             }
         } catch (error) {
-            return { message: window.translationUtils ? window.translationUtils.t('api.errors.unknown') : 'Unknown error occurred' };
+            return { message: 'Unknown error occurred' };
         }
     }
 
@@ -167,14 +167,14 @@ class ApiClient {
         });
     }
 
-    // ===== LocationIQ Specific API Methods =====
+    // ===== LokaSkor Specific API Methods =====
 
     /**
      * Score a single point (Mode 1)
      */
     async scorePoint(lat, lng, businessType) {
         if (!lat || !lng || !businessType) {
-            throw new ValidationError(window.translationUtils ? window.translationUtils.t('api.validation.missingParams') : 'Missing required parameters', ['lat', 'lng', 'businessType']);
+            throw new ValidationError('Missing required parameters', ['lat', 'lng', 'businessType']);
         }
 
         return this.post('/api/v5/score_point', {
@@ -189,11 +189,11 @@ class ApiClient {
      */
     async scoreMultiplePoints(locations, businessType) {
         if (!locations || !Array.isArray(locations) || locations.length === 0) {
-            throw new ValidationError(window.translationUtils ? window.translationUtils.t('api.validation.missingLocations') : 'Locations array is required', ['locations']);
+            throw new ValidationError('Locations array is required', ['locations']);
         }
         
         if (!businessType) {
-            throw new ValidationError(window.translationUtils ? window.translationUtils.t('api.validation.missingBusinessType') : 'Business type is required', ['businessType']);
+            throw new ValidationError('Business type is required', ['businessType']);
         }
 
         // Score each location individually
@@ -208,7 +208,7 @@ class ApiClient {
                 location: locations[index]
             }));
         } catch (error) {
-            throw new ApiError(window.translationUtils ? window.translationUtils.t('api.errors.scoringFailed') : 'Failed to score multiple points', error);
+            throw new ApiError('Failed to score multiple points', error);
         }
     }
 
@@ -217,7 +217,7 @@ class ApiClient {
      */
     async getRegionAnalysis(il, ilce, mahalle, businessType) {
         if (!il || !ilce || !mahalle || !businessType) {
-            throw new ValidationError(window.translationUtils ? window.translationUtils.t('api.validation.missingRegionParams') : 'Missing required parameters', ['il', 'ilce', 'mahalle', 'businessType']);
+            throw new ValidationError('Missing required parameters', ['il', 'ilce', 'mahalle', 'businessType']);
         }
 
         return this.post('/api/v8/mahalle_analizi', {
@@ -233,7 +233,7 @@ class ApiClient {
      */
     async getHeatmapData(il, ilce, mahalle, businessType) {
         if (!il || !ilce || !mahalle || !businessType) {
-            throw new ValidationError(window.translationUtils ? window.translationUtils.t('api.validation.missingHeatmapParams') : 'Missing required parameters', ['il', 'ilce', 'mahalle', 'businessType']);
+            throw new ValidationError('Missing required parameters', ['il', 'ilce', 'mahalle', 'businessType']);
         }
 
         return this.post('/api/v8/heatmap_data', {
@@ -249,7 +249,7 @@ class ApiClient {
      */
     async searchLocations(query) {
         if (!query || query.trim().length < 3) {
-            throw new ValidationError(window.translationUtils ? window.translationUtils.t('api.validation.queryTooShort') : 'Search query must be at least 3 characters', ['query']);
+            throw new ValidationError('Search query must be at least 3 characters', ['query']);
         }
 
         // This would integrate with a geocoding service
@@ -277,15 +277,15 @@ class ApiClient {
         const longitude = parseFloat(lng);
         
         if (isNaN(latitude) || isNaN(longitude)) {
-            throw new ValidationError(window.translationUtils ? window.translationUtils.t('api.validation.invalidCoordinates') : 'Invalid coordinates - must be numbers');
+            throw new ValidationError('Invalid coordinates - must be numbers');
         }
         
         if (latitude < -90 || latitude > 90) {
-            throw new ValidationError(window.translationUtils ? window.translationUtils.t('api.validation.latitudeRange') : 'Latitude must be between -90 and 90');
+            throw new ValidationError('Latitude must be between -90 and 90');
         }
         
         if (longitude < -180 || longitude > 180) {
-            throw new ValidationError(window.translationUtils ? window.translationUtils.t('api.validation.longitudeRange') : 'Longitude must be between -180 and 180');
+            throw new ValidationError('Longitude must be between -180 and 180');
         }
         
         return { lat: latitude, lng: longitude };
@@ -298,7 +298,7 @@ class ApiClient {
         const validTypes = ['eczane', 'firin', 'market', 'cafe', 'restoran'];
         
         if (!businessType || !validTypes.includes(businessType.toLowerCase())) {
-            throw new ValidationError(window.translationUtils ? window.translationUtils.t('api.validation.invalidBusinessType', { types: validTypes.join(', ') }) : `Invalid business type. Must be one of: ${validTypes.join(', ')}`);
+            throw new ValidationError(`Invalid business type. Must be one of: ${validTypes.join(', ')}`);
         }
         
         return businessType.toLowerCase();

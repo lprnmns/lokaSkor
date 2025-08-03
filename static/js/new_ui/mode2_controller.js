@@ -1,5 +1,5 @@
 /**
- * LocationIQ Modern UI - Mode 2 Controller
+ * LokaSkor Modern UI - Mode 2 Controller
  * Handles region analysis logic and interface
  */
 
@@ -698,8 +698,8 @@ class Mode2Controller {
     }
     
     getBusinessType() {
-        if (window.LocationIQApp) {
-            const state = window.LocationIQApp.getState();
+        if (window.LokaSkorApp) {
+            const state = window.LokaSkorApp.getState();
             return state.selectedBusinessType;
         }
         
@@ -714,8 +714,8 @@ class Mode2Controller {
     }
     
     showError(message) {
-        if (window.LocationIQApp && window.LocationIQApp.errorHandler) {
-            window.LocationIQApp.errorHandler.showError('Hata', message);
+        if (window.LokaSkorApp && window.LokaSkorApp.errorHandler) {
+            window.LokaSkorApp.errorHandler.showError('Hata', message);
         } else {
             alert(message);
         }

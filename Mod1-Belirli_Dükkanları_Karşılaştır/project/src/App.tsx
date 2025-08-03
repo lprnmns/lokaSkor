@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { MapPin, ArrowLeft, TrendingUp, Users, Building2, Stethoscope, ShoppingBag, GraduationCap, Train, Car, Star, ChevronDown, ChevronUp, Info, ImageOff } from 'lucide-react';
-import { TranslationProvider, useTranslation } from './contexts/TranslationContext';
-import LanguageSelector from './components/LanguageSelector';
+import React, { useState } from 'react';
+import { MapPin, ArrowLeft, TrendingUp, Users, Building2, Stethoscope, ShoppingBag, GraduationCap, Train, Car, Star, ChevronDown, ChevronUp, Info } from 'lucide-react';
 
 interface LocationData {
   id: number;
@@ -37,7 +35,6 @@ interface LocationData {
       mall: { name: string; distance: string; score: number; }[];
     };
   };
-  streetViewImageUrl?: string;
 }
 
 const mockLocations: LocationData[] = [
@@ -78,8 +75,7 @@ const mockLocations: LocationData[] = [
           { name: "Karşıyaka AVM", distance: "441m", score: 7.4 }
         ]
       }
-    },
-    streetViewImageUrl: "https://example.com/street-view-a.jpg"
+    }
   },
   {
     id: 2,
@@ -119,8 +115,7 @@ const mockLocations: LocationData[] = [
           { name: "Karum AVM", distance: "600m", score: 12.8 }
         ]
       }
-    },
-    streetViewImageUrl: "https://example.com/street-view-b.jpg"
+    }
   },
   {
     id: 3,
@@ -160,120 +155,13 @@ const mockLocations: LocationData[] = [
           { name: "Karum AVM", distance: "1.1km", score: 8.2 }
         ]
       }
-    },
-    streetViewImageUrl: "https://example.com/street-view-c.jpg"
+    }
   }
 ];
-
-// API'den veri çekme fonksiyonu
-const fetchLocationData = async () => {
-  try {
-    const response = await fetch('http://localhost:5000/api/compare-locations', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        business_type: 'eczane',
-        locations: [
-          {
-            id: "1",
-            name: "Hastane Metro",
-            lat: 39.9334,
-            lng: 32.8597,
-            address: "Örnek Adres 1"
-          },
-          {
-            id: "2",
-            name: "Çamlıca Mahallesi",
-            lat: 39.9200,
-            lng: 32.8500,
-            address: "Örnek Adres 2"
-          }
-        ]
-      })
-    });
-    
-    if (!response.ok) {
-      throw new Error('API çağrısı başarısız oldu');
-    }
-    
-    const data = await response.json();
-    return data.locations;
-  } catch (error) {
-    console.error('Veri çekme hatası:', error);
-    return null;
-  }
-};
 
 function App() {
   const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(null);
   const [expandedDetails, setExpandedDetails] = useState<string | null>(null);
-  const [realLocations, setRealLocations] = useState<LocationData[] | null>(null);
-  const [loading, setLoading] = useState(false);
-  
-  // useTranslation hook'unu kullan
-  const { t } = useTranslation();
-
-  // Component yüklendiğinde API'den veri çek
-  useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      const data = await fetchLocationData();
-      if (data) {
-        // API'den gelen verileri doğru formata dönüştür
-        const formattedData = data.map((location: any) => ({
-          id: parseInt(location.id),
-          name: location.name,
-          address: location.address || "Adres bilgisi yok",
-          coordinates: {
-            lat: location.lat,
-            lng: location.lng
-          },
-          totalScore: location.totalScore,
-          scores: {
-            hospital: location.scores.hospital,
-            competitor: location.scores.competitor,
-            important: location.scores.important,
-            demographic: location.scores.demographic
-          },
-          details: {
-            nearbyPlaces: {
-              hospital: {
-                name: location.details.nearby_places.hospital?.name || "Hastane bulunamadı",
-                distance: location.details.nearby_places.hospital?.distance || "Bilinmiyor"
-              },
-              metro: {
-                name: location.details.nearby_places.metro?.name || "Metro istasyonu bulunamadı",
-                distance: location.details.nearby_places.metro?.distance || "Bilinmiyor"
-              },
-              pharmacy: {
-                name: location.details.nearby_places.pharmacy?.name || "Eczane bulunamadı",
-                distance: location.details.nearby_places.pharmacy?.distance || "Bilinmiyor"
-              }
-            },
-            demographic: {
-              population: location.details.demographic?.population || 0,
-              ageProfile: location.details.demographic?.age_profile || "Bilinmiyor",
-              incomeLevel: location.details.demographic?.income_level || "Bilinmiyor"
-            },
-            competitors: location.details.competitors || [],
-            importantPlaces: {
-              metro: [],
-              university: [],
-              mall: []
-            }
-          },
-          streetViewImageUrl: location.streetViewImageUrl
-        }));
-        
-        setRealLocations(formattedData);
-      }
-      setLoading(false);
-    };
-    
-    loadData();
-  }, []);
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-600 bg-green-50';
@@ -341,7 +229,7 @@ function App() {
           <div>
             <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
               <MapPin className="w-4 h-4 text-blue-600" />
-              {t('comparison.nearbyPlaces')}
+              Yakın Yerler
             </h4>
             <div className="space-y-2">
               <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
@@ -372,7 +260,7 @@ function App() {
           <div>
             <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
               <Users className="w-4 h-4 text-purple-600" />
-              {t('comparison.demographics')}
+              Demografik Bilgiler
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div className="p-3 bg-purple-50 rounded-lg text-center">
@@ -394,7 +282,7 @@ function App() {
           <div>
             <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
               <Building2 className="w-4 h-4 text-orange-600" />
-              {t('comparison.competitorAnalysis')}
+              Rekabet Analizi
             </h4>
             <div className="space-y-2">
               {location.details.competitors.map((competitor, index) => (
@@ -415,7 +303,7 @@ function App() {
           <div>
             <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
               <Star className="w-4 h-4 text-teal-600" />
-              {t('comparison.importantPlaces')}
+              Önemli Yerler
             </h4>
             <div className="space-y-3">
               {location.details.importantPlaces.metro.length > 0 && (
@@ -473,53 +361,51 @@ function App() {
   );
 
   return (
-    <TranslationProvider>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50">
-        <LanguageSelector />
-        {/* Header */}
-        <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
-              <div className="flex items-center gap-4">
-                <button className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors">
-                  <ArrowLeft className="w-5 h-5" />
-                  <span className="font-medium">{t('app.back')}</span>
-                </button>
-                <div className="h-6 w-px bg-gray-300" />
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-white" />
-                  </div>
-                  <span className="font-bold text-gray-900">{t('app.title')}</span>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50">
+      {/* Header */}
+      <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-4">
+              <button className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors">
+                <ArrowLeft className="w-5 h-5" />
+                <span className="font-medium">Geri</span>
+              </button>
+              <div className="h-6 w-px bg-gray-300" />
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <MapPin className="w-5 h-5 text-white" />
                 </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <button className="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
-                  {t('app.watchDemo')}
-                </button>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                  {t('app.getReport')}
-                </button>
+                <span className="font-bold text-gray-900">LocationIQ</span>
               </div>
             </div>
+            <div className="flex items-center gap-4">
+              <button className="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                Demo İzle
+              </button>
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                Rapor Al
+              </button>
+            </div>
           </div>
-        </header>
+        </div>
+      </header>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Title Section */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {t('app.title')}
+            Lokasyon Analiz Sonuçları
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            {t('app.description')}
+            Seçtiğiniz lokasyonların detaylı analiz sonuçları. En yüksek skorlu lokasyon işletmeniz için en uygun seçenektir.
           </p>
         </div>
 
         {/* Analysis Results */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {(realLocations || mockLocations).map((location, index) => (
+          {mockLocations.map((location, index) => (
             <div key={location.id} className={`bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-2xl hover:scale-150 hover:z-50 transition-all duration-700 border-3 ${getDynamicBorderColor(index)} hover:border-opacity-100 relative group`}>
               {/* Location Header */}
               <div className="p-6 border-b border-gray-100 border border-gray-800 border-opacity-20 rounded-t-2xl">
@@ -547,7 +433,7 @@ function App() {
                 {index === 0 && location.totalScore === Math.max(...mockLocations.map(l => l.totalScore)) && (
                   <div className="flex items-center gap-1 text-green-600 text-sm font-medium mt-2">
                     <Star className="w-4 h-4 fill-current" />
-                    <span>{t('comparison.bestOption')}</span>
+                    <span>En İyi Seçenek</span>
                   </div>
                 )}
               </div>
@@ -582,27 +468,38 @@ function App() {
 
               {/* Action Buttons */}
               <div className="p-6 pt-0 space-y-3">
-                {/* Street View Image */}
+                {/* Mini Map */}
                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-700">{t('comparison.streetView')}</span>
+                    <span className="text-sm font-medium text-gray-700">Lokasyon Haritası</span>
                     <div className="flex items-center gap-1 text-xs text-gray-500">
                       <MapPin className="w-3 h-3" />
-                      <span>{t('shop.name')}</span>
+                      <span>Eczane</span>
                     </div>
                   </div>
-                  {location.streetViewImageUrl ? (
-                    <img
-                      src={location.streetViewImageUrl}
-                      alt="Street View"
-                      className="w-full h-48 object-cover rounded-lg"
-                    />
-                  ) : (
-                    <div className="w-full h-48 bg-slate-200 rounded-lg flex flex-col items-center justify-center">
-                      <ImageOff className="w-12 h-12 text-gray-400 mb-2" />
-                      <span className="text-gray-500">{t('comparison.streetViewNotAvailable')}</span>
+                  <div className="relative bg-gradient-to-br from-blue-100 to-teal-100 rounded-lg h-24 overflow-hidden">
+                    {/* Simulated mini map background */}
+                    <div className="absolute inset-0 opacity-20">
+                      <div className="absolute top-2 left-3 w-8 h-1 bg-gray-400 rounded"></div>
+                      <div className="absolute top-4 left-2 w-12 h-1 bg-gray-400 rounded"></div>
+                      <div className="absolute top-6 right-4 w-6 h-1 bg-gray-400 rounded"></div>
+                      <div className="absolute bottom-4 left-5 w-10 h-1 bg-gray-400 rounded"></div>
+                      <div className="absolute bottom-2 right-2 w-8 h-1 bg-gray-400 rounded"></div>
                     </div>
-                  )}
+                    {/* Location marker */}
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                      <div className="relative">
+                        <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                          <div className="w-2 h-2 bg-white rounded-full"></div>
+                        </div>
+                        <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-2 bg-red-500"></div>
+                      </div>
+                    </div>
+                    {/* Coordinate info */}
+                    <div className="absolute bottom-1 left-1 text-xs text-gray-600 bg-white bg-opacity-80 px-1 rounded">
+                      {location.coordinates.lat.toFixed(4)}, {location.coordinates.lng.toFixed(4)}
+                    </div>
+                  </div>
                 </div>
                 
                 <button 
@@ -610,11 +507,11 @@ function App() {
                   className="w-full bg-blue-600 text-white py-3 rounded-xl font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
                 >
                   <Info className="w-4 h-4" />
-                  {t('comparison.detailedAnalysis')}
+                  Detaylı Analiz
                 </button>
                 <button className="w-full bg-teal-600 text-white py-3 rounded-xl font-medium hover:bg-teal-700 transition-colors flex items-center justify-center gap-2">
                   <TrendingUp className="w-4 h-4" />
-                  {t('app.getReport')}
+                  Rapor Al
                 </button>
               </div>
             </div>
@@ -623,25 +520,25 @@ function App() {
 
         {/* Summary Section */}
         <div className={`mt-12 bg-white rounded-2xl p-8 border-4 ${getDynamicBorderColor(0)} shadow-lg hover:shadow-xl transition-all duration-300`}>
-          <h2 className="text-xl font-bold text-gray-900 mb-4">{t('comparison.summary')}</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Analiz Özeti</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center p-4 bg-green-50 rounded-xl border border-green-200">
               <div className="text-2xl font-bold text-green-600 mb-1">
-                {Math.max(...(realLocations || mockLocations).map(l => l.totalScore))}
+                {Math.max(...mockLocations.map(l => l.totalScore))}
               </div>
-              <div className="text-sm text-green-600">{t('comparison.highestScore')}</div>
+              <div className="text-sm text-green-600">En Yüksek Skor</div>
             </div>
             <div className="text-center p-4 bg-blue-50 rounded-xl border border-blue-200">
               <div className="text-2xl font-bold text-blue-600 mb-1">
-                {Math.round((realLocations || mockLocations).reduce((sum, l) => sum + l.totalScore, 0) / (realLocations || mockLocations).length)}
+                {Math.round(mockLocations.reduce((sum, l) => sum + l.totalScore, 0) / mockLocations.length)}
               </div>
-              <div className="text-sm text-blue-600">{t('comparison.averageScore')}</div>
+              <div className="text-sm text-blue-600">Ortalama Skor</div>
             </div>
             <div className="text-center p-4 bg-purple-50 rounded-xl border border-purple-200">
               <div className="text-2xl font-bold text-purple-600 mb-1">
-                {(realLocations || mockLocations).length}
+                {mockLocations.length}
               </div>
-              <div className="text-sm text-purple-600">{t('comparison.analyzedLocations')}</div>
+              <div className="text-sm text-purple-600">Analiz Edilen Lokasyon</div>
             </div>
           </div>
         </div>

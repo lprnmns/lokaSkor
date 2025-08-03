@@ -59,7 +59,7 @@ class SearchManager {
                 { 
                     signal: this.abortController.signal,
                     headers: {
-                        'User-Agent': 'LocationIQ-Mod1/1.0'
+                        'User-Agent': 'LokaSkor-Mod1/1.0'
                     }
                 }
             );
@@ -138,6 +138,10 @@ class LocationComparison {
         // Initialize detail panel system
         this.detailPanelManager = null;
         
+        // Street View Static API integration
+        this.streetViewEnabled = true;
+        this.useAlternativeStreetView = false; // Initialize to false, will be updated by API test
+        
         this.init();
     }
 
@@ -161,6 +165,9 @@ class LocationComparison {
         this.bindEvents();
         this.updateUI();
         
+        // Street View Static API is always enabled
+        console.log('✅ Street View Static API enabled');
+        
         // Initialize detail panel system
         if (window.DetailPanelManager) {
             this.detailPanelManager = new DetailPanelManager(this);
@@ -178,8 +185,83 @@ class LocationComparison {
             locationsList: !!this.locationsList,
             comparisonFooter: !!this.comparisonFooter,
             mapStatusMessage: !!this.mapStatusMessage,
-            detailPanelManager: !!this.detailPanelManager
+            detailPanelManager: !!this.detailPanelManager,
+            streetViewEnabled: this.streetViewEnabled
         });
+        
+        // Test Google Maps API accessibility
+        this.testGoogleMapsAPI();
+    }
+
+    testGoogleMapsAPI() {
+        const testUrl = 'https://maps.googleapis.com/maps/api/streetview?size=100x100&location=39.9334,32.8597&key=AIzaSyBdqmzhohI-SKOE7pJ5kFULP3z0u5dMj6A';
+        
+        console.log('🧪 Testing Google Maps API with URL:', testUrl);
+        
+        fetch(testUrl)
+            .then(response => {
+                console.log('🌐 Google Maps API test response:', response.status, response.statusText);
+                console.log('🌐 Response headers:', Object.fromEntries(response.headers.entries()));
+                
+                if (response.status === 403) {
+                    console.warn('⚠️ Google Maps API returned 403 - check API key and domain restrictions');
+                    this.useAlternativeStreetView = true;
+                } else if (response.status === 200) {
+                    console.log('✅ Google Maps API is accessible');
+                    this.useAlternativeStreetView = false;
+                    
+                    // Test if we can actually get the image data
+                    return response.blob();
+                } else {
+                    console.warn(`⚠️ Google Maps API returned unexpected status: ${response.status}`);
+                    this.useAlternativeStreetView = true;
+                }
+            })
+            .then(blob => {
+                if (blob) {
+                    console.log('✅ Google Maps API returned image blob:', {
+                        size: blob.size,
+                        type: blob.type
+                    });
+                    
+                    // Test if the blob is actually an image
+                    const url = URL.createObjectURL(blob);
+                    const testImg = new Image();
+                    testImg.onload = () => {
+                        console.log('✅ Google Maps API image loads successfully:', {
+                            width: testImg.naturalWidth,
+                            height: testImg.naturalHeight
+                        });
+                        URL.revokeObjectURL(url);
+                    };
+                    testImg.onerror = () => {
+                        console.error('❌ Google Maps API image failed to load');
+                        URL.revokeObjectURL(url);
+                    };
+                    testImg.src = url;
+                }
+            })
+            .catch(error => {
+                console.error('❌ Google Maps API test failed:', error);
+                this.useAlternativeStreetView = true;
+            });
+    }
+
+    createAlternativeStreetViewImage(lat, lng) {
+        // Create a simple map placeholder with coordinates
+        return `
+            <div class="street-view-container">
+                <div class="street-view-placeholder">
+                    <div class="street-view-placeholder-icon">🗺️</div>
+                    <p>Harita Görünümü</p>
+                    <small>Koordinat: ${lat.toFixed(4)}, ${lng.toFixed(4)}</small>
+                    <div class="street-view-coordinate-display">
+                        <strong>Enlem:</strong> ${lat.toFixed(6)}<br>
+                        <strong>Boylam:</strong> ${lng.toFixed(6)}
+                    </div>
+                </div>
+            </div>
+        `;
     }
 
     /**
@@ -709,15 +791,234 @@ class LocationComparison {
     }
 
     /**
-     * UI Refactoring: Create mini map pin matching main map style - ADDED
+     * Create Street View Static API image
      */
-    createMiniMapPin(location, index) {
-        const color = this.markerColors[index];
+    createStreetViewImage(lat, lng) {
+        // If API is not accessible, use alternative approach
+        if (this.useAlternativeStreetView) {
+            console.log('🔄 Using alternative Street View for coordinates:', lat, lng);
+            return this.createAlternativeStreetViewImage(lat, lng);
+        }
+        
+        const apiKey = 'AIzaSyBdqmzhohI-SKOE7pJ5kFULP3z0u5dMj6A';
+        const size = '300x200';
+        const fov = '90';
+        const heading = '0';
+        const pitch = '0';
+        
+        const streetViewUrl = `https://maps.googleapis.com/maps/api/streetview?size=${size}&location=${lat},${lng}&heading=${heading}&pitch=${pitch}&fov=${fov}&key=${apiKey}`;
+        
+        // Log the URL for debugging
+        console.log('🗺️ Street View URL:', streetViewUrl);
+        console.log('🔍 useAlternativeStreetView value:', this.useAlternativeStreetView);
+        
+        // Create a unique ID for this Street View container
+        const containerId = `street-view-${lat}-${lng}`.replace(/\./g, '-');
+        console.log('🔍 Container ID:', containerId);
+        
+        // Set a timeout to handle cases where the API doesn't respond
+        setTimeout(() => {
+            const container = document.getElementById(containerId);
+            if (container && !container.classList.contains('street-view-loaded') && !container.classList.contains('street-view-error-container')) {
+                console.log('⏰ Street View timeout for coordinates:', lat, lng);
+                console.log('🔍 Container classes:', container.className);
+                this.handleStreetViewError(lat, lng, containerId);
+            }
+        }, 15000); // Increased to 15 second timeout
+        
         return `
-            <div class="mini-map-pin" style="background-color: ${color}">
-                <span class="mini-pin-number">${index + 1}</span>
+            <div class="street-view-container" id="${containerId}">
+                <div class="street-view-loading">
+                    <div class="street-view-loading-spinner"></div>
+                    <p>Street View yükleniyor...</p>
+                </div>
+                <img src="${streetViewUrl}"
+                     alt="Street View"
+                     class="street-view-static-image"
+                     style="width: 100%; height: auto; display: none;">
+                <div class="street-view-fallback" style="display: none;">
+                    <div class="street-view-placeholder">
+                        <div class="street-view-placeholder-icon">🗺️</div>
+                        <p>Harita Görünümü</p>
+                        <small>Koordinat: ${lat.toFixed(4)}, ${lng.toFixed(4)}</small>
+                    </div>
+                </div>
             </div>
         `;
+    }
+
+    /**
+     * Setup event listeners for Street View images
+     */
+    setupStreetViewEventListeners(container) {
+        const img = container.querySelector('.street-view-static-image');
+        if (!img) {
+            console.log('❌ No image found in Street View container:', container.id);
+            return;
+        }
+
+        // Extract coordinates from container ID
+        const containerId = container.id;
+        const coordsMatch = containerId.match(/street-view-([\d.-]+)-([\d.-]+)/);
+        if (!coordsMatch) {
+            console.log('❌ Could not extract coordinates from container ID:', containerId);
+            return;
+        }
+
+        const lat = parseFloat(coordsMatch[1].replace(/-/g, '.'));
+        const lng = parseFloat(coordsMatch[2].replace(/-/g, '.'));
+
+        console.log('🔧 Setting up event listeners for Street View:', {
+            containerId,
+            lat,
+            lng,
+            imgSrc: img.src
+        });
+
+        // Remove any existing listeners
+        img.onload = null;
+        img.onerror = null;
+
+        // Add new event listeners
+        img.onload = () => {
+            console.log('🖼️ Image onload triggered for', containerId);
+            this.handleStreetViewSuccess(lat, lng, containerId);
+        };
+
+        img.onerror = () => {
+            console.log('🖼️ Image onerror triggered for', containerId);
+            this.handleStreetViewError(lat, lng, containerId);
+        };
+
+        // Force image to load immediately to avoid lazy loading issues
+        if (img.complete) {
+            console.log('🖼️ Image already loaded for', containerId);
+            if (img.naturalWidth > 0) {
+                this.handleStreetViewSuccess(lat, lng, containerId);
+            } else {
+                this.handleStreetViewError(lat, lng, containerId);
+            }
+        } else {
+            console.log('🖼️ Image loading in progress for', containerId);
+            
+            // Use fetch to load the image and create a blob URL to bypass lazy loading
+            fetch(img.src)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    console.log('🖼️ Image blob loaded successfully for', containerId, {
+                        size: blob.size,
+                        type: blob.type
+                    });
+                    
+                    // Create blob URL and set it as the image source
+                    const blobUrl = URL.createObjectURL(blob);
+                    img.src = blobUrl;
+                    
+                    // Clean up blob URL after image loads
+                    img.onload = () => {
+                        console.log('🖼️ Image onload triggered for', containerId);
+                        URL.revokeObjectURL(blobUrl);
+                        this.handleStreetViewSuccess(lat, lng, containerId);
+                    };
+                    
+                    img.onerror = () => {
+                        console.log('🖼️ Image onerror triggered for', containerId);
+                        URL.revokeObjectURL(blobUrl);
+                        this.handleStreetViewError(lat, lng, containerId);
+                    };
+                })
+                .catch(error => {
+                    console.error('❌ Failed to fetch image for', containerId, error);
+                    this.handleStreetViewError(lat, lng, containerId);
+                });
+        }
+    }
+
+    handleStreetViewError(lat, lng, containerId) {
+        console.log('❌ Street View image failed to load for coordinates:', lat, lng);
+        console.log('🔍 Container ID:', containerId);
+        const container = document.getElementById(containerId);
+        console.log('🔍 Container found:', !!container);
+        if (container) {
+            // Check if we've already tried multiple headings
+            const retryCount = container.dataset.retryCount || 0;
+            
+            if (retryCount < 3) {
+                // Try different heading values
+                const headings = [90, 180, 270];
+                const nextHeading = headings[retryCount];
+                
+                console.log(`🔄 Retrying Street View with heading ${nextHeading} for coordinates:`, lat, lng);
+                
+                const apiKey = 'AIzaSyBdqmzhohI-SKOE7pJ5kFULP3z0u5dMj6A';
+                const size = '300x200';
+                const fov = '90';
+                const pitch = '0';
+                
+                const retryUrl = `https://maps.googleapis.com/maps/api/streetview?size=${size}&location=${lat},${lng}&heading=${nextHeading}&pitch=${pitch}&fov=${fov}&key=${apiKey}`;
+                
+                container.dataset.retryCount = parseInt(retryCount) + 1;
+                
+                const img = container.querySelector('.street-view-static-image');
+                if (img) {
+                    img.src = retryUrl;
+                    img.onerror = () => this.handleStreetViewError(lat, lng, containerId);
+                    img.onload = () => this.handleStreetViewSuccess(lat, lng, containerId);
+                }
+                return;
+            }
+            
+            // All retries failed, show fallback
+            const loadingDiv = container.querySelector('.street-view-loading');
+            const image = container.querySelector('.street-view-static-image');
+            const fallbackDiv = container.querySelector('.street-view-fallback');
+            
+            if (loadingDiv) {
+                loadingDiv.style.display = 'none';
+            }
+            if (image) {
+                image.style.display = 'none';
+            }
+            if (fallbackDiv) {
+                fallbackDiv.style.display = 'flex';
+            }
+            
+            container.classList.add('street-view-fallback-container');
+        }
+    }
+
+    handleStreetViewSuccess(lat, lng, containerId) {
+        console.log('✅ Street View image loaded successfully for coordinates:', lat, lng);
+        console.log('🔍 Container ID:', containerId);
+        const container = document.getElementById(containerId);
+        console.log('🔍 Container found:', !!container);
+        if (container) {
+            const loadingDiv = container.querySelector('.street-view-loading');
+            const image = container.querySelector('.street-view-static-image');
+            
+            if (loadingDiv) {
+                loadingDiv.style.display = 'none';
+            }
+            if (image) {
+                image.style.display = 'block';
+                image.style.width = '100%';
+                image.style.height = 'auto';
+                image.style.maxWidth = '100%';
+                console.log('🖼️ Street View image displayed:', {
+                    src: image.src,
+                    width: image.offsetWidth,
+                    height: image.offsetHeight,
+                    display: image.style.display
+                });
+            }
+            
+            container.classList.add('street-view-loaded');
+        }
     }
 
     initializeMap() {
@@ -802,6 +1103,7 @@ class LocationComparison {
             this.geoData.fitMapToBounds(this.map, bounds);
         }
     }
+
 
     bindEvents() {
         // Modern UI: New search form handler
@@ -1654,20 +1956,6 @@ class LocationComparison {
             // Simulate analysis progress
             await this.simulateAnalysisProgress();
 
-            // First, get Google Maps API key from backend
-            let apiKey = null;
-            try {
-                const keyResponse = await fetch('/api/google-maps-key');
-                if (keyResponse.ok) {
-                    const keyData = await keyResponse.json();
-                    apiKey = keyData.api_key;
-                }
-            } catch (keyError) {
-                console.warn('Could not fetch Google Maps API key from backend, using fallback');
-                // Fallback API key (should be removed in production)
-                apiKey = 'AIzaSyDT3gZhQAO_BT_tW5PRVGBFok-tx6r_lHA';
-            }
-
             // Call backend for analysis using the exact same endpoint as modern dashboard
             const analysisPromises = this.locations.map(async (location) => {
                 try {
@@ -1732,21 +2020,6 @@ class LocationComparison {
                     name: location.name
                 });
                 
-                // Retrieve Google Maps API key from environment (in real implementation, this would come from backend)
-                const apiKey = 'AIzaSyDT3gZhQAO_BT_tW5PRVGBFok-tx6r_lHA'; // This should be set as environment variable
-                let streetViewUrl = null;
-                
-                // Construct Street View URL if API key is available
-                if (apiKey) {
-                    try {
-                        const lat = location.lat;
-                        const lng = location.lng;
-                        streetViewUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x300&location=${lat},${lng}&fov=90&key=${apiKey}`;
-                    } catch (e) {
-                        console.error('Street View URL construction failed:', e);
-                    }
-                }
-
                 return {
                     id: location.id,
                     name: location.name,
@@ -1756,7 +2029,6 @@ class LocationComparison {
                     coordinates: { lat: location.lat, lng: location.lng },
                     totalScore: result.total_score || 0,
                     rank: 0, // Will be calculated after all scores
-                    streetViewImageUrl: streetViewUrl, // Add StreetView URL to the response
                     scores: {
                         hospital: this.safeParseScore(result.breakdown?.hospital_proximity?.score) || 0,
                         competitor: this.safeParseScore(result.breakdown?.competitors?.score) || 0,
@@ -1933,40 +2205,205 @@ class LocationComparison {
                         ${this.createScoreItems(location.scores, this.getLocationWinners(winners, index), location.id)}
                     </div>
                     
-                    
-                    <!-- Street View Image -->
-                    <div class="street-view-section">
-                        <h4 class="detail-section-title">
-                            <svg class="detail-section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/>
-                            </svg>
-                            Street View
-                        </h4>
-                        ${location.streetViewImageUrl ? `
-                            <div class="street-view-image-container">
-                                <img src="${location.streetViewImageUrl}" alt="Street View of ${location.name}" class="street-view-image" onerror="this.parentElement.innerHTML='<div class=street-view-placeholder><svg width=48 height=48 fill=none stroke=currentColor viewBox=0 0 24 24><path stroke-linecap=round stroke-linejoin=round stroke-width=2 d=M4 9h16M4 15h16M9 9v6m6-6v6M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z/></svg><p>Street View görüntülenemiyor</p></div>'">
-                            </div>
-                        ` : `
-                            <div class="street-view-placeholder">
-                                <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 9h16M4 15h16M9 9v6m6-6v6M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/>
-                                </svg>
-                                <p>Street View mevcut değil</p>
-                            </div>
-                        `}
+                    <div class="street-view-map">
+                        <div class="street-view-header">
+                            <span class="street-view-title">Street View</span>
+                            <div class="street-view-coords">${location.coordinates.lat.toFixed(4)}, ${location.coordinates.lng.toFixed(4)}</div>
+                        </div>
+                        <div class="street-view-image">
+                            ${this.createStreetViewImage(location.coordinates.lat, location.coordinates.lng)}
+                        </div>
                     </div>
+                    
+
                 </div>
             `;
             resultsContent.appendChild(card);
+            
+            // Street View is now integrated directly in the location card template
+            console.log('✅ Street View integrated in location card for:', location.name);
         });
 
         // Store results for detail modal
         this.analysisResults = results.locations;
         console.log('💾 Stored analysisResults:', this.analysisResults);
         console.log('🔍 analysisResults IDs:', this.analysisResults.map(loc => `${loc.id} (${typeof loc.id})`));
+        
+                    // Debug Street View containers and setup event listeners
+            setTimeout(() => {
+                const streetViewContainers = document.querySelectorAll('.street-view-container');
+                console.log('🔍 Found Street View containers:', streetViewContainers.length);
+                streetViewContainers.forEach((container, index) => {
+                    console.log(`  Container ${index}:`, {
+                        id: container.id,
+                        hasImage: !!container.querySelector('img'),
+                        hasLoading: !!container.querySelector('.street-view-loading'),
+                        classes: container.className
+                    });
+                    
+                    // Setup event listeners for this container
+                    this.setupStreetViewEventListeners(container);
+                });
+                
+                // Add test function to window for debugging
+                window.testStreetView = (lat = 39.9691, lng = 32.7838) => {
+                    console.log('🧪 Testing Street View for coordinates:', lat, lng);
+                    const testContainer = document.createElement('div');
+                    testContainer.innerHTML = this.createStreetViewImage(lat, lng);
+                    document.body.appendChild(testContainer);
+                    console.log('🧪 Test Street View container added to page');
+                    
+                    // Setup event listeners for test container
+                    const testStreetViewContainer = testContainer.querySelector('.street-view-container');
+                    if (testStreetViewContainer) {
+                        this.setupStreetViewEventListeners(testStreetViewContainer);
+                    }
+                };
+
+                // Add function to test specific coordinates with fetch
+                window.testStreetViewFetch = (lat = 39.9691, lng = 32.7838) => {
+                    console.log('🧪 Testing Street View fetch for coordinates:', lat, lng);
+                    const apiKey = 'AIzaSyBdqmzhohI-SKOE7pJ5kFULP3z0u5dMj6A';
+                    const testUrl = `https://maps.googleapis.com/maps/api/streetview?size=300x200&location=${lat},${lng}&heading=0&pitch=0&fov=90&key=${apiKey}`;
+                    
+                    console.log('🧪 Fetch URL:', testUrl);
+                    
+                    fetch(testUrl)
+                        .then(response => {
+                            console.log('🧪 Fetch response:', response.status, response.statusText);
+                            console.log('🧪 Response headers:', Object.fromEntries(response.headers.entries()));
+                            
+                            if (response.ok) {
+                                return response.blob();
+                            } else {
+                                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                            }
+                        })
+                        .then(blob => {
+                            console.log('🧪 Fetch successful, blob:', {
+                                size: blob.size,
+                                type: blob.type
+                            });
+                            
+                            // Create a test image to verify it loads
+                            const url = URL.createObjectURL(blob);
+                            const testImg = new Image();
+                            testImg.onload = () => {
+                                console.log('🧪 Test image loaded successfully:', {
+                                    width: testImg.naturalWidth,
+                                    height: testImg.naturalHeight
+                                });
+                                URL.revokeObjectURL(url);
+                            };
+                            testImg.onerror = () => {
+                                console.error('🧪 Test image failed to load');
+                                URL.revokeObjectURL(url);
+                            };
+                            testImg.src = url;
+                        })
+                        .catch(error => {
+                            console.error('🧪 Fetch failed:', error);
+                        });
+                };
+
+                // Add function to check all Street View containers
+                window.checkStreetViewContainers = () => {
+                    const containers = document.querySelectorAll('.street-view-container');
+                    console.log('🔍 Checking all Street View containers:', containers.length);
+                    
+                    containers.forEach((container, index) => {
+                        const img = container.querySelector('.street-view-static-image');
+                        const loading = container.querySelector('.street-view-loading');
+                        const fallback = container.querySelector('.street-view-fallback');
+                        
+                        console.log(`Container ${index} (${container.id}):`, {
+                            hasImage: !!img,
+                            imageSrc: img?.src,
+                            imageComplete: img?.complete,
+                            imageNaturalWidth: img?.naturalWidth,
+                            imageNaturalHeight: img?.naturalHeight,
+                            imageDisplay: img?.style.display,
+                            hasLoading: !!loading,
+                            loadingDisplay: loading?.style.display,
+                            hasFallback: !!fallback,
+                            fallbackDisplay: fallback?.style.display,
+                            classes: container.className,
+                            retryCount: container.dataset.retryCount
+                        });
+                    });
+                };
+
+                // Add function to test the new fetch-based approach
+                window.testFetchBasedStreetView = (lat = 39.9691, lng = 32.7838) => {
+                    console.log('🧪 Testing fetch-based Street View for coordinates:', lat, lng);
+                    const apiKey = 'AIzaSyBdqmzhohI-SKOE7pJ5kFULP3z0u5dMj6A';
+                    const testUrl = `https://maps.googleapis.com/maps/api/streetview?size=300x200&location=${lat},${lng}&heading=0&pitch=0&fov=90&key=${apiKey}`;
+                    
+                    console.log('🧪 Fetch URL:', testUrl);
+                    
+                    fetch(testUrl)
+                        .then(response => {
+                            console.log('🧪 Fetch response:', response.status, response.statusText);
+                            if (!response.ok) {
+                                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                            }
+                            return response.blob();
+                        })
+                        .then(blob => {
+                            console.log('🧪 Fetch successful, blob:', {
+                                size: blob.size,
+                                type: blob.type
+                            });
+                            
+                            // Create a test container and image
+                            const testContainer = document.createElement('div');
+                            testContainer.innerHTML = `
+                                <div class="street-view-container" id="test-fetch-${lat}-${lng}">
+                                    <div class="street-view-loading">
+                                        <div class="street-view-loading-spinner"></div>
+                                        <p>Test Street View yükleniyor...</p>
+                                    </div>
+                                    <img src="" alt="Test Street View" class="street-view-static-image" style="width: 100%; height: auto; display: none;">
+                                    <div class="street-view-fallback" style="display: none;">
+                                        <div class="street-view-placeholder">
+                                            <div class="street-view-placeholder-icon">🗺️</div>
+                                            <p>Test Harita Görünümü</p>
+                                            <small>Koordinat: ${lat.toFixed(4)}, ${lng.toFixed(4)}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            document.body.appendChild(testContainer);
+                            const img = testContainer.querySelector('.street-view-static-image');
+                            
+                            // Set up event listeners
+                            const blobUrl = URL.createObjectURL(blob);
+                            img.onload = () => {
+                                console.log('🧪 Test fetch-based image loaded successfully');
+                                img.style.display = 'block';
+                                testContainer.querySelector('.street-view-loading').style.display = 'none';
+                                URL.revokeObjectURL(blobUrl);
+                            };
+                            img.onerror = () => {
+                                console.error('🧪 Test fetch-based image failed to load');
+                                testContainer.querySelector('.street-view-fallback').style.display = 'block';
+                                testContainer.querySelector('.street-view-loading').style.display = 'none';
+                                URL.revokeObjectURL(blobUrl);
+                            };
+                            
+                            img.src = blobUrl;
+                        })
+                        .catch(error => {
+                            console.error('🧪 Fetch-based test failed:', error);
+                        });
+                };
+            }, 1000);
 
         resultsSection.style.display = 'block';
         resultsSection.scrollIntoView({ behavior: 'smooth' });
+        
+        console.log('✅ Results displayed with Street View images in location cards');
         
         // Add event delegation for metric item clicks (Detail Panel System)
         this.setupMetricItemClickHandlers(resultsSection);
@@ -3198,49 +3635,6 @@ const notificationStyles = `
 `;
 
 // Add styles to head
-// Street View Styles
-const streetViewStyles = `
-    .street-view-section {
-        margin-top: 1.5rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid #e5e7eb;
-    }
-    
-    .street-view-image-container {
-        width: 100%;
-        border-radius: 0.5rem;
-        overflow: hidden;
-        margin-top: 0.75rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    .street-view-image {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-        display: block;
-    }
-    
-    .street-view-placeholder {
-        width: 100%;
-        height: 200px;
-        background-color: #f9fafb;
-        border: 2px dashed #e5e7eb;
-        border-radius: 0.5rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: #9ca3af;
-        margin-top: 0.75rem;
-    }
-    
-    .street-view-placeholder svg {
-        margin-bottom: 0.5rem;
-        opacity: 0.5;
-    }
-`;
-
 const styleSheet = document.createElement('style');
-styleSheet.textContent = notificationStyles + streetViewStyles;
+styleSheet.textContent = notificationStyles;
 document.head.appendChild(styleSheet);

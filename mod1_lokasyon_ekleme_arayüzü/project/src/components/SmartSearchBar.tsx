@@ -1,6 +1,5 @@
 import React from 'react';
 import { Search } from 'lucide-react';
-import { useTranslation } from '../contexts/TranslationContext';
 
 interface SmartSearchBarProps {
   disabled: boolean;
@@ -8,7 +7,6 @@ interface SmartSearchBarProps {
 }
 
 const SmartSearchBar: React.FC<SmartSearchBarProps> = ({ disabled, onSearch }) => {
-  const { t } = useTranslation();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -26,7 +24,7 @@ const SmartSearchBar: React.FC<SmartSearchBarProps> = ({ disabled, onSearch }) =
         <input
           type="text"
           name="search"
-          placeholder={t('search.placeholder')}
+          placeholder="Adres arayın veya koordinat yapıştırın"
           disabled={disabled}
           className={`w-full pl-12 pr-4 py-4 text-lg border border-slate-200 rounded-xl 
             focus:outline-none focus:ring-3 focus:ring-blue-100 focus:border-blue-500 

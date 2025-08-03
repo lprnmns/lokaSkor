@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lokasyon Karşılaştırma - LocationIQ</title>
+    <title>Lokasyon Karşılaştırma - LokaSkor</title>
     
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/design_system.css') }}">
@@ -12,6 +12,7 @@
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
 </head>
 <body>
     {% include 'components/simple_button_effects.html' %}
@@ -28,7 +29,7 @@
                             <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                         </svg>
                     </div>
-                    <span class="logo-text">LocationIQ</span>
+                    <span class="logo-text">LokaSkor</span>
                 </div>
                 <button class="back-button" data-safe-transition="slide-left" onclick="navigateWithSafeTransition('/mode-selection?business_type={{ business_type }}', 'slide-left')">
                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -52,7 +53,7 @@
                             </svg>
                         </div>
                         <div class="brand-info">
-                            <h1>LocationIQ</h1>
+                            <h1>LokaSkor</h1>
                             <p>{{ business_type|title }} Analiz Aracı</p>
                         </div>
                     </div>
@@ -134,6 +135,7 @@
             <div id="resultsContent" class="results-content">
                 <!-- Results will be populated here -->
             </div>
+            
         </section>
     </div>
 

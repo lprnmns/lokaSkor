@@ -4,10 +4,9 @@
  */
 
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { useTranslation } from '../../contexts/TranslationContext';
-import {
-  useLocationAnalysis,
-  useHeatmapData,
+import { 
+  useLocationAnalysis, 
+  useHeatmapData, 
   useApiError,
   useLocationCache 
 } from '../../lib/hooks';
@@ -55,8 +54,6 @@ export const LocationDashboard: React.FC<LocationDashboardProps> = ({
   onAnalysisComplete,
   onError
 }) => {
-  const { t } = useTranslation();
-  
   // Component state
   const [state, setState] = useState<LocationDashboardState>({
     analysisMode: initialMode,
@@ -324,7 +321,7 @@ export const LocationDashboard: React.FC<LocationDashboardProps> = ({
     <ErrorBoundary onError={onError}>
       <div className={`location-dashboard ${className}`}>
         <div className="dashboard-header">
-          <h1>{t('dashboard.title')}</h1>
+          <h1>Lokasyon Analizi</h1>
           {renderAnalysisControls()}
         </div>
         

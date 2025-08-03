@@ -1,5 +1,5 @@
 /**
- * LocationIQ Modern UI - Animation Performance Optimizer
+ * LokaSkor Modern UI - Animation Performance Optimizer
  * Optimizes animations for better performance and user experience
  */
 

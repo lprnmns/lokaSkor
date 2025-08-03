@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="businessSelection.title">İşletme Türü Seçimi - LocationIQ</title>
+    <title>İşletme Türü Seçimi - LokaSkor</title>
     
     <!-- Meta Tags -->
     <meta name="description" content="İşletmeniz için en uygun lokasyon analizini başlatmak için işletme türünüzü seçin.">
@@ -179,109 +179,6 @@
             background: hsl(var(--primary));
         }
         
-        /* Language Selector Styles */
-        .language-selector {
-            position: fixed;
-            top: 16px;
-            left: 16px;
-            z-index: 9999;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        }
-
-        .language-selector__button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
-        }
-
-        .language-selector__button:hover {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-color: #cbd5e0;
-        }
-
-        .language-selector__flag {
-            font-size: 16px;
-        }
-
-        .language-selector__code {
-            font-weight: 600;
-            color: #334155;
-        }
-
-        .language-selector__arrow {
-            font-size: 12px;
-            color: #94a3b8;
-        }
-
-        .language-selector__dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            margin-top: 8px;
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            min-width: 160px;
-            overflow: hidden;
-            animation: fadeIn 0.2s ease;
-            display: none;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .language-selector__option {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-            padding: 12px 16px;
-            background: none;
-            border: none;
-            text-align: left;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-
-        .language-selector__option:hover {
-            background-color: #f1f5f9;
-        }
-
-        .language-selector__option--active {
-            background-color: #dbeafe;
-            font-weight: 600;
-        }
-
-        .language-selector__name {
-            color: #334155;
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .language-selector {
-                top: 12px;
-                left: 12px;
-            }
-            
-            .language-selector__button {
-                padding: 6px 10px;
-            }
-            
-            .language-selector__code {
-                font-size: 14px;
-            }
-        }
-        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .business-card {
@@ -300,26 +197,6 @@
     </style>
 </head>
 <body class="bg-background text-foreground min-h-screen">
-    <!-- Language Selector -->
-    <div class="language-selector" id="languageSelector">
-        <button class="language-selector__button" id="languageButton" aria-label="Select language">
-            <span class="language-selector__flag" id="currentFlag">🇹🇷</span>
-            <span class="language-selector__code" id="currentCode">TR</span>
-            <span class="language-selector__arrow" id="arrow">▼</span>
-        </button>
-
-        <div class="language-selector__dropdown" id="languageDropdown">
-            <button class="language-selector__option language-selector__option--active" data-lang="tr">
-                <span class="language-selector__flag">🇹🇷</span>
-                <span class="language-selector__name">Türkçe</span>
-            </button>
-            <button class="language-selector__option" data-lang="en">
-                <span class="language-selector__flag">🇬🇧</span>
-                <span class="language-selector__name">English</span>
-            </button>
-        </div>
-    </div>
-    
     <!-- Progress Bar -->
     <div class="progress-bar" style="width: 33.33%"></div>
     
@@ -332,13 +209,13 @@
                     <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                         <i data-lucide="map-pin" class="w-5 h-5 text-primary-foreground"></i>
                     </div>
-                    <span class="text-xl font-bold text-foreground">LocationIQ</span>
+                    <span class="text-xl font-bold text-foreground">LokaSkor</span>
                 </div>
                 
                 <!-- Back Button -->
                 <button id="back-btn" class="btn btn-ghost btn-sm">
                     <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
-                    <span data-i18n="businessSelection.back">Geri</span>
+                    Geri
                 </button>
             </div>
         </div>
@@ -358,10 +235,10 @@
             
             <!-- Header -->
             <div class="text-center mb-12 animate-slide-in-from-top">
-                <h1 class="text-3xl md:text-4xl font-bold text-foreground mb-4" data-i18n="businessSelection.stepIndicator">
+                <h1 class="text-3xl md:text-4xl font-bold text-foreground mb-4">
                     İşletme Türünüzü Seçin
                 </h1>
-                <p class="text-xl text-muted-foreground max-w-2xl mx-auto" data-i18n="businessSelection.stepSubtitle">
+                <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
                     Size en uygun lokasyon analizini yapabilmemiz için işletmenizin türünü belirleyin
                 </p>
             </div>
@@ -376,8 +253,8 @@
                     <div class="business-icon bg-blue-100 text-blue-600">
                         <i data-lucide="cross" class="w-8 h-8"></i>
                     </div>
-                    <h3 class="business-title" data-i18n="businessSelection.businessTypes.pharmacy.title">Eczane</h3>
-                    <p class="business-description" data-i18n="businessSelection.businessTypes.pharmacy.description">
+                    <h3 class="business-title">Eczane</h3>
+                    <p class="business-description">
                         Sağlık hizmetleri odaklı analiz. Hastane yakınlığı, yaşlı nüfus yoğunluğu ve ulaşım kolaylığı öncelikli.
                     </p>
                 </div>
@@ -390,8 +267,8 @@
                     <div class="business-icon bg-orange-100 text-orange-600">
                         <i data-lucide="wheat" class="w-8 h-8"></i>
                     </div>
-                    <h3 class="business-title" data-i18n="businessSelection.businessTypes.bakery.title">Fırın</h3>
-                    <p class="business-description" data-i18n="businessSelection.businessTypes.bakery.description">
+                    <h3 class="business-title">Fırın</h3>
+                    <p class="business-description">
                         Günlük ihtiyaç odaklı analiz. Konut yoğunluğu, yaya trafiği ve rekabet analizi ön planda.
                     </p>
                 </div>
@@ -404,8 +281,8 @@
                     <div class="business-icon bg-green-100 text-green-600">
                         <i data-lucide="shopping-cart" class="w-8 h-8"></i>
                     </div>
-                    <h3 class="business-title" data-i18n="businessSelection.businessTypes.market.title">Market</h3>
-                    <p class="business-description" data-i18n="businessSelection.businessTypes.market.description">
+                    <h3 class="business-title">Market</h3>
+                    <p class="business-description">
                         Perakende odaklı analiz. Nüfus yoğunluğu, gelir seviyesi ve park imkanları değerlendirilir.
                     </p>
                 </div>
@@ -418,8 +295,8 @@
                     <div class="business-icon bg-purple-100 text-purple-600">
                         <i data-lucide="coffee" class="w-8 h-8"></i>
                     </div>
-                    <h3 class="business-title" data-i18n="businessSelection.businessTypes.cafe.title">Cafe</h3>
-                    <p class="business-description" data-i18n="businessSelection.businessTypes.cafe.description">
+                    <h3 class="business-title">Cafe</h3>
+                    <p class="business-description">
                         Sosyal mekan odaklı analiz. Genç nüfus, öğrenci yoğunluğu ve sosyal aktivite alanları öncelikli.
                     </p>
                 </div>
@@ -432,8 +309,8 @@
                     <div class="business-icon bg-red-100 text-red-600">
                         <i data-lucide="utensils" class="w-8 h-8"></i>
                     </div>
-                    <h3 class="business-title" data-i18n="businessSelection.businessTypes.restaurant.title">Restoran</h3>
-                    <p class="business-description" data-i18n="businessSelection.businessTypes.restaurant.description">
+                    <h3 class="business-title">Restoran</h3>
+                    <p class="business-description">
                         Yemek hizmeti odaklı analiz. İş merkezi yakınlığı, gelir seviyesi ve akşam trafiği değerlendirilir.
                     </p>
                 </div>
@@ -443,8 +320,8 @@
                     <div class="business-icon bg-gray-100 text-gray-400">
                         <i data-lucide="more-horizontal" class="w-8 h-8"></i>
                     </div>
-                    <h3 class="business-title text-gray-400" data-i18n="businessSelection.businessTypes.other.title">Diğer</h3>
-                    <p class="business-description text-gray-400" data-i18n="businessSelection.businessTypes.other.description">
+                    <h3 class="business-title text-gray-400">Diğer</h3>
+                    <p class="business-description text-gray-400">
                         Yakında daha fazla işletme türü eklenecek...
                     </p>
                 </div>
@@ -453,7 +330,7 @@
             <!-- Action Buttons -->
             <div class="flex justify-center space-x-4 animate-slide-in-from-bottom">
                 <button id="continue-btn" class="btn btn-lg btn-primary px-8 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                    <span id="continue-text" data-i18n="businessSelection.continue">İşletme Türü Seçin</span>
+                    <span id="continue-text">İşletme Türü Seçin</span>
                     <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
                 </button>
             </div>
@@ -462,7 +339,7 @@
             <div class="text-center mt-8 animate-fade-in animate-delay-500">
                 <p class="text-sm text-muted-foreground">
                     <i data-lucide="info" class="w-4 h-4 inline mr-1"></i>
-                    <span data-i18n="businessSelection.helpText">İşletme türünüz listede yoksa, en yakın türü seçebilirsiniz</span>
+                    İşletme türünüz listede yoksa, en yakın türü seçebilirsiniz
                 </p>
             </div>
         </div>
@@ -473,28 +350,165 @@
         <div class="flex items-center justify-center h-full">
             <div class="text-center">
                 <div class="loading-spinner w-8 h-8 mx-auto mb-4"></div>
-                <p class="text-muted-foreground" data-i18n="businessSelection.loading">Analiz paneli hazırlanıyor...</p>
+                <p class="text-muted-foreground">Yönlendiriliyor...</p>
             </div>
         </div>
     </div>
 
     <!-- JavaScript Files -->
-    <script src="/static/js/new_ui/translation-utils.js"></script>
-    <script src="/static/js/new_ui/language-selector.js"></script>
-    <script src="/static/js/new_ui/translation-engine.js"></script>
     <script src="/static/js/new_ui/api_client.js"></script>
     <script src="/static/js/new_ui/error_handler.js"></script>
     <script src="/static/js/new_ui/main.js"></script>
-    <script src="/static/js/new_ui/test-translation.js"></script>
     
     <script>
-        // Initialize Lucide icons
+        // Business Selection Page Logic
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Lucide icons
             lucide.createIcons();
             
-            // Initialize translation if available
-            if (window.translationUtils) {
-                window.translationUtils.translatePage();
+            let selectedBusinessType = null;
+            const businessCards = document.querySelectorAll('.business-card[data-business-type]:not([data-business-type="diger"])');
+            const continueBtn = document.getElementById('continue-btn');
+            const continueText = document.getElementById('continue-text');
+            const backBtn = document.getElementById('back-btn');
+            const loadingOverlay = document.getElementById('loading-overlay');
+            
+            // Business card selection logic
+            businessCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const businessType = this.dataset.businessType;
+                    
+                    // Remove selection from all cards
+                    businessCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Add selection to clicked card
+                    this.classList.add('selected');
+                    
+                    // Update selected business type
+                    selectedBusinessType = businessType;
+                    
+                    // Enable continue button
+                    continueBtn.disabled = false;
+                    continueText.textContent = 'Devam Et';
+                    
+                    // Add micro-interaction
+                    this.classList.add('micro-bounce');
+                    setTimeout(() => {
+                        this.classList.remove('micro-bounce');
+                    }, 300);
+                    
+                    // Update app state if available
+                    if (window.LokaSkorApp) {
+                        window.LokaSkorApp.state.setBusinessType(businessType);
+                    }
+                    
+                    console.log('Selected business type:', businessType);
+                });
+                
+                // Add hover sound effect (optional)
+                card.addEventListener('mouseenter', function() {
+                    // Could add subtle sound effect here
+                });
+            });
+            
+            // Continue button logic
+            continueBtn.addEventListener('click', function() {
+                if (!selectedBusinessType) {
+                    return;
+                }
+                
+                // Show loading
+                loadingOverlay.classList.remove('hidden');
+                
+                // Simulate brief loading for smooth UX
+                setTimeout(() => {
+                    if (window.LokaSkorApp) {
+                        window.LokaSkorApp.navigate('mode-selection', {
+                            businessType: selectedBusinessType
+                        });
+                    } else {
+                        // Fallback navigation
+                        window.location.href = `/mode-selection?business=${selectedBusinessType}`;
+                    }
+                }, 500);
+            });
+            
+            // Back button logic
+            backBtn.addEventListener('click', function() {
+                if (window.LokaSkorApp) {
+                    window.LokaSkorApp.navigate('landing');
+                } else {
+                    window.history.back();
+                }
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && selectedBusinessType && !continueBtn.disabled) {
+                    continueBtn.click();
+                } else if (e.key === 'Escape') {
+                    backBtn.click();
+                }
+                
+                // Arrow key navigation
+                if (e.key === 'ArrowRight' || e.key === 'ArrowLeft' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    const cards = Array.from(businessCards);
+                    const currentIndex = cards.findIndex(card => card.classList.contains('selected'));
+                    let nextIndex;
+                    
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                        nextIndex = currentIndex < cards.length - 1 ? currentIndex + 1 : 0;
+                    } else {
+                        nextIndex = currentIndex > 0 ? currentIndex - 1 : cards.length - 1;
+                    }
+                    
+                    if (nextIndex >= 0) {
+                        cards[nextIndex].click();
+                        cards[nextIndex].focus();
+                    }
+                }
+            });
+            
+            // Stagger animation for cards
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const staggerObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const delay = Array.from(entry.target.parentNode.children).indexOf(entry.target) * 0.1;
+                        entry.target.style.animationDelay = `${delay}s`;
+                        entry.target.classList.add('animate-scale-in');
+                        staggerObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            businessCards.forEach(card => {
+                staggerObserver.observe(card);
+            });
+            
+            // Auto-focus first card for accessibility
+            if (businessCards.length > 0) {
+                businessCards[0].setAttribute('tabindex', '0');
+                businessCards.forEach((card, index) => {
+                    if (index > 0) card.setAttribute('tabindex', '-1');
+                });
+            }
+            
+            // Check if business type was passed via URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const preselectedBusiness = urlParams.get('business');
+            if (preselectedBusiness) {
+                const preselectedCard = document.querySelector(`[data-business-type="${preselectedBusiness}"]`);
+                if (preselectedCard) {
+                    setTimeout(() => {
+                        preselectedCard.click();
+                    }, 500);
+                }
             }
         });
     </script>

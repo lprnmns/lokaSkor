@@ -1,28 +1,23 @@
 import React from 'react';
 import { BarChart3, Search, MapPin, ArrowLeft, Play } from 'lucide-react';
-import { TranslationProvider } from './contexts/TranslationContext';
-import LanguageSelector from './components/LanguageSelector';
-import { useTranslation } from './contexts/TranslationContext';
 
-function AppContent() {
-  const { t } = useTranslation();
+function App() {
   const [selectedMode, setSelectedMode] = React.useState<'compare' | 'discover' | null>(null);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <LanguageSelector />
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-3 bg-white/90 backdrop-blur-md border-b border-blue-100 shadow-sm">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center shadow-md">
             <MapPin className="w-5 h-5 text-white" />
           </div>
-          <h1 className="text-xl font-bold text-gray-800">{t('app.title')}</h1>
+          <h1 className="text-xl font-bold text-gray-800">LocationIQ</h1>
         </div>
         <button className="px-3 py-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200 font-medium text-sm">
           <div className="flex items-center gap-2">
             <ArrowLeft className="w-4 h-4" />
-            {t('app.back')}
+            Geri
           </div>
         </button>
       </header>
@@ -32,10 +27,13 @@ function AppContent() {
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6 leading-tight">
-            {t('hero.title')}
+            Hangi analiz türünü{' '}
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              tercih ediyorsunuz?
+            </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            {t('hero.subtitle')}
+            İhtiyacınıza en uygun analiz modülünü seçin ve lokasyon potansiyelini keşfedin
           </p>
         </div>
 
@@ -69,17 +67,22 @@ function AppContent() {
                 }`}>
                   <BarChart3 className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-800">{t('modes.compare.title')}</h3>
+                <h3 className="text-2xl font-bold text-gray-800">Belirli Dükkanları Karşılaştır</h3>
               </div>
               
               <p className="text-gray-600 mb-6 leading-relaxed">
-                {t('modes.compare.description')}
+                Bildiğiniz spesifik adresleri karşılaştırın ve hangisinin daha avantajlı olduğunu öğrenin
               </p>
 
               <div className="space-y-3">
-                <h4 className="font-semibold text-gray-800 text-lg">{t('modes.compare.featuresTitle')}</h4>
+                <h4 className="font-semibold text-gray-800 text-lg">Bu modda neler var:</h4>
                 <ul className="space-y-3">
-                  {t('modes.compare.features').map((feature, index) => (
+                  {[
+                    'Birden fazla adres karşılaştırması',
+                    'Detaylı skor analizi',
+                    'Rakip yoğunluğu karşılaştırması',
+                    'Yaya erişimi değerlendirmesi'
+                  ].map((feature, index) => (
                     <li key={index} className="flex items-center gap-3 text-gray-700">
                       <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0" />
                       <span>{feature}</span>
@@ -124,17 +127,22 @@ function AppContent() {
                 }`}>
                   <Search className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-800">{t('modes.discover.title')}</h3>
+                <h3 className="text-2xl font-bold text-gray-800">Yeni Fırsatları Keşfet</h3>
               </div>
               
               <p className="text-gray-600 mb-6 leading-relaxed">
-                {t('modes.discover.description')}
+                Belirli bir bölgedeki en potansiyelli lokasyonları keşfedin ve yeni fırsatları yakalayın
               </p>
 
               <div className="space-y-3">
-                <h4 className="font-semibold text-gray-800 text-lg">{t('modes.discover.featuresTitle')}</h4>
+                <h4 className="font-semibold text-gray-800 text-lg">Bu modda neler var:</h4>
                 <ul className="space-y-3">
-                  {t('modes.discover.features').map((feature, index) => (
+                  {[
+                    'Bölgesel potansiyel haritası',
+                    'En iyi 5 lokasyon önerisi',
+                    'Mahalle bazında analiz',
+                    'Yoğunluk haritası görselleştirme'
+                  ].map((feature, index) => (
                     <li key={index} className="flex items-center gap-3 text-gray-700">
                       <div className="w-2 h-2 bg-cyan-500 rounded-full flex-shrink-0" />
                       <span>{feature}</span>
@@ -163,7 +171,7 @@ function AppContent() {
             <div className="relative flex items-center gap-3">
               <Play className="w-6 h-6 fill-current" />
               <span className="text-xl">
-                {t('app.analyzeButton', { mode: selectedMode === 'compare' ? 'Karşılaştırma' : 'Keşif' })}
+                {selectedMode === 'compare' ? 'Karşılaştırma' : 'Keşif'} Analizini Başlat
               </span>
             </div>
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-2xl opacity-0 group-hover:opacity-30 blur transition-opacity duration-300" />
@@ -173,18 +181,10 @@ function AppContent() {
 
       {/* Footer Note */}
       <div className="fixed bottom-6 right-6 bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg border border-blue-100 max-w-xs">
-        <h4 className="font-semibold text-gray-800 mb-1">{t('footer.title')}</h4>
-        <p className="text-sm text-gray-600">{t('footer.description')}</p>
+        <h4 className="font-semibold text-gray-800 mb-1">Windows'u Etkinleştir</h4>
+        <p className="text-sm text-gray-600">Windows'u etkinleştirmek için Ayarlar'a gidin</p>
       </div>
     </div>
-  );
-}
-
-function App() {
-  return (
-    <TranslationProvider>
-      <AppContent />
-    </TranslationProvider>
   );
 }
 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Trash2, MapPin } from 'lucide-react';
 import { Location } from '../types/Location';
-import { useTranslation } from '../contexts/TranslationContext';
 
 interface LocationCardProps {
   location: Location;
@@ -10,7 +9,6 @@ interface LocationCardProps {
 }
 
 const LocationCard: React.FC<LocationCardProps> = ({ location, index, onRemove }) => {
-  const { t } = useTranslation();
   const [isHovered, setIsHovered] = useState(false);
 
   const badgeColors = [
@@ -48,7 +46,7 @@ const LocationCard: React.FC<LocationCardProps> = ({ location, index, onRemove }
           <button
             onClick={() => onRemove(location.id)}
             className="p-2 text-slate-400 hover:text-red-500 transition-colors duration-200 rounded-lg hover:bg-red-50"
-            aria-label={t('locationCard.remove')}
+            aria-label="Konumu kaldır"
           >
             <Trash2 className="w-4 h-4" />
           </button>

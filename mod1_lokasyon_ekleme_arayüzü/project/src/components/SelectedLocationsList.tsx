@@ -2,7 +2,6 @@ import React from 'react';
 import { Location } from '../types/Location';
 import LocationCard from './LocationCard';
 import { AlertCircle } from 'lucide-react';
-import { useTranslation } from '../contexts/TranslationContext';
 
 interface SelectedLocationsListProps {
   locations: Location[];
@@ -10,17 +9,16 @@ interface SelectedLocationsListProps {
   isMaxReached: boolean;
 }
 
-const SelectedLocationsList: React.FC<SelectedLocationsListProps> = ({
-  locations,
-  onRemoveLocation,
-  isMaxReached
+const SelectedLocationsList: React.FC<SelectedLocationsListProps> = ({ 
+  locations, 
+  onRemoveLocation, 
+  isMaxReached 
 }) => {
-  const { t } = useTranslation();
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-slate-900 border-b border-slate-200 pb-3 mb-4">
-          {t('selectedLocations.title')} ({locations.length}/3)
+          Seçilen Konumlar ({locations.length}/3)
         </h3>
       </div>
 
@@ -28,7 +26,7 @@ const SelectedLocationsList: React.FC<SelectedLocationsListProps> = ({
         <div className="flex items-center space-x-2 p-3 bg-amber-50 border border-amber-200 rounded-xl">
           <AlertCircle className="w-5 h-5 text-amber-600" />
           <p className="text-amber-800 text-sm font-medium">
-            {t('selectedLocations.maxReached')}
+            Maksimum konum sayısına ulaşıldı.
           </p>
         </div>
       )}
@@ -36,7 +34,7 @@ const SelectedLocationsList: React.FC<SelectedLocationsListProps> = ({
       {locations.length === 1 && (
         <div className="mt-4 p-3 bg-slate-100 border border-slate-200 rounded-xl">
           <p className="text-slate-600 text-sm text-center">
-            {t('selectedLocations.addMore')}
+            Karşılaştırmaya başlamak için bir nokta daha ekleyin
           </p>
         </div>
       )}
@@ -48,9 +46,9 @@ const SelectedLocationsList: React.FC<SelectedLocationsListProps> = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
-          <p className="text-blue-800 font-medium mb-1">{t('selectedLocations.noLocations')}</p>
+          <p className="text-blue-800 font-medium mb-1">Hiç konum seçilmedi</p>
           <p className="text-blue-600 text-sm">
-            {t('selectedLocations.addTwo')}
+            Karşılaştırmaya başlamak için en az 2 konum ekleyin.
           </p>
         </div>
       ) : (

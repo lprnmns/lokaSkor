@@ -1,5 +1,5 @@
 /**
- * LocationIQ Modern UI - Enhanced Map Manager
+ * LokaSkor Modern UI - Enhanced Map Manager
  * Manages map interactions, animations, and visualizations
  */
 
@@ -35,7 +35,7 @@ class MapManager {
             console.log('MapManager initialized successfully');
         } catch (error) {
             console.error('Failed to initialize MapManager:', error);
-            this.showError(window.translationUtils ? window.translationUtils.t('map.errors.loadFailed') : 'Harita yüklenemedi');
+            this.showError('Harita yüklenemedi');
         }
     }
     
@@ -110,13 +110,6 @@ class MapManager {
         // Coordinates controls
         const addCoordinateBtn = document.getElementById('add-coordinate-btn');
         addCoordinateBtn?.addEventListener('click', () => this.addCoordinateLocation());
-        
-        // Listen for language changes
-        if (window.languageEvents) {
-            window.languageEvents.subscribe((lang) => {
-                this.updateUIText();
-            });
-        }
     }
     
     /**
@@ -235,7 +228,7 @@ class MapManager {
         return `
             <div class="pin-popup">
                 <div class="popup-header">
-                    <h4 class="popup-title">${location.address || (window.translationUtils ? window.translationUtils.t('map.location') : 'Lokasyon')}</h4>
+                    <h4 class="popup-title">${location.address || 'Lokasyon'}</h4>
                     <div class="popup-score ${scoreClass}">${score}/100</div>
                 </div>
                 <div class="popup-content">
@@ -245,26 +238,26 @@ class MapManager {
                     </div>
                     ${details.competitor ? `
                         <div class="popup-detail">
-                            <span>${window.translationUtils ? window.translationUtils.t('map.popup.competitorDensity') : 'Rakip Yoğunluğu'}:</span>
+                            <span>Rakip Yoğunluğu:</span>
                             <span>${details.competitor}</span>
                         </div>
                     ` : ''}
                     ${details.pedestrian ? `
                         <div class="popup-detail">
-                            <span>${window.translationUtils ? window.translationUtils.t('map.popup.pedestrianAccess') : 'Yaya Erişimi'}:</span>
+                            <span>Yaya Erişimi:</span>
                             <span>${details.pedestrian}/100</span>
                         </div>
                     ` : ''}
                     ${details.target ? `
                         <div class="popup-detail">
-                            <span>${window.translationUtils ? window.translationUtils.t('map.popup.targetAudience') : 'Hedef Kitle'}:</span>
+                            <span>Hedef Kitle:</span>
                             <span>${details.target}/100</span>
                         </div>
                     ` : ''}
                 </div>
                 <div class="popup-actions">
                     <button class="btn btn-sm btn-primary" onclick="mapManager.showLocationDetails('${location.id || Date.now()}')">
-                        ${window.translationUtils ? window.translationUtils.t('map.popup.viewDetails') : 'Detayları Gör'}
+                        Detayları Gör
                     </button>
                 </div>
             </div>
@@ -469,32 +462,32 @@ class MapManager {
         infoPanelBody.innerHTML = `
             <div class="location-detail-card">
                 <div class="detail-header">
-                    <h4 class="detail-title">${location.address || (window.translationUtils ? window.translationUtils.t('map.locationDetails') : 'Lokasyon Detayları')}</h4>
+                    <h4 class="detail-title">${location.address || 'Lokasyon Detayları'}</h4>
                     <div class="detail-score ${scoreClass}">${score}/100</div>
                 </div>
                 
                 <div class="detail-section">
-                    <h5 class="section-title">${window.translationUtils ? window.translationUtils.t('map.locationInfo') : 'Konum Bilgileri'}</h5>
+                    <h5 class="section-title">Konum Bilgileri</h5>
                     <div class="detail-grid">
                         <div class="detail-item">
-                            <span class="detail-label">${window.translationUtils ? window.translationUtils.t('map.latitude') : 'Enlem'}:</span>
+                            <span class="detail-label">Enlem:</span>
                             <span class="detail-value">${location.lat.toFixed(6)}</span>
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label">${window.translationUtils ? window.translationUtils.t('map.longitude') : 'Boylam'}:</span>
+                            <span class="detail-label">Boylam:</span>
                             <span class="detail-value">${location.lng.toFixed(6)}</span>
                         </div>
                     </div>
                 </div>
                 
                 <div class="detail-section">
-                    <h5 class="section-title">${window.translationUtils ? window.translationUtils.t('map.analysisResults') : 'Analiz Sonuçları'}</h5>
+                    <h5 class="section-title">Analiz Sonuçları</h5>
                     <div class="score-breakdown">
                         <div class="score-item">
                             <div class="score-bar">
                                 <div class="score-fill" style="width: ${score}%"></div>
                             </div>
-                            <span class="score-text">${window.translationUtils ? window.translationUtils.t('map.overallScore') : 'Genel Skor'}: ${score}/100</span>
+                            <span class="score-text">Genel Skor: ${score}/100</span>
                         </div>
                     </div>
                 </div>
@@ -502,11 +495,11 @@ class MapManager {
                 <div class="detail-actions">
                     <button class="btn btn-sm btn-outline" onclick="mapManager.exportLocationData('${locationId}')">
                         <i data-lucide="download" class="w-3 h-3"></i>
-                        ${window.translationUtils ? window.translationUtils.t('map.export') : 'Dışa Aktar'}
+                        Dışa Aktar
                     </button>
                     <button class="btn btn-sm btn-primary" onclick="mapManager.shareLocation('${locationId}')">
                         <i data-lucide="share" class="w-3 h-3"></i>
-                        ${window.translationUtils ? window.translationUtils.t('map.share') : 'Paylaş'}
+                        Paylaş
                     </button>
                 </div>
             </div>
@@ -669,18 +662,6 @@ class MapManager {
                 lucide.createIcons();
             }
         }
-    }
-    
-    /**
-     * Update UI text when language changes
-     */
-    updateUIText() {
-        // Update button labels if they have text content
-        // This would typically be handled by the HTML elements with data-i18n attributes
-        // For buttons with only icons, no update is needed
-        
-        // Update any dynamic text in the map UI
-        // For example, if there are any labels that are set programmatically
     }
     
     /**

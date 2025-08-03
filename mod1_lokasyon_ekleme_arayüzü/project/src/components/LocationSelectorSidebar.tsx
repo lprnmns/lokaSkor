@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { Location } from '../types/Location';
 import SmartSearchBar from './SmartSearchBar';
 import SelectedLocationsList from './SelectedLocationsList';
-import { useTranslation } from '../contexts/TranslationContext';
 
 const LocationSelectorSidebar: React.FC = () => {
   const [selectedLocations, setSelectedLocations] = useState<Location[]>([]);
-  const { t } = useTranslation();
 
   const isMaxReached = selectedLocations.length >= 3;
 
@@ -66,8 +64,8 @@ const LocationSelectorSidebar: React.FC = () => {
             </svg>
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900">{t('app.title')}</h1>
-            <p className="text-sm text-slate-500">{t('app.description')}</p>
+            <h1 className="text-xl font-bold text-slate-900">LocationIQ</h1>
+            <p className="text-sm text-slate-500">Konum Analiz Aracı</p>
           </div>
         </div>
 
@@ -79,7 +77,7 @@ const LocationSelectorSidebar: React.FC = () => {
           
           {!isMaxReached && (
             <p className="text-sm text-slate-500 text-center">
-              {t('locationSelector.selectOnMap')}
+              veya eklemek için haritadan bir konum seçin
             </p>
           )}
         </div>
@@ -98,7 +96,7 @@ const LocationSelectorSidebar: React.FC = () => {
       {selectedLocations.length >= 2 && (
         <div className="p-6 border-t border-slate-200 bg-white">
           <button className="w-full bg-blue-600 text-white py-3 px-4 rounded-xl font-semibold hover:bg-blue-700 transition-colors duration-200">
-            {t('selectedLocations.startComparison')}
+            Start Comparison
           </button>
         </div>
       )}

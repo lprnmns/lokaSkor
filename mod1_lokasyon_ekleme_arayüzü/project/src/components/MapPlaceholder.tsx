@@ -1,9 +1,7 @@
 import React from 'react';
 import { Map, Navigation } from 'lucide-react';
-import { useTranslation } from '../contexts/TranslationContext';
 
 const MapPlaceholder: React.FC = () => {
-  const { t } = useTranslation();
   return (
     <div className="flex-1 bg-slate-200 relative overflow-hidden">
       {/* Map placeholder with gradient */}
@@ -13,9 +11,9 @@ const MapPlaceholder: React.FC = () => {
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-center text-slate-600">
           <Map className="w-24 h-24 mx-auto mb-4 opacity-40" />
-          <h3 className="text-xl font-semibold mb-2">{t('map.title')}</h3>
+          <h3 className="text-xl font-semibold mb-2">Etkileşimli Harita</h3>
           <p className="text-slate-500 max-w-sm">
-            {t('map.description')}
+            Karşılaştırma analizi için konum eklemek üzere haritanın herhangi bir yerine tıklayın
           </p>
         </div>
       </div>

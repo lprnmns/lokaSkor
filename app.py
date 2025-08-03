@@ -300,7 +300,7 @@ def analysis_dashboard():
 @app.route('/mod1-comparison')
 def mod1_comparison():
     """Mod1: Belirli Dükkanları Karşılaştır"""
-    business_type = request.args.get('business_type', 'genel')
+    business_type = request.args.get('business_type', 'eczane')  # Changed default from 'genel' to 'eczane'
     return render_template('mod1_location_comparison.html', business_type=business_type)
 
 @app.route('/api/compare-locations', methods=['POST'])
@@ -314,25 +314,11 @@ def compare_locations():
         if len(locations) < 2:
             return jsonify({'error': 'En az 2 lokasyon gerekli'}), 400
         
-        # Retrieve Google Maps API key
-        api_key = os.getenv('GOOGLE_MAPS_API_KEY')
-        
         # Perform analysis for each location
         results = []
         for i, location in enumerate(locations):
             # Use enhanced analysis functions
             analysis = analyze_location_score(location['lat'], location['lng'], business_type)
-            
-            # Construct Street View URL if API key is available
-            street_view_url = None
-            if api_key:
-                try:
-                    lat = location['lat']
-                    lng = location['lng']
-                    street_view_url = f"https://maps.googleapis.com/maps/api/streetview?size=600x300&location={lat},{lng}&fov=90&key={api_key}"
-                except Exception as e:
-                    # If URL construction fails, street_view_url will remain None
-                    print(f"Street View URL construction failed for location {location.get('id', 'unknown')}: {str(e)}")
             
             result = {
                 'id': location['id'],
@@ -344,8 +330,7 @@ def compare_locations():
                 'totalScore': analysis['total_score'],
                 'rank': 0,  # Will be calculated after all scores
                 'scores': analysis['scores'],
-                'details': analysis['details'],
-                'streetViewImageUrl': street_view_url
+                'details': analysis['details']
             }
             results.append(result)
         
@@ -1884,8 +1869,20 @@ def admin_score_point():
             is_active=True
         ).all()
         
+        # If no parameters found for the requested category, try to use a fallback
         if not parameters:
-            return jsonify({"error": f"No active parameters found for category: {category}"}), 404
+            # Try to find any active parameters for any category
+            fallback_parameters = AdvancedParameter.query.filter_by(is_active=True).limit(10).all()
+            if fallback_parameters:
+                # Use the first available category as fallback
+                fallback_category = fallback_parameters[0].category
+                parameters = AdvancedParameter.query.filter_by(
+                    category=fallback_category,
+                    is_active=True
+                ).all()
+                print(f"Warning: No parameters found for category '{category}', using fallback category '{fallback_category}'")
+            else:
+                return jsonify({"error": f"No active parameters found for category: {category} and no fallback available"}), 404
         
         # Convert AdvancedParameter to legacy Kural format for scorer
         legacy_rules = []
@@ -1919,7 +1916,9 @@ def admin_score_point():
         # Score the point
         import time
         start_time = time.time()
-        result = score_single_point(lat, lon, category, legacy_rules)
+        # Use the actual category that was used for scoring (might be fallback)
+        scoring_category = fallback_category if 'fallback_category' in locals() else category
+        result = score_single_point(lat, lon, scoring_category, legacy_rules)
         scoring_time = time.time() - start_time
         
         if 'error' in result:

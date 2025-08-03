@@ -1,5 +1,5 @@
 /**
- * LocationIQ Modern UI - Sidebar Component
+ * LokaSkor Modern UI - Sidebar Component
  * Manages sidebar interactions and mode-specific content
  */
 

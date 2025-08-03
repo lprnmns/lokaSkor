@@ -1,5 +1,5 @@
 /**
- * LocationIQ Modern UI - Error Handler
+ * LokaSkor Modern UI - Error Handler
  * Manages error display and user feedback
  */
 
@@ -57,14 +57,6 @@ class ErrorHandler {
             console.error('JavaScript error:', event.error);
             this.handle(event.error);
         });
-        
-        // Listen for language changes
-        if (window.languageEvents) {
-            window.languageEvents.subscribe((lang) => {
-                // Update any existing error messages
-                this.updateErrorMessages();
-            });
-        }
     }
 
     /**
@@ -130,55 +122,55 @@ class ErrorHandler {
      */
     categorizeError(error) {
         let type = this.errorTypes.GENERIC_ERROR;
-        let title = window.translationUtils ? window.translationUtils.t('errors.generic.title') : 'Bir Hata Oluştu';
-        let message = window.translationUtils ? window.translationUtils.t('errors.generic.message') : 'Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.';
+        let title = 'Bir Hata Oluştu';
+        let message = 'Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.';
         let actions = [];
         let severity = 'error';
 
         if (error instanceof NetworkError) {
             type = this.errorTypes.NETWORK_ERROR;
-            title = window.translationUtils ? window.translationUtils.t('errors.network.title') : 'Bağlantı Hatası';
-            message = window.translationUtils ? window.translationUtils.t('errors.network.message') : 'İnternet bağlantınızı kontrol edin ve tekrar deneyin.';
+            title = 'Bağlantı Hatası';
+            message = 'İnternet bağlantınızı kontrol edin ve tekrar deneyin.';
             actions = [
-                { text: window.translationUtils ? window.translationUtils.t('errors.actions.retry') : 'Tekrar Dene', action: () => window.location.reload() },
-                { text: window.translationUtils ? window.translationUtils.t('errors.actions.close') : 'Kapat', action: null }
+                { text: 'Tekrar Dene', action: () => window.location.reload() },
+                { text: 'Kapat', action: null }
             ];
         } else if (error instanceof ApiError) {
             type = this.errorTypes.API_ERROR;
-            title = window.translationUtils ? window.translationUtils.t('errors.api.title') : 'Sunucu Hatası';
+            title = 'Sunucu Hatası';
             
             if (error.status >= 500) {
-                message = window.translationUtils ? window.translationUtils.t('errors.api.serverError') : 'Sunucuda bir sorun oluştu. Lütfen daha sonra tekrar deneyin.';
+                message = 'Sunucuda bir sorun oluştu. Lütfen daha sonra tekrar deneyin.';
             } else if (error.status === 404) {
-                message = window.translationUtils ? window.translationUtils.t('errors.api.notFound') : 'İstenen kaynak bulunamadı.';
+                message = 'İstenen kaynak bulunamadı.';
             } else if (error.status === 403) {
-                message = window.translationUtils ? window.translationUtils.t('errors.api.forbidden') : 'Bu işlem için yetkiniz bulunmuyor.';
+                message = 'Bu işlem için yetkiniz bulunmuyor.';
             } else if (error.status >= 400) {
-                message = error.message || (window.translationUtils ? window.translationUtils.t('errors.api.requestError') : 'İstek işlenirken bir hata oluştu.');
+                message = error.message || 'İstek işlenirken bir hata oluştu.';
             }
             
             actions = [
-                { text: window.translationUtils ? window.translationUtils.t('errors.actions.retry') : 'Tekrar Dene', action: () => this.retryLastAction() },
-                { text: window.translationUtils ? window.translationUtils.t('errors.actions.close') : 'Kapat', action: null }
+                { text: 'Tekrar Dene', action: () => this.retryLastAction() },
+                { text: 'Kapat', action: null }
             ];
         } else if (error instanceof ValidationError) {
             type = this.errorTypes.VALIDATION_ERROR;
-            title = window.translationUtils ? window.translationUtils.t('errors.validation.title') : 'Geçersiz Veri';
-            message = error.message || (window.translationUtils ? window.translationUtils.t('errors.validation.message') : 'Girilen veriler geçersiz.');
+            title = 'Geçersiz Veri';
+            message = error.message || 'Girilen veriler geçersiz.';
             severity = 'warning';
             
             if (error.missingFields && error.missingFields.length > 0) {
-                message += ` ${window.translationUtils ? window.translationUtils.t('errors.validation.missingFields') : 'Eksik alanlar'}: ${error.missingFields.join(', ')}`;
+                message += ` Eksik alanlar: ${error.missingFields.join(', ')}`;
             }
             
-            actions = [{ text: window.translationUtils ? window.translationUtils.t('errors.actions.ok') : 'Tamam', action: null }];
+            actions = [{ text: 'Tamam', action: null }];
         } else if (error.message && error.message.includes('map')) {
             type = this.errorTypes.MAP_ERROR;
-            title = window.translationUtils ? window.translationUtils.t('errors.map.title') : 'Harita Hatası';
-            message = window.translationUtils ? window.translationUtils.t('errors.map.message') : 'Harita yüklenirken bir sorun oluştu.';
+            title = 'Harita Hatası';
+            message = 'Harita yüklenirken bir sorun oluştu.';
             actions = [
-                { text: window.translationUtils ? window.translationUtils.t('errors.actions.refreshMap') : 'Haritayı Yenile', action: () => this.refreshMap() },
-                { text: window.translationUtils ? window.translationUtils.t('errors.actions.close') : 'Kapat', action: null }
+                { text: 'Haritayı Yenile', action: () => this.refreshMap() },
+                { text: 'Kapat', action: null }
             ];
         }
 
@@ -314,7 +306,7 @@ class ErrorHandler {
         }
 
         const buttonsHtml = actions.map(action => {
-            const isPrimary = action.text === (window.translationUtils ? window.translationUtils.t('errors.actions.retry') : 'Tekrar Dene') || action.text === (window.translationUtils ? window.translationUtils.t('errors.actions.ok') : 'Tamam');
+            const isPrimary = action.text === 'Tekrar Dene' || action.text === 'Tamam';
             const buttonClass = isPrimary 
                 ? 'btn btn-sm btn-primary mr-2' 
                 : 'btn btn-sm btn-secondary mr-2';
@@ -391,8 +383,8 @@ class ErrorHandler {
     refreshMap() {
         console.log('Refreshing map...');
         // This would be implemented to refresh the map component
-        if (window.LocationIQApp && window.LocationIQApp.mapManager) {
-            window.LocationIQApp.mapManager.refresh();
+        if (window.LokaSkorApp && window.LokaSkorApp.mapManager) {
+            window.LokaSkorApp.mapManager.refresh();
         }
     }
 
@@ -415,10 +407,10 @@ class ErrorHandler {
     showSuccess(title, message) {
         const successInfo = {
             type: 'success',
-            title: title || (window.translationUtils ? window.translationUtils.t('errors.success.title') : 'Başarılı'),
-            message: message || (window.translationUtils ? window.translationUtils.t('errors.success.message') : 'İşlem başarıyla tamamlandı.'),
+            title,
+            message,
             severity: 'info',
-            actions: [{ text: window.translationUtils ? window.translationUtils.t('errors.actions.ok') : 'Tamam', action: null }],
+            actions: [{ text: 'Tamam', action: null }],
             timestamp: new Date().toISOString()
         };
 
@@ -431,23 +423,444 @@ class ErrorHandler {
     showInfo(title, message) {
         const infoData = {
             type: 'info',
-            title: title || (window.translationUtils ? window.translationUtils.t('errors.info.title') : 'Bilgi'),
-            message: message || (window.translationUtils ? window.translationUtils.t('errors.info.message') : 'Bilgi mesajı.'),
+            title,
+            message,
             severity: 'info',
-            actions: [{ text: window.translationUtils ? window.translationUtils.t('errors.actions.ok') : 'Tamam', action: null }],
+            actions: [{ text: 'Tamam', action: null }],
             timestamp: new Date().toISOString()
         };
 
         this.displayError(infoData);
     }
+}
+
+// Export for module usage
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = ErrorHandler;
+}   
+ /**
+     * Create comprehensive notification system
+     */
+    createNotificationSystem() {
+        // Create notification container if it doesn't exist
+        let container = document.getElementById('notification-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'notification-container';
+            container.className = 'notification-container';
+            document.body.appendChild(container);
+        }
+        return container;
+    }
     
     /**
-     * Update error messages when language changes
+     * Show success notification
      */
-    updateErrorMessages() {
-        // This would update any existing error messages when the language changes
-        // For now, we'll just log that it was called
-        console.log('Language changed, updating error messages...');
+    showSuccess(message, duration = 3000) {
+        this.showNotification(message, 'success', duration);
+    }
+    
+    /**
+     * Show warning notification
+     */
+    showWarning(message, duration = 4000) {
+        this.showNotification(message, 'warning', duration);
+    }
+    
+    /**
+     * Show info notification
+     */
+    showInfo(message, duration = 3000) {
+        this.showNotification(message, 'info', duration);
+    }
+    
+    /**
+     * Show error notification
+     */
+    showError(message, duration = 5000) {
+        this.showNotification(message, 'error', duration);
+    }
+    
+    /**
+     * Show generic notification
+     */
+    showNotification(message, type = 'info', duration = 3000) {
+        const container = this.createNotificationSystem();
+        
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type} notification-enter`;
+        
+        const icons = {
+            success: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>`,
+            warning: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+            </svg>`,
+            error: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>`,
+            info: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>`
+        };
+        
+        notification.innerHTML = `
+            <div class="notification-content">
+                <div class="notification-icon">
+                    ${icons[type] || icons.info}
+                </div>
+                <div class="notification-message">${message}</div>
+                <button class="notification-close" onclick="this.parentNode.parentNode.remove()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        `;
+        
+        container.appendChild(notification);
+        
+        // Auto-remove after duration
+        if (duration > 0) {
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.classList.add('notification-exit');
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 300);
+                }
+            }, duration);
+        }
+        
+        return notification;
+    }
+    
+    /**
+     * Show confirmation dialog
+     */
+    showConfirmation(message, onConfirm, onCancel = null) {
+        const modal = document.createElement('div');
+        modal.className = 'confirmation-modal-overlay';
+        
+        modal.innerHTML = `
+            <div class="confirmation-modal-content">
+                <div class="confirmation-modal-header">
+                    <div class="confirmation-icon">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="confirmation-title">Onay</h3>
+                </div>
+                <div class="confirmation-modal-body">
+                    <p class="confirmation-message">${message}</p>
+                </div>
+                <div class="confirmation-modal-actions">
+                    <button class="btn btn-outline btn-sm" id="confirmCancel">İptal</button>
+                    <button class="btn btn-primary btn-sm" id="confirmOk">Tamam</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Add event listeners
+        modal.querySelector('#confirmOk').addEventListener('click', () => {
+            modal.remove();
+            if (onConfirm) onConfirm();
+        });
+        
+        modal.querySelector('#confirmCancel').addEventListener('click', () => {
+            modal.remove();
+            if (onCancel) onCancel();
+        });
+        
+        // Close on overlay click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+                if (onCancel) onCancel();
+            }
+        });
+        
+        // Add animation
+        setTimeout(() => {
+            modal.classList.add('confirmation-modal-visible');
+        }, 10);
+        
+        return modal;
+    }
+    
+    /**
+     * Show loading feedback
+     */
+    showLoading(message = 'Yükleniyor...', cancellable = false) {
+        const modal = document.createElement('div');
+        modal.className = 'loading-modal-overlay';
+        modal.id = 'loadingModal';
+        
+        modal.innerHTML = `
+            <div class="loading-modal-content">
+                <div class="loading-spinner-large"></div>
+                <div class="loading-message">${message}</div>
+                ${cancellable ? '<button class="btn btn-outline btn-sm" onclick="this.closest(\'.loading-modal-overlay\').remove()">İptal</button>' : ''}
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        setTimeout(() => {
+            modal.classList.add('loading-modal-visible');
+        }, 10);
+        
+        return modal;
+    }
+    
+    /**
+     * Hide loading feedback
+     */
+    hideLoading() {
+        const modal = document.getElementById('loadingModal');
+        if (modal) {
+            modal.classList.add('loading-modal-exit');
+            setTimeout(() => {
+                if (modal.parentNode) {
+                    modal.parentNode.removeChild(modal);
+                }
+            }, 300);
+        }
+    }
+    
+    /**
+     * Show progress feedback
+     */
+    showProgress(message = 'İşleniyor...', initialProgress = 0) {
+        const modal = document.createElement('div');
+        modal.className = 'progress-modal-overlay';
+        modal.id = 'progressModal';
+        
+        modal.innerHTML = `
+            <div class="progress-modal-content">
+                <div class="progress-message">${message}</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${initialProgress}%"></div>
+                    </div>
+                    <div class="progress-percentage">${initialProgress}%</div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        setTimeout(() => {
+            modal.classList.add('progress-modal-visible');
+        }, 10);
+        
+        return {
+            modal,
+            updateProgress: (progress, newMessage = null) => {
+                const fill = modal.querySelector('.progress-fill');
+                const percentage = modal.querySelector('.progress-percentage');
+                const messageEl = modal.querySelector('.progress-message');
+                
+                if (fill) fill.style.width = `${progress}%`;
+                if (percentage) percentage.textContent = `${Math.round(progress)}%`;
+                if (newMessage && messageEl) messageEl.textContent = newMessage;
+            },
+            close: () => {
+                modal.classList.add('progress-modal-exit');
+                setTimeout(() => {
+                    if (modal.parentNode) {
+                        modal.parentNode.removeChild(modal);
+                    }
+                }, 300);
+            }
+        };
+    }
+    
+    /**
+     * Show form validation errors
+     */
+    showValidationErrors(errors) {
+        // Clear existing validation errors
+        document.querySelectorAll('.validation-error').forEach(error => {
+            error.remove();
+        });
+        
+        document.querySelectorAll('.input-error').forEach(input => {
+            input.classList.remove('input-error');
+        });
+        
+        // Show new validation errors
+        Object.keys(errors).forEach(fieldName => {
+            const field = document.querySelector(`[name="${fieldName}"], #${fieldName}`);
+            if (field) {
+                field.classList.add('input-error');
+                
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'validation-error';
+                errorMessage.textContent = errors[fieldName];
+                
+                // Insert error message after the field
+                field.parentNode.insertBefore(errorMessage, field.nextSibling);
+                
+                // Remove error on input
+                field.addEventListener('input', () => {
+                    field.classList.remove('input-error');
+                    errorMessage.remove();
+                }, { once: true });
+            }
+        });
+        
+        // Show summary notification
+        const errorCount = Object.keys(errors).length;
+        this.showError(`${errorCount} alanda hata bulundu. Lütfen düzeltin.`);
+    }
+    
+    /**
+     * Show network status
+     */
+    showNetworkStatus(isOnline) {
+        // Remove existing network status
+        const existing = document.getElementById('networkStatus');
+        if (existing) {
+            existing.remove();
+        }
+        
+        if (!isOnline) {
+            const status = document.createElement('div');
+            status.id = 'networkStatus';
+            status.className = 'network-status offline';
+            status.innerHTML = `
+                <div class="network-status-content">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364"/>
+                    </svg>
+                    <span>Bağlantı yok</span>
+                </div>
+            `;
+            
+            document.body.appendChild(status);
+            
+            setTimeout(() => {
+                status.classList.add('network-status-visible');
+            }, 10);
+        }
+    }
+    
+    /**
+     * Retry last action
+     */
+    retryLastAction() {
+        if (this.lastAction) {
+            try {
+                this.lastAction();
+            } catch (error) {
+                this.handle(error);
+            }
+        }
+    }
+    
+    /**
+     * Set last action for retry functionality
+     */
+    setLastAction(action) {
+        this.lastAction = action;
+    }
+    
+    /**
+     * Refresh map
+     */
+    refreshMap() {
+        if (window.mapManager && window.mapManager.reload) {
+            window.mapManager.reload();
+        } else {
+            window.location.reload();
+        }
+    }
+    
+    /**
+     * Clear all notifications
+     */
+    clearAllNotifications() {
+        const container = document.getElementById('notification-container');
+        if (container) {
+            container.innerHTML = '';
+        }
+        
+        // Remove modals
+        document.querySelectorAll('.confirmation-modal-overlay, .loading-modal-overlay, .progress-modal-overlay').forEach(modal => {
+            modal.remove();
+        });
+    }
+    
+    /**
+     * Get error statistics
+     */
+    getErrorStats() {
+        if (!this.uiState) return null;
+        
+        const errors = this.uiState.getState().errors || [];
+        const stats = {
+            total: errors.length,
+            byType: {},
+            recent: errors.filter(error => 
+                Date.now() - new Date(error.timestamp).getTime() < 3600000 // Last hour
+            ).length
+        };
+        
+        errors.forEach(error => {
+            const type = error.type || 'unknown';
+            stats.byType[type] = (stats.byType[type] || 0) + 1;
+        });
+        
+        return stats;
+    }
+    
+    /**
+     * Setup network monitoring
+     */
+    setupNetworkMonitoring() {
+        window.addEventListener('online', () => {
+            this.showNetworkStatus(true);
+            this.showSuccess('Bağlantı yeniden kuruldu');
+        });
+        
+        window.addEventListener('offline', () => {
+            this.showNetworkStatus(false);
+            this.showWarning('İnternet bağlantısı kesildi');
+        });
+    }
+    
+    /**
+     * Cleanup error handler
+     */
+    cleanup() {
+        this.clearAllNotifications();
+        
+        // Remove event listeners
+        window.removeEventListener('unhandledrejection', this.handleUnhandledRejection);
+        window.removeEventListener('error', this.handleError);
+        window.removeEventListener('online', this.handleOnline);
+        window.removeEventListener('offline', this.handleOffline);
+        
+        // Remove containers
+        const containers = [
+            'error-container',
+            'notification-container',
+            'networkStatus'
+        ];
+        
+        containers.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.remove();
+            }
+        });
     }
 }
 

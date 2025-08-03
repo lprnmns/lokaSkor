@@ -1,5 +1,5 @@
 /**
- * LocationIQ Modern UI - Loading Manager
+ * LokaSkor Modern UI - Loading Manager
  * Manages loading states and skeleton loaders
  */
 

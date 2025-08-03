@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="modeSelection.title">Analiz Modu Seçimi - LocationIQ</title>
+    <title>Analiz Modu Seçimi - LokaSkor</title>
     
     <!-- Meta Tags -->
     <meta name="description" content="Lokasyon analiziniz için uygun modu seçin: Belirli dükkanları karşılaştırın veya yeni fırsatları keşfedin.">
@@ -255,109 +255,6 @@
             background: hsl(var(--primary));
         }
         
-        /* Language Selector Styles */
-        .language-selector {
-            position: fixed;
-            top: 16px;
-            left: 16px;
-            z-index: 9999;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        }
-
-        .language-selector__button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
-        }
-
-        .language-selector__button:hover {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-color: #cbd5e0;
-        }
-
-        .language-selector__flag {
-            font-size: 16px;
-        }
-
-        .language-selector__code {
-            font-weight: 600;
-            color: #334155;
-        }
-
-        .language-selector__arrow {
-            font-size: 12px;
-            color: #94a3b8;
-        }
-
-        .language-selector__dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            margin-top: 8px;
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            min-width: 160px;
-            overflow: hidden;
-            animation: fadeIn 0.2s ease;
-            display: none;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .language-selector__option {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-            padding: 12px 16px;
-            background: none;
-            border: none;
-            text-align: left;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-
-        .language-selector__option:hover {
-            background-color: #f1f5f9;
-        }
-
-        .language-selector__option--active {
-            background-color: #dbeafe;
-            font-weight: 600;
-        }
-
-        .language-selector__name {
-            color: #334155;
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .language-selector {
-                top: 12px;
-                left: 12px;
-            }
-            
-            .language-selector__button {
-                padding: 6px 10px;
-            }
-            
-            .language-selector__code {
-                font-size: 14px;
-            }
-        }
-        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .mode-card {
@@ -384,26 +281,6 @@
     </style>
 </head>
 <body class="bg-background text-foreground min-h-screen">
-    <!-- Language Selector -->
-    <div class="language-selector" id="languageSelector">
-        <button class="language-selector__button" id="languageButton" aria-label="Select language">
-            <span class="language-selector__flag" id="currentFlag">🇹🇷</span>
-            <span class="language-selector__code" id="currentCode">TR</span>
-            <span class="language-selector__arrow" id="arrow">▼</span>
-        </button>
-
-        <div class="language-selector__dropdown" id="languageDropdown">
-            <button class="language-selector__option language-selector__option--active" data-lang="tr">
-                <span class="language-selector__flag">🇹🇷</span>
-                <span class="language-selector__name">Türkçe</span>
-            </button>
-            <button class="language-selector__option" data-lang="en">
-                <span class="language-selector__flag">🇬🇧</span>
-                <span class="language-selector__name">English</span>
-            </button>
-        </div>
-    </div>
-    
     <!-- Progress Bar -->
     <div class="progress-bar" style="width: 66.66%"></div>
     
@@ -416,13 +293,13 @@
                     <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                         <i data-lucide="map-pin" class="w-5 h-5 text-primary-foreground"></i>
                     </div>
-                    <span class="text-xl font-bold text-foreground">LocationIQ</span>
+                    <span class="text-xl font-bold text-foreground">LokaSkor</span>
                 </div>
                 
                 <!-- Back Button -->
                 <button id="back-btn" class="btn btn-ghost btn-sm">
                     <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
-                    <span data-i18n="modeSelection.back">Geri</span>
+                    Geri
                 </button>
             </div>
         </div>
@@ -446,15 +323,14 @@
                 <div class="flex justify-center mb-4">
                     <div class="business-type-display">
                         <i id="business-icon" data-lucide="store" class="w-4 h-4"></i>
-                        <span id="business-name" data-i18n="modeSelection.businessTypePrefix">İşletme Türü:</span>
-                        <span id="business-type-name">Eczane</span>
+                        <span id="business-name">İşletme Türü</span>
                     </div>
                 </div>
                 
-                <h1 class="text-3xl md:text-4xl font-bold text-foreground mb-4" data-i18n="modeSelection.stepIndicator">
+                <h1 class="text-3xl md:text-4xl font-bold text-foreground mb-4">
                     Analiz Modunu Seçin
                 </h1>
-                <p class="text-xl text-muted-foreground max-w-3xl mx-auto" data-i18n="modeSelection.stepSubtitle">
+                <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
                     İhtiyacınıza en uygun analiz yöntemini seçerek lokasyon araştırmanızı başlatın
                 </p>
             </div>
@@ -472,8 +348,8 @@
                         <div class="mode-icon bg-blue-100 text-blue-600">
                             <i data-lucide="git-compare" class="w-10 h-10"></i>
                         </div>
-                        <h3 class="mode-title" data-i18n="modeSelection.modes.comparison.title">Belirli Dükkanları Karşılaştır</h3>
-                        <p class="mode-subtitle" data-i18n="modeSelection.modes.comparison.subtitle">
+                        <h3 class="mode-title">Belirli Dükkanları Karşılaştır</h3>
+                        <p class="mode-subtitle">
                             Aklınızdaki birden fazla lokasyonun potansiyelini analiz edin ve en iyisini belirleyin
                         </p>
                     </div>
@@ -482,23 +358,23 @@
                         <ul class="feature-list">
                             <li class="feature-item">
                                 <i data-lucide="map-pin" class="feature-icon"></i>
-                                <span data-i18n="modeSelection.modes.comparison.features.0">Birden fazla adres ekleyip karşılaştırın</span>
+                                Birden fazla adres ekleyip karşılaştırın
                             </li>
                             <li class="feature-item">
                                 <i data-lucide="bar-chart-3" class="feature-icon"></i>
-                                <span data-i18n="modeSelection.modes.comparison.features.1">Detaylı skor analizi ve karşılaştırma tablosu</span>
+                                Detaylı skor analizi ve karşılaştırma tablosu
                             </li>
                             <li class="feature-item">
                                 <i data-lucide="target" class="feature-icon"></i>
-                                <span data-i18n="modeSelection.modes.comparison.features.2">Rakip yoğunluğu ve hedef kitle uyumu</span>
+                                Rakip yoğunluğu ve hedef kitle uyumu
                             </li>
                             <li class="feature-item">
                                 <i data-lucide="navigation" class="feature-icon"></i>
-                                <span data-i18n="modeSelection.modes.comparison.features.3">Yaya erişimi ve ulaşım kolaylığı analizi</span>
+                                Yaya erişimi ve ulaşım kolaylığı analizi
                             </li>
                             <li class="feature-item">
                                 <i data-lucide="trending-up" class="feature-icon"></i>
-                                <span data-i18n="modeSelection.modes.comparison.features.4">100 üzerinden genel skor değerlendirmesi</span>
+                                100 üzerinden genel skor değerlendirmesi
                             </li>
                         </ul>
                     </div>
@@ -515,8 +391,8 @@
                         <div class="mode-icon bg-green-100 text-green-600">
                             <i data-lucide="search" class="w-10 h-10"></i>
                         </div>
-                        <h3 class="mode-title" data-i18n="modeSelection.modes.discovery.title">Yeni Fırsatları Keşfet</h3>
-                        <p class="mode-subtitle" data-i18n="modeSelection.modes.discovery.subtitle">
+                        <h3 class="mode-title">Yeni Fırsatları Keşfet</h3>
+                        <p class="mode-subtitle">
                             Seçtiğiniz bölgedeki en uygun konumları sizin için bulalım ve önerelim
                         </p>
                     </div>
@@ -525,23 +401,23 @@
                         <ul class="feature-list">
                             <li class="feature-item">
                                 <i data-lucide="map" class="feature-icon"></i>
-                                <span data-i18n="modeSelection.modes.discovery.features.0">İl, ilçe ve mahalle bazında analiz</span>
+                                İl, ilçe ve mahalle bazında analiz
                             </li>
                             <li class="feature-item">
                                 <i data-lucide="thermometer" class="feature-icon"></i>
-                                <span data-i18n="modeSelection.modes.discovery.features.1">Isı haritası ile potansiyel görselleştirme</span>
+                                Isı haritası ile potansiyel görselleştirme
                             </li>
                             <li class="feature-item">
                                 <i data-lucide="star" class="feature-icon"></i>
-                                <span data-i18n="modeSelection.modes.discovery.features.2">En yüksek skorlu 5 lokasyon önerisi</span>
+                                En yüksek skorlu 5 lokasyon önerisi
                             </li>
                             <li class="feature-item">
                                 <i data-lucide="eye" class="feature-icon"></i>
-                                <span data-i18n="modeSelection.modes.discovery.features.3">Bölgesel fırsat analizi ve keşif</span>
+                                Bölgesel fırsat analizi ve keşif
                             </li>
                             <li class="feature-item">
                                 <i data-lucide="zap" class="feature-icon"></i>
-                                <span data-i18n="modeSelection.modes.discovery.features.4">Hızlı bölge tarama ve değerlendirme</span>
+                                Hızlı bölge tarama ve değerlendirme
                             </li>
                         </ul>
                     </div>
@@ -551,7 +427,7 @@
             <!-- Action Buttons -->
             <div class="flex justify-center space-x-4 animate-slide-in-from-bottom">
                 <button id="continue-btn" class="btn btn-lg btn-primary px-8 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                    <span id="continue-text" data-i18n="modeSelection.continue">Analiz Modu Seçin</span>
+                    <span id="continue-text">Analiz Modu Seçin</span>
                     <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
                 </button>
             </div>
@@ -561,9 +437,9 @@
                 <div class="max-w-2xl mx-auto">
                     <p class="text-sm text-muted-foreground mb-2">
                         <i data-lucide="lightbulb" class="w-4 h-4 inline mr-1"></i>
-                        <strong data-i18n="modeSelection.helpTitle">Hangi modu seçmeliyim?</strong>
+                        <strong>Hangi modu seçmeliyim?</strong>
                     </p>
-                    <p class="text-xs text-muted-foreground" data-i18n="modeSelection.helpText">
+                    <p class="text-xs text-muted-foreground">
                         Elinizde belirli adresler varsa <strong>Mod 1</strong>'i, 
                         yeni fırsatlar arıyorsanız <strong>Mod 2</strong>'yi tercih edin
                     </p>
@@ -577,31 +453,15 @@
         <div class="flex items-center justify-center h-full">
             <div class="text-center">
                 <div class="loading-spinner w-8 h-8 mx-auto mb-4"></div>
-                <p class="text-muted-foreground" data-i18n="modeSelection.loading">Analiz paneli hazırlanıyor...</p>
+                <p class="text-muted-foreground">Analiz paneli hazırlanıyor...</p>
             </div>
         </div>
     </div>
 
     <!-- JavaScript Files -->
-    <script src="/static/js/new_ui/translation-utils.js"></script>
-    <script src="/static/js/new_ui/language-selector.js"></script>
-    <script src="/static/js/new_ui/translation-engine.js"></script>
     <script src="/static/js/new_ui/api_client.js"></script>
     <script src="/static/js/new_ui/error_handler.js"></script>
     <script src="/static/js/new_ui/main.js"></script>
-    <script src="/static/js/new_ui/test-translation.js"></script>
-    
-    <script>
-        // Initialize Lucide icons
-        document.addEventListener('DOMContentLoaded', function() {
-            lucide.createIcons();
-            
-            // Initialize translation if available
-            if (window.translationUtils) {
-                window.translationUtils.translatePage();
-            }
-        });
-    </script>
     
     <script>
         // Mode Selection Page Logic
@@ -619,7 +479,6 @@
             const loadingOverlay = document.getElementById('loading-overlay');
             const businessIcon = document.getElementById('business-icon');
             const businessName = document.getElementById('business-name');
-            const businessTypeName = document.getElementById('business-type-name');
             
             // Business type configuration
             const businessTypes = {
@@ -639,8 +498,8 @@
                     return urlBusiness;
                 }
                 
-                if (window.LocationIQApp) {
-                    const state = window.LocationIQApp.getState();
+                if (window.LokaSkorApp) {
+                    const state = window.LokaSkorApp.getState();
                     return state.selectedBusinessType;
                 }
                 
@@ -651,14 +510,14 @@
             function updateBusinessTypeDisplay(businessType) {
                 if (businessType && businessTypes[businessType]) {
                     const config = businessTypes[businessType];
-                    businessTypeName.textContent = config.name;
+                    businessName.textContent = config.name;
                     businessIcon.setAttribute('data-lucide', config.icon);
                     lucide.createIcons(); // Refresh icons
                     selectedBusinessType = businessType;
                 } else {
                     // Redirect back to business selection if no valid business type
-                    if (window.LocationIQApp) {
-                        window.LocationIQApp.navigate('business-selection');
+                    if (window.LokaSkorApp) {
+                        window.LokaSkorApp.navigate('business-selection');
                     } else {
                         window.location.href = '/business-selection';
                     }
@@ -685,9 +544,7 @@
                     
                     // Enable continue button
                     continueBtn.disabled = false;
-                    continueText.textContent = mode === 'comparison' ? 
-                        (window.translator ? window.translator.t('modeSelection.modes.comparison.continue') : 'Karşılaştırmaya Başla') : 
-                        (window.translator ? window.translator.t('modeSelection.modes.discovery.continue') : 'Keşfe Başla');
+                    continueText.textContent = mode === 'comparison' ? 'Karşılaştırmaya Başla' : 'Keşfe Başla';
                     
                     // Add micro-interaction
                     this.classList.add('micro-bounce');
@@ -696,8 +553,8 @@
                     }, 400);
                     
                     // Update app state if available
-                    if (window.LocationIQApp) {
-                        window.LocationIQApp.state.setMode(mode);
+                    if (window.LokaSkorApp) {
+                        window.LokaSkorApp.state.setMode(mode);
                     }
                     
                     console.log('Selected mode:', mode);
@@ -728,8 +585,8 @@
                 
                 // Simulate brief loading for smooth UX
                 setTimeout(() => {
-                    if (window.LocationIQApp) {
-                        window.LocationIQApp.navigate('analysis', {
+                    if (window.LokaSkorApp) {
+                        window.LokaSkorApp.navigate('analysis', {
                             mode: selectedMode,
                             businessType: selectedBusinessType
                         });
@@ -742,8 +599,8 @@
             
             // Back button logic
             backBtn.addEventListener('click', function() {
-                if (window.LocationIQApp) {
-                    window.LocationIQApp.navigate('business-selection');
+                if (window.LokaSkorApp) {
+                    window.LokaSkorApp.navigate('business-selection');
                 } else {
                     window.location.href = '/business-selection';
                 }
@@ -795,11 +652,6 @@
                         preselectedCard.click();
                     }, 600);
                 }
-            }
-            
-            // Translate page content
-            if (window.translator) {
-                window.translator.translatePage();
             }
         });
     </script>

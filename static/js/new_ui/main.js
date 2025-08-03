@@ -1,5 +1,5 @@
 /**
- * LocationIQ Modern UI - Main Application Controller
+ * LokaSkor Modern UI - Main Application Controller
  * Manages the overall application state and coordinates between components
  */
 
@@ -284,7 +284,7 @@ class UIState {
 /**
  * Main Application Controller
  */
-class LocationIQApp {
+class LokaSkorApp {
     constructor() {
         this.state = new UIState();
         this.apiClient = null;
@@ -303,21 +303,16 @@ class LocationIQApp {
      */
     async init() {
         if (this.initialized) {
-            console.warn('LocationIQ App already initialized');
+            console.warn('LokaSkor App already initialized');
             return;
         }
         
         try {
-            console.log('Initializing LocationIQ Modern UI...');
+            console.log('Initializing LokaSkor Modern UI...');
             
             // Initialize API client and error handler
             this.apiClient = new ApiClient();
             this.errorHandler = new ErrorHandler(this.state);
-            
-            // Initialize translation utilities
-            if (window.translationUtils) {
-                await window.translationUtils.init();
-            }
             
             // Initialize animation systems
             this.animationPerformance = new AnimationPerformance();
@@ -337,10 +332,10 @@ class LocationIQApp {
             await this.initializePage();
             
             this.initialized = true;
-            console.log('LocationIQ Modern UI initialized successfully');
+            console.log('LokaSkor Modern UI initialized successfully');
             
         } catch (error) {
-            console.error('Failed to initialize LocationIQ App:', error);
+            console.error('Failed to initialize LokaSkor App:', error);
             this.handleError(error);
         }
     }
@@ -356,14 +351,6 @@ class LocationIQApp {
         window.addEventListener('unhandledrejection', (event) => {
             this.handleError(new Error(event.reason));
         });
-        
-        // Listen for language changes
-        if (window.languageEvents) {
-            window.languageEvents.subscribe((lang) => {
-                // Update UI when language changes
-                this.updateUIText();
-            });
-        }
     }
     
     /**
@@ -467,32 +454,6 @@ class LocationIQApp {
                 root.style.setProperty('--animation-duration-slow', '500ms');
                 break;
         }
-    }
-    
-    /**
-     * Update UI text when language changes
-     */
-    updateUIText() {
-        // Update all elements with data-i18n attribute
-        const elements = document.querySelectorAll('[data-i18n]');
-        elements.forEach(element => {
-            const key = element.getAttribute('data-i18n');
-            const params = {};
-            
-            // Check for parameters
-            const paramAttrs = element.getAttribute('data-i18n-params');
-            if (paramAttrs) {
-                try {
-                    Object.assign(params, JSON.parse(paramAttrs));
-                } catch (e) {
-                    console.error('Error parsing translation parameters:', e);
-                }
-            }
-            
-            if (window.translationUtils) {
-                element.textContent = window.translationUtils.t(key, params);
-            }
-        });
     }
     
     /**
@@ -662,14 +623,14 @@ let app = null;
  */
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        app = new LocationIQApp();
+        app = new LokaSkorApp();
         await app.init();
         
         // Make app globally available for debugging
-        window.LocationIQApp = app;
+        window.LokaSkorApp = app;
         
     } catch (error) {
-        console.error('Failed to start LocationIQ App:', error);
+        console.error('Failed to start LokaSkor App:', error);
     }
 });
 
@@ -685,7 +646,7 @@ window.addEventListener('popstate', (event) => {
 // Export for module usage
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
-        LocationIQApp,
+        LokaSkorApp,
         UIState,
         ApiError,
         ValidationError,

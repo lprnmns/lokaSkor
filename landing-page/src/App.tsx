@@ -1,11 +1,8 @@
-import React, { useEffect, useRef, useContext } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { MapPin, BarChart3, Globe, ArrowRight, Play, Shield, Zap, Users, Building, TrendingUp, Map } from 'lucide-react';
-import LanguageSelector from './components/LanguageSelector';
-import { TranslationContext } from './contexts/TranslationContext';
 
 function App() {
   const heroRef = useRef<HTMLDivElement>(null);
-  const { t } = useContext(TranslationContext);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -105,12 +102,12 @@ function App() {
               <span className="text-2xl font-bold text-gray-900">LocationIQ</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">{t('navigation.features')}</a>
-              <a href="#demo" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">{t('navigation.demo')}</a>
-              <a href="#contact" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">{t('navigation.contact')}</a>
+              <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">Özellikler</a>
+              <a href="#demo" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">Demo</a>
+              <a href="#contact" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">İletişim</a>
               <div className="flex items-center space-x-4">
-                <button className="text-blue-600 hover:text-blue-700 transition-colors font-medium underline">{t('navigation.adminPanel')}</button>
-                <button className="text-blue-600 hover:text-blue-700 transition-colors font-medium underline">{t('navigation.oldVersion')}</button>
+                <button className="text-blue-600 hover:text-blue-700 transition-colors font-medium underline">Admin Panel</button>
+                <button className="text-blue-600 hover:text-blue-700 transition-colors font-medium underline">Eski Sürüm</button>
               </div>
             </div>
           </div>
@@ -123,31 +120,32 @@ function App() {
           <div className="text-center">
             <div className="inline-flex items-center px-6 py-3 bg-blue-50 border border-blue-200 rounded-full text-blue-700 text-sm font-medium mb-8 shadow-sm">
               <Globe className="w-4 h-4 mr-2" />
-              {t('hero.tagline')}
+              Yapay zeka destekli lokasyon analizi
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-8 leading-tight">
-              {t('hero.title')}
+              Lokasyon Analizinde
               <span className="block text-blue-600 mt-2">
-                {t('hero.subtitle')}
+                Yeni Dönem
               </span>
             </h1>
             
             <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed">
-              {t('hero.description')}
+              Yapay zeka destekli lokasyon analizi ile işletmeniz için en uygun yeri bulun. Modern 
+              araçlar, detaylı analizler ve gerçek zamanlı sonuçlar.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
               <button className="group bg-blue-600 text-white px-10 py-5 rounded-xl text-lg font-semibold hover:bg-blue-700 transition-all duration-300 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                 <ArrowRight className="mr-3 w-6 h-6 group-hover:translate-x-1 transition-transform" />
-                {t('hero.startAnalysis')}
+                Analize Başla
               </button>
               
               <button className="group flex items-center text-gray-700 hover:text-gray-900 px-8 py-5 rounded-xl text-lg font-semibold transition-all duration-300 border border-gray-300 hover:border-gray-400 bg-white/50 backdrop-blur-sm hover:bg-white/70">
                 <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mr-4 group-hover:scale-110 transition-transform border border-blue-200">
                   <Play className="w-5 h-5 ml-1 text-blue-600" />
                 </div>
-                {t('hero.watchDemo')}
+                Demo İzle
               </button>
             </div>
           </div>
@@ -159,10 +157,10 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              {t('features.title')}
+              Gelişmiş Analiz Araçları
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              {t('features.description')}
+              İşletmenizin başarısı için gerekli tüm lokasyon verilerini tek platformda
             </p>
           </div>
           
@@ -170,22 +168,22 @@ function App() {
             {[
               {
                 icon: <BarChart3 className="w-10 h-10 text-blue-600" />,
-                title: t('features.detailedAnalysis.title'),
-                description: t('features.detailedAnalysis.description'),
+                title: "Detaylı Analiz",
+                description: "Demografik veriler, trafik yoğunluğu ve rekabet analizi ile kapsamlı raporlar",
                 bgColor: "bg-blue-50",
                 borderColor: "border-blue-200"
               },
               {
                 icon: <Zap className="w-10 h-10 text-purple-600" />,
-                title: t('features.realTimeData.title'),
-                description: t('features.realTimeData.description'),
+                title: "Gerçek Zamanlı Veri",
+                description: "Anlık güncellemeler ve canlı verilerle her zaman güncel kalın",
                 bgColor: "bg-purple-50",
                 borderColor: "border-purple-200"
               },
               {
                 icon: <Shield className="w-10 h-10 text-cyan-600" />,
-                title: t('features.securePlatform.title'),
-                description: t('features.securePlatform.description'),
+                title: "Güvenli Platform",
+                description: "Verileriniz şifreli olarak saklanır ve güvenliğiniz önceliğimizdir",
                 bgColor: "bg-cyan-50",
                 borderColor: "border-cyan-200"
               }
@@ -214,10 +212,10 @@ function App() {
           <div className="bg-white/70 backdrop-blur-sm border border-gray-200 rounded-3xl p-12 shadow-lg">
             <div className="grid md:grid-cols-4 gap-8 text-center">
               {[
-                { number: "10,000+", label: t('stats.locations') },
-                { number: "500+", label: t('stats.customers') },
-                { number: "99.9%", label: t('stats.uptime') },
-                { number: "24/7", label: t('stats.support') }
+                { number: "10,000+", label: "Analiz Edilen Lokasyon" },
+                { number: "500+", label: "Mutlu Müşteri" },
+                { number: "99.9%", label: "Uptime Garantisi" },
+                { number: "24/7", label: "Destek Hizmeti" }
               ].map((stat, index) => (
                 <div key={index} className="group">
                   <div className="text-4xl font-bold text-blue-600 mb-2 group-hover:scale-110 transition-transform">
@@ -236,17 +234,17 @@ function App() {
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-12 shadow-2xl text-white">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              {t('cta.title')}
+              Hemen Başlayın
             </h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-              {t('cta.description')}
+              Lokasyon analizinizi bugün başlatın ve işletmeniz için en doğru kararları verin
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="bg-white text-blue-600 px-10 py-4 rounded-xl text-lg font-semibold hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                {t('cta.tryFree')}
+                Ücretsiz Deneyin
               </button>
               <button className="border-2 border-white/30 text-white px-10 py-4 rounded-xl text-lg font-semibold hover:bg-white/10 transition-all duration-300 backdrop-blur-sm">
-                {t('cta.moreInfo')}
+                Daha Fazla Bilgi
               </button>
             </div>
           </div>
@@ -265,36 +263,36 @@ function App() {
                 <span className="text-2xl font-bold text-gray-900">LocationIQ</span>
               </div>
               <p className="text-gray-600">
-                {t('footer.description')}
+                Yapay zeka destekli lokasyon analizi platformu
               </p>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">{t('footer.product')}</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Ürün</h3>
               <ul className="space-y-2 text-gray-600">
-                <li><a href="#" className="hover:text-gray-900 transition-colors">{t('footer.features')}</a></li>
-                <li><a href="#" className="hover:text-gray-900 transition-colors">{t('footer.pricing')}</a></li>
-                <li><a href="#" className="hover:text-gray-900 transition-colors">{t('footer.api')}</a></li>
+                <li><a href="#" className="hover:text-gray-900 transition-colors">Özellikler</a></li>
+                <li><a href="#" className="hover:text-gray-900 transition-colors">Fiyatlandırma</a></li>
+                <li><a href="#" className="hover:text-gray-900 transition-colors">API</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">{t('footer.company')}</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Şirket</h3>
               <ul className="space-y-2 text-gray-600">
-                <li><a href="#" className="hover:text-gray-900 transition-colors">{t('footer.about')}</a></li>
-                <li><a href="#" className="hover:text-gray-900 transition-colors">{t('footer.blog')}</a></li>
-                <li><a href="#" className="hover:text-gray-900 transition-colors">{t('footer.careers')}</a></li>
+                <li><a href="#" className="hover:text-gray-900 transition-colors">Hakkımızda</a></li>
+                <li><a href="#" className="hover:text-gray-900 transition-colors">Blog</a></li>
+                <li><a href="#" className="hover:text-gray-900 transition-colors">Kariyer</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">{t('footer.support')}</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Destek</h3>
               <ul className="space-y-2 text-gray-600">
-                <li><a href="#" className="hover:text-gray-900 transition-colors">{t('footer.helpCenter')}</a></li>
-                <li><a href="#" className="hover:text-gray-900 transition-colors">{t('footer.contact')}</a></li>
-                <li><a href="#" className="hover:text-gray-900 transition-colors">{t('footer.status')}</a></li>
+                <li><a href="#" className="hover:text-gray-900 transition-colors">Yardım Merkezi</a></li>
+                <li><a href="#" className="hover:text-gray-900 transition-colors">İletişim</a></li>
+                <li><a href="#" className="hover:text-gray-900 transition-colors">Durum</a></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-200 mt-12 pt-8 text-center text-gray-500">
-            <p>&copy; 2024 LocationIQ. {t('footer.copyright')}</p>
+            <p>&copy; 2024 LocationIQ. Tüm hakları saklıdır.</p>
             <div className="mt-4 text-sm">
               <span className="text-gray-400">Windows'u Etkinleştir</span>
               <br />
@@ -303,7 +301,6 @@ function App() {
           </div>
         </div>
       </footer>
-      <LanguageSelector />
     </div>
   );
 }

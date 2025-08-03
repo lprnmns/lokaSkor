@@ -1,5 +1,5 @@
 /**
- * LocationIQ Modern UI - Notification System
+ * LokaSkor Modern UI - Notification System
  * Manages user feedback and notifications
  */
 

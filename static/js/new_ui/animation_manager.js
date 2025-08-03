@@ -1,5 +1,5 @@
 /**
- * LocationIQ Modern UI - Animation Manager
+ * LokaSkor Modern UI - Animation Manager
  * Manages advanced animations and micro-interactions
  */
 
@@ -36,14 +36,6 @@ class AnimationManager {
             this.reducedMotion = e.matches;
             this.updateAnimationSettings();
         });
-        
-        // Listen for language changes
-        if (window.languageEvents) {
-            window.languageEvents.subscribe((lang) => {
-                // Update any animation-related text if needed
-                this.updateAnimationText();
-            });
-        }
     }
     
     /**
@@ -721,15 +713,6 @@ class AnimationManager {
         this.observers.clear();
         this.animationQueue = [];
         this.isProcessing = false;
-    }
-    
-    /**
-     * Update animation text when language changes
-     */
-    updateAnimationText() {
-        // This would update any animation-related text when the language changes
-        // For now, we'll just log that it was called
-        console.log('Language changed, updating animation text...');
     }
 }
 

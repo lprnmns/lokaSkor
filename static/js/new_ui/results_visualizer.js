@@ -28,7 +28,7 @@ class ResultsVisualizer {
                             <h3 class="popup-address"></h3>
                             <div class="popup-score-container">
                                 <span class="popup-score"></span>
-                                <span class="popup-score-label">${window.translationUtils ? window.translationUtils.t('results.popup.scoreLabel') : 'puan'}</span>
+                                <span class="popup-score-label">puan</span>
                             </div>
                         </div>
                         <button class="popup-close" onclick="window.resultsVisualizer.closePopup()">
@@ -42,15 +42,15 @@ class ResultsVisualizer {
                         <div class="metrics-grid">
                             <div class="metric-card">
                                 <div class="metric-header">
-                                    <span class="metric-title">${window.translationUtils ? window.translationUtils.t('results.popup.metrics.overallScore') : 'Genel Skor'}</span>
+                                    <span class="metric-title">Genel Skor</span>
                                     <span class="metric-main-value"></span>
                                 </div>
-                                <div class="metric-description">${window.translationUtils ? window.translationUtils.t('results.popup.metrics.overallScoreDesc') : 'Toplam performans değerlendirmesi'}</div>
+                                <div class="metric-description">Toplam performans değerlendirmesi</div>
                             </div>
                             
                             <div class="metric-card">
                                 <div class="metric-header">
-                                    <span class="metric-title">${window.translationUtils ? window.translationUtils.t('results.popup.metrics.competition') : 'Rakip Yoğunluğu'}</span>
+                                    <span class="metric-title">Rakip Yoğunluğu</span>
                                     <span class="metric-competition-value"></span>
                                 </div>
                                 <div class="metric-bar-container">
@@ -58,12 +58,12 @@ class ResultsVisualizer {
                                         <div class="metric-progress-fill competition-fill"></div>
                                     </div>
                                 </div>
-                                <div class="metric-description">${window.translationUtils ? window.translationUtils.t('results.popup.metrics.competitionDesc') : 'Çevredeki rakip işletme sayısı'}</div>
+                                <div class="metric-description">Çevredeki rakip işletme sayısı</div>
                             </div>
                             
                             <div class="metric-card">
                                 <div class="metric-header">
-                                    <span class="metric-title">${window.translationUtils ? window.translationUtils.t('results.popup.metrics.accessibility') : 'Yaya Erişimi'}</span>
+                                    <span class="metric-title">Yaya Erişimi</span>
                                     <span class="metric-accessibility-value"></span>
                                 </div>
                                 <div class="metric-bar-container">
@@ -71,12 +71,12 @@ class ResultsVisualizer {
                                         <div class="metric-progress-fill accessibility-fill"></div>
                                     </div>
                                 </div>
-                                <div class="metric-description">${window.translationUtils ? window.translationUtils.t('results.popup.metrics.accessibilityDesc') : 'Yürüme mesafesi ve ulaşım kolaylığı'}</div>
+                                <div class="metric-description">Yürüme mesafesi ve ulaşım kolaylığı</div>
                             </div>
                             
                             <div class="metric-card">
                                 <div class="metric-header">
-                                    <span class="metric-title">${window.translationUtils ? window.translationUtils.t('results.popup.metrics.targetAudience') : 'Hedef Kitle Uyumu'}</span>
+                                    <span class="metric-title">Hedef Kitle Uyumu</span>
                                     <span class="metric-target-value"></span>
                                 </div>
                                 <div class="metric-bar-container">
@@ -84,27 +84,27 @@ class ResultsVisualizer {
                                         <div class="metric-progress-fill target-fill"></div>
                                     </div>
                                 </div>
-                                <div class="metric-description">${window.translationUtils ? window.translationUtils.t('results.popup.metrics.targetAudienceDesc') : 'Demografik uyum ve müşteri potansiyeli'}</div>
+                                <div class="metric-description">Demografik uyum ve müşteri potansiyeli</div>
                             </div>
                         </div>
                         
                         <div class="details-section">
-                            <h4 class="details-title">${window.translationUtils ? window.translationUtils.t('results.popup.details.title') : 'Detaylı Bilgiler'}</h4>
+                            <h4 class="details-title">Detaylı Bilgiler</h4>
                             <div class="details-grid">
                                 <div class="detail-item">
-                                    <span class="detail-label">${window.translationUtils ? window.translationUtils.t('results.popup.details.nearbyCompetitors') : 'Yakındaki Rakipler:'}</span>
+                                    <span class="detail-label">Yakındaki Rakipler:</span>
                                     <span class="detail-value competitors-count"></span>
                                 </div>
                                 <div class="detail-item">
-                                    <span class="detail-label">${window.translationUtils ? window.translationUtils.t('results.popup.details.walkingDistance') : 'Yürüme Mesafesi:'}</span>
+                                    <span class="detail-label">Yürüme Mesafesi:</span>
                                     <span class="detail-value walking-distance"></span>
                                 </div>
                                 <div class="detail-item">
-                                    <span class="detail-label">${window.translationUtils ? window.translationUtils.t('results.popup.details.publicTransport') : 'Toplu Taşıma:'}</span>
+                                    <span class="detail-label">Toplu Taşıma:</span>
                                     <span class="detail-value public-transport"></span>
                                 </div>
                                 <div class="detail-item">
-                                    <span class="detail-label">${window.translationUtils ? window.translationUtils.t('results.popup.details.parking') : 'Otopark:'}</span>
+                                    <span class="detail-label">Otopark:</span>
                                     <span class="detail-value parking-info"></span>
                                 </div>
                             </div>
@@ -116,13 +116,13 @@ class ResultsVisualizer {
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 </svg>
-                                ${window.translationUtils ? window.translationUtils.t('results.popup.actions.showOnMap') : 'Haritada Göster'}
+                                Haritada Göster
                             </button>
                             <button class="btn btn-outline btn-sm" onclick="window.resultsVisualizer.compareWithOthers()">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                                 </svg>
-                                ${window.translationUtils ? window.translationUtils.t('results.popup.actions.compare') : 'Karşılaştır'}
+                                Karşılaştır
                             </button>
                         </div>
                     </div>
@@ -192,7 +192,7 @@ class ResultsVisualizer {
             </div>
             <div class="pin-tooltip">
                 <div class="tooltip-address">${result.address}</div>
-                <div class="tooltip-score">${window.translationUtils ? window.translationUtils.t('results.popup.scoreLabel') : 'Skor'}: ${result.score}</div>
+                <div class="tooltip-score">Skor: ${result.score}</div>
             </div>
         `;
 
@@ -269,11 +269,8 @@ class ResultsVisualizer {
         // Detailed information
         popup.querySelector('.competitors-count').textContent = result.details.nearbyCompetitors || 'N/A';
         popup.querySelector('.walking-distance').textContent = result.details.walkingDistance ? `${result.details.walkingDistance}m` : 'N/A';
-        popup.querySelector('.public-transport').textContent = result.details.publicTransport ? 
-            (window.translationUtils ? window.translationUtils.t('results.popup.details.available') : 'Mevcut') : 
-            (window.translationUtils ? window.translationUtils.t('results.popup.details.notAvailable') : 'Yok');
-        popup.querySelector('.parking-info').textContent = result.details.parking || 
-            (window.translationUtils ? window.translationUtils.t('results.popup.details.noInfo') : 'Bilgi yok');
+        popup.querySelector('.public-transport').textContent = result.details.publicTransport ? 'Mevcut' : 'Yok';
+        popup.querySelector('.parking-info').textContent = result.details.parking || 'Bilgi yok';
         
         // Animate metrics
         setTimeout(() => {

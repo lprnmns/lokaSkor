@@ -97,13 +97,6 @@ class Sidebar {
                 this.closeMobile();
             }
         });
-        
-        // Listen for language changes
-        if (window.languageEvents) {
-            window.languageEvents.subscribe((lang) => {
-                this.updateUIText();
-            });
-        }
     }
 
     setupResponsive() {
@@ -208,9 +201,7 @@ class Sidebar {
             this.businessTypeSpan.textContent = this.getBusinessTypeLabel(businessType);
         }
         
-        this.analysisModeSpan.textContent = mode === 'mode1' ? 
-            (window.translationUtils ? window.translationUtils.t('sidebar.analysisMode.comparison') : 'Lokasyon Karşılaştırması') : 
-            (window.translationUtils ? window.translationUtils.t('sidebar.analysisMode.region') : 'Bölge Analizi');
+        this.analysisModeSpan.textContent = mode === 'mode1' ? 'Lokasyon Karşılaştırması' : 'Bölge Analizi';
         
         // Show appropriate content
         this.showModeContent(mode);
@@ -238,11 +229,11 @@ class Sidebar {
 
     getBusinessTypeLabel(businessType) {
         const labels = {
-            'eczane': window.translationUtils ? window.translationUtils.t('businessTypes.pharmacy') : 'Eczane',
-            'firin': window.translationUtils ? window.translationUtils.t('businessTypes.bakery') : 'Fırın',
-            'market': window.translationUtils ? window.translationUtils.t('businessTypes.market') : 'Market',
-            'cafe': window.translationUtils ? window.translationUtils.t('businessTypes.cafe') : 'Cafe',
-            'restoran': window.translationUtils ? window.translationUtils.t('businessTypes.restaurant') : 'Restoran'
+            'eczane': 'Eczane',
+            'firin': 'Fırın',
+            'market': 'Market',
+            'cafe': 'Cafe',
+            'restoran': 'Restoran'
         };
         return labels[businessType] || businessType;
     }
@@ -261,7 +252,7 @@ class Sidebar {
         
         // Check for duplicates
         if (this.addresses.some(addr => addr.text === address)) {
-            this.showError(window.translationUtils ? window.translationUtils.t('sidebar.mode1.errors.duplicateAddress') : 'Bu adres zaten eklenmiş');
+            this.showError('Bu adres zaten eklenmiş');
             return;
         }
         
@@ -307,7 +298,7 @@ class Sidebar {
             addressItem.className = 'address-item';
             addressItem.innerHTML = `
                 <span class="address-text">${address.text}</span>
-                <button class="address-remove" onclick="window.sidebar.removeAddress(${address.id})" title="${window.translationUtils ? window.translationUtils.t('sidebar.mode1.removeAddress') : 'Adresi kaldır'}">
+                <button class="address-remove" onclick="window.sidebar.removeAddress(${address.id})" title="Adresi kaldır">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
@@ -324,20 +315,16 @@ class Sidebar {
         this.analyzeBtn.disabled = !hasEnoughAddresses;
         
         if (hasEnoughAddresses) {
-            this.analyzeBtn.textContent = window.translationUtils ? 
-                window.translationUtils.t('sidebar.mode1.analyzeButton', { count: this.addresses.length }) : 
-                `${this.addresses.length} Konumu Analiz Et`;
+            this.analyzeBtn.textContent = `${this.addresses.length} Konumu Analiz Et`;
         } else {
-            this.analyzeBtn.textContent = window.translationUtils ? 
-                window.translationUtils.t('sidebar.mode1.minAddressesRequired') : 
-                'En az 2 konum gerekli';
+            this.analyzeBtn.textContent = 'En az 2 konum gerekli';
         }
     }
 
     async startAnalysis() {
         if (this.addresses.length < 2) return;
         
-        this.showLoading(window.translationUtils ? window.translationUtils.t('sidebar.mode1.analyzing') : 'Konumlar analiz ediliyor...');
+        this.showLoading('Konumlar analiz ediliyor...');
         
         try {
             // Geocode addresses first
@@ -356,7 +343,7 @@ class Sidebar {
             
         } catch (error) {
             console.error('Analysis error:', error);
-            this.showError(window.translationUtils ? window.translationUtils.t('sidebar.mode1.analysisError') : 'Analiz sırasında bir hata oluştu');
+            this.showError('Analiz sırasında bir hata oluştu');
         } finally {
             this.hideLoading();
         }
@@ -408,10 +395,10 @@ class Sidebar {
                     <span class="result-score">${result.score}</span>
                 </div>
                 <div class="result-metrics">
-                    <span>${window.translationUtils ? window.translationUtils.t('sidebar.mode1.metrics.competition') : 'Rekabet'}: ${result.metrics.competition}</span>
-                    <span>${window.translationUtils ? window.translationUtils.t('sidebar.mode1.metrics.accessibility') : 'Erişim'}: ${result.metrics.accessibility}</span>
-                    <span>${window.translationUtils ? window.translationUtils.t('sidebar.mode1.metrics.targetAudience') : 'Hedef'}: ${result.metrics.targetAudience}</span>
-                    <span>${window.translationUtils ? window.translationUtils.t('sidebar.mode1.metrics.footTraffic') : 'Trafik'}: ${result.metrics.footTraffic}</span>
+                    <span>Rekabet: ${result.metrics.competition}</span>
+                    <span>Erişim: ${result.metrics.accessibility}</span>
+                    <span>Hedef: ${result.metrics.targetAudience}</span>
+                    <span>Trafik: ${result.metrics.footTraffic}</span>
                 </div>
             `;
             
@@ -484,7 +471,7 @@ class Sidebar {
     populateIlDropdown() {
         if (!this.ilSelect) return;
         
-        this.ilSelect.innerHTML = `<option value="">${window.translationUtils ? window.translationUtils.t('sidebar.mode2.selectProvince') : 'İl seçiniz'}</option>`;
+        this.ilSelect.innerHTML = '<option value="">İl seçiniz</option>';
         
         this.locationData.iller.forEach(il => {
             const option = document.createElement('option');
@@ -519,7 +506,7 @@ class Sidebar {
     populateIlceDropdown(ilceler) {
         if (!this.ilceSelect) return;
         
-        this.ilceSelect.innerHTML = `<option value="">${window.translationUtils ? window.translationUtils.t('sidebar.mode2.selectDistrict') : 'İlçe seçiniz'}</option>`;
+        this.ilceSelect.innerHTML = '<option value="">İlçe seçiniz</option>';
         this.ilceSelect.disabled = false;
         
         ilceler.forEach(ilce => {
@@ -557,7 +544,7 @@ class Sidebar {
     populateMahalleDropdown(mahalleler) {
         if (!this.mahalleSelect) return;
         
-        this.mahalleSelect.innerHTML = `<option value="">${window.translationUtils ? window.translationUtils.t('sidebar.mode2.selectNeighborhood') : 'Mahalle seçiniz'}</option>`;
+        this.mahalleSelect.innerHTML = '<option value="">Mahalle seçiniz</option>';
         this.mahalleSelect.disabled = false;
         
         mahalleler.forEach(mahalle => {
@@ -588,7 +575,7 @@ class Sidebar {
 
     resetIlceDropdown() {
         if (this.ilceSelect) {
-            this.ilceSelect.innerHTML = `<option value="">${window.translationUtils ? window.translationUtils.t('sidebar.mode2.selectDistrict') : 'İlçe seçiniz'}</option>`;
+            this.ilceSelect.innerHTML = '<option value="">İlçe seçiniz</option>';
             this.ilceSelect.disabled = true;
         }
         this.resetMahalleDropdown();
@@ -596,7 +583,7 @@ class Sidebar {
 
     resetMahalleDropdown() {
         if (this.mahalleSelect) {
-            this.mahalleSelect.innerHTML = `<option value="">${window.translationUtils ? window.translationUtils.t('sidebar.mode2.selectNeighborhood') : 'Mahalle seçiniz'}</option>`;
+            this.mahalleSelect.innerHTML = '<option value="">Mahalle seçiniz</option>';
             this.mahalleSelect.disabled = true;
         }
         this.updateRegionAnalyzeButton();
@@ -606,7 +593,7 @@ class Sidebar {
         const mahalleId = this.mahalleSelect.value;
         if (!mahalleId) return;
         
-        this.showLoading(window.translationUtils ? window.translationUtils.t('sidebar.mode2.analyzing') : 'Bölge analizi yapılıyor...');
+        this.showLoading('Bölge analizi yapılıyor...');
         
         try {
             // Get heatmap data
@@ -626,7 +613,7 @@ class Sidebar {
             
         } catch (error) {
             console.error('Region analysis error:', error);
-            this.showError(window.translationUtils ? window.translationUtils.t('sidebar.mode2.analysisError') : 'Bölge analizi sırasında bir hata oluştu');
+            this.showError('Bölge analizi sırasında bir hata oluştu');
         } finally {
             this.hideLoading();
         }
@@ -648,21 +635,21 @@ class Sidebar {
                 address: 'Kızılay Meydanı, Çankaya',
                 coordinates: [32.8597, 39.9334],
                 score: 95,
-                potential: window.translationUtils ? window.translationUtils.t('sidebar.mode2.potential.veryHigh') : 'Çok Yüksek'
+                potential: 'Çok Yüksek'
             },
             {
                 id: 2,
                 address: 'Tunalı Hilmi Caddesi, Çankaya',
                 coordinates: [32.8547, 39.9284],
                 score: 88,
-                potential: window.translationUtils ? window.translationUtils.t('sidebar.mode2.potential.high') : 'Yüksek'
+                potential: 'Yüksek'
             },
             {
                 id: 3,
                 address: 'Çayyolu Merkez, Çankaya',
                 coordinates: [32.7897, 39.9134],
                 score: 82,
-                potential: window.translationUtils ? window.translationUtils.t('sidebar.mode2.potential.high') : 'Yüksek'
+                potential: 'Yüksek'
             }
         ];
     }
@@ -682,7 +669,7 @@ class Sidebar {
             locationItem.innerHTML = `
                 <div class="location-info">
                     <div class="location-address">${location.address}</div>
-                    <div class="location-score">${window.translationUtils ? window.translationUtils.t('sidebar.mode2.scoreLabel') : 'Skor'}: ${location.score}</div>
+                    <div class="location-score">Skor: ${location.score}</div>
                 </div>
             `;
             
@@ -726,7 +713,7 @@ class Sidebar {
     }
 
     // State management methods
-    showLoading(message = window.translationUtils ? window.translationUtils.t('sidebar.loading') : 'Yükleniyor...') {
+    showLoading(message = 'Yükleniyor...') {
         this.hideAllStates();
         this.loadingState.classList.remove('hidden');
         
@@ -776,48 +763,6 @@ class Sidebar {
             this.startAnalysis();
         } else if (this.currentMode === 'mode2') {
             this.startRegionAnalysis();
-        }
-    }
-
-    // Update UI text when language changes
-    updateUIText() {
-        // Update analysis mode span
-        if (this.analysisModeSpan) {
-            this.analysisModeSpan.textContent = this.currentMode === 'mode1' ? 
-                (window.translationUtils ? window.translationUtils.t('sidebar.analysisMode.comparison') : 'Lokasyon Karşılaştırması') : 
-                (window.translationUtils ? window.translationUtils.t('sidebar.analysisMode.region') : 'Bölge Analizi');
-        }
-        
-        // Update business type labels
-        if (this.businessTypeSpan && this.businessTypeSpan.textContent) {
-            // This would need to be updated based on the current business type
-            // For now, we'll leave it as is since it's set dynamically
-        }
-        
-        // Update analyze buttons
-        this.updateAnalyzeButton();
-        this.updateRegionAnalyzeButton();
-        
-        // Update dropdown placeholders
-        if (this.ilSelect) {
-            const ilPlaceholder = this.ilSelect.querySelector('option[value=""]');
-            if (ilPlaceholder) {
-                ilPlaceholder.textContent = window.translationUtils ? window.translationUtils.t('sidebar.mode2.selectProvince') : 'İl seçiniz';
-            }
-        }
-        
-        if (this.ilceSelect) {
-            const ilcePlaceholder = this.ilceSelect.querySelector('option[value=""]');
-            if (ilcePlaceholder) {
-                ilcePlaceholder.textContent = window.translationUtils ? window.translationUtils.t('sidebar.mode2.selectDistrict') : 'İlçe seçiniz';
-            }
-        }
-        
-        if (this.mahalleSelect) {
-            const mahallePlaceholder = this.mahalleSelect.querySelector('option[value=""]');
-            if (mahallePlaceholder) {
-                mahallePlaceholder.textContent = window.translationUtils ? window.translationUtils.t('sidebar.mode2.selectNeighborhood') : 'Mahalle seçiniz';
-            }
         }
     }
 

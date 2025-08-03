@@ -1,5 +1,5 @@
 /**
- * LocationIQ Modern UI - Micro-interactions Utility
+ * LokaSkor Modern UI - Micro-interactions Utility
  * Handles specific micro-interactions and feedback
  */
 

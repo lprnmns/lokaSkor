@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LocationIQ - Analiz Dashboard</title>
+    <title>LokaSkor - Analiz Dashboard</title>
     
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/design_system.css') }}">
@@ -24,7 +24,7 @@
     <div id="welcomeScreen" class="welcome-screen">
         <div class="welcome-content">
             <div class="welcome-icon">📍</div>
-            <h1 class="welcome-title">LocationIQ</h1>
+            <h1 class="welcome-title">LokaSkor</h1>
             <p class="welcome-description">Lokasyon analizi sonuçlarını görüntüleyin</p>
             <div class="welcome-features">
                 <div class="feature-item">
@@ -48,7 +48,7 @@
         <!-- Sidebar -->
         <div class="sidebar-container">
             <div class="sidebar-header">
-                <h2>LocationIQ</h2>
+                <h2>LokaSkor</h2>
                 <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
             </div>
             
@@ -563,7 +563,7 @@
             // Implementation for sharing results
             if (navigator.share) {
                 navigator.share({
-                    title: 'LocationIQ Analiz Sonuçları',
+                    title: 'LokaSkor Analiz Sonuçları',
                     text: 'Lokasyon analizi sonuçlarını görüntüleyin',
                     url: window.location.href
                 }).then(() => {
