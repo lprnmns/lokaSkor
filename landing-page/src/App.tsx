@@ -1,4 +1,7 @@
+'use client';
+
 import React, { useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { MapPin, BarChart3, Globe, ArrowRight, Play, Shield, Zap, Users, Building, TrendingUp, Map } from 'lucide-react';
 
 function App() {
@@ -136,10 +139,14 @@ function App() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-              <button className="group bg-blue-600 text-white px-10 py-5 rounded-xl text-lg font-semibold hover:bg-blue-700 transition-all duration-300 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                <ArrowRight className="mr-3 w-6 h-6 group-hover:translate-x-1 transition-transform" />
-                Analize Başla
-              </button>
+              <Link href="/business-selector">
+                <button
+                  className="group bg-blue-600 text-white px-10 py-5 rounded-xl text-lg font-semibold hover:bg-blue-700 transition-all duration-300 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                >
+                  <ArrowRight className="mr-3 w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                  Analize Başla
+                </button>
+              </Link>
               
               <button className="group flex items-center text-gray-700 hover:text-gray-900 px-8 py-5 rounded-xl text-lg font-semibold transition-all duration-300 border border-gray-300 hover:border-gray-400 bg-white/50 backdrop-blur-sm hover:bg-white/70">
                 <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mr-4 group-hover:scale-110 transition-transform border border-blue-200">
